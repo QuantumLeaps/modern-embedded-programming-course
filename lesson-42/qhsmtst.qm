@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="5.1.3" links="1">
+ <documentation>QHsmTst is a contrived state machine from Chapter 2 of the PSiCC2 book for testing all possible transition topologies with up to 4-levels of state nesting.</documentation>
+ <!--${qpc}-->
+ <framework name="qpc"/>
+ <!--${HSMs}-->
+ <package name="HSMs" stereotype="0x02">
+  <!--${HSMs::QHsmTst}-->
+  <class name="QHsmTst" superclass="qpc::QHsm">
+   <documentation>Test active object</documentation>
+   <!--${HSMs::QHsmTst::foo}-->
+   <attribute name="foo" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <!--${HSMs::QHsmTst::SM}-->
+   <statechart properties="0x03">
+    <!--${HSMs::QHsmTst::SM::initial}-->
+    <initial target="../1/5">
+     <action>(void)par; /* unused parameter */
+me-&gt;foo = 0U;
+BSP_display(&quot;top-INIT;&quot;);</action>
+     <initial_glyph conn="76,2,4,1,6,-8">
+      <action box="-7,6,13,4"/>
+     </initial_glyph>
+    </initial>
+    <!--${HSMs::QHsmTst::SM::s}-->
+    <state name="s">
+     <entry>BSP_display(&quot;s-ENTRY;&quot;);</entry>
+     <exit>BSP_display(&quot;s-EXIT;&quot;);</exit>
+     <!--${HSMs::QHsmTst::SM::s::initial}-->
+     <initial target="../4/7">
+      <action>BSP_display(&quot;s-INIT;&quot;);</action>
+      <initial_glyph conn="31,7,5,0,-9,19">
+       <action box="-6,0,6,2"/>
+      </initial_glyph>
+     </initial>
+     <!--${HSMs::QHsmTst::SM::s::I}-->
+     <tran trig="I">
+      <!--${HSMs::QHsmTst::SM::s::I::[me->foo]}-->
+      <choice>
+       <guard>me-&gt;foo</guard>
+       <action>me-&gt;foo = 0U;
+BSP_display(&quot;s-I;&quot;);</action>
+       <choice_glyph conn="7,10,5,-1,8">
+        <action box="1,0,12,4"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="2,10,3,-1,5">
+       <action box="1,-2,6,2"/>
+      </tran_glyph>
+     </tran>
+     <!--${HSMs::QHsmTst::SM::s::E}-->
+     <tran trig="E" target="../4/7">
+      <action>BSP_display(&quot;s-E;&quot;);</action>
+      <tran_glyph conn="28,39,2,2,-6">
+       <action box="1,-2,6,2"/>
+      </tran_glyph>
+     </tran>
+     <!--${HSMs::QHsmTst::SM::s::TERMINATE}-->
+     <tran trig="TERMINATE" target="../../2">
+      <tran_glyph conn="71,19,1,0,4,13">
+       <action box="0,-2,9,2"/>
+      </tran_glyph>
+     </tran>
+     <!--${HSMs::QHsmTst::SM::s::s1}-->
+     <state name="s1">
+      <entry>BSP_display(&quot;s1-ENTRY;&quot;);</entry>
+      <exit>BSP_display(&quot;s1-EXIT;&quot;);</exit>
+      <!--${HSMs::QHsmTst::SM::s::s1::initial}-->
+      <initial target="../7">
+       <action>BSP_display(&quot;s1-INIT;&quot;);</action>
+       <initial_glyph conn="26,19,5,0,-2,7">
+        <action box="-4,0,6,2"/>
+       </initial_glyph>
+      </initial>
+      <!--${HSMs::QHsmTst::SM::s::s1::I}-->
+      <tran trig="I">
+       <action>BSP_display(&quot;s1-I;&quot;);</action>
+       <tran_glyph conn="13,23,3,-1,6">
+        <action box="1,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s1::D}-->
+      <tran trig="D">
+       <!--${HSMs::QHsmTst::SM::s::s1::D::[!me->foo]}-->
+       <choice target="../../..">
+        <guard>!me-&gt;foo</guard>
+        <action>me-&gt;foo = 1U;
+BSP_display(&quot;s1-D;&quot;);</action>
+        <choice_glyph conn="7,17,4,3,6,-5">
+         <action box="-4,2,11,4"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="13,17,3,-1,-6">
+        <action box="-2,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s1::A}-->
+      <tran trig="A" target="..">
+       <action>BSP_display(&quot;s1-A;&quot;);</action>
+       <tran_glyph conn="27,15,0,0,-3,4,3">
+        <action box="1,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s1::B}-->
+      <tran trig="B" target="../7">
+       <action>BSP_display(&quot;s1-B;&quot;);</action>
+       <tran_glyph conn="13,27,3,3,6">
+        <action box="1,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s1::F}-->
+      <tran trig="F" target="../../5/4/4">
+       <action>BSP_display(&quot;s1-F;&quot;);</action>
+       <tran_glyph conn="34,31,1,3,17">
+        <action box="0,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s1::C}-->
+      <tran trig="C" target="../../5">
+       <action>BSP_display(&quot;s1-C;&quot;);</action>
+       <tran_glyph conn="34,17,1,3,6">
+        <action box="0,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s1::s11}-->
+      <state name="s11">
+       <entry>BSP_display(&quot;s11-ENTRY;&quot;);</entry>
+       <exit>BSP_display(&quot;s11-EXIT;&quot;);</exit>
+       <!--${HSMs::QHsmTst::SM::s::s1::s11::H}-->
+       <tran trig="H" target="../../..">
+        <action>BSP_display(&quot;s11-H;&quot;);</action>
+        <tran_glyph conn="24,33,2,2,6">
+         <action box="1,0,6,2"/>
+        </tran_glyph>
+       </tran>
+       <!--${HSMs::QHsmTst::SM::s::s1::s11::D}-->
+       <tran trig="D">
+        <!--${HSMs::QHsmTst::SM::s::s1::s11::D::[me->foo]}-->
+        <choice target="../../..">
+         <guard>me-&gt;foo</guard>
+         <action>me-&gt;foo = 0U;
+BSP_display(&quot;s11-D;&quot;);</action>
+         <choice_glyph conn="7,31,4,3,-6,6">
+          <action box="-4,-5,11,4"/>
+         </choice_glyph>
+        </choice>
+        <!--${HSMs::QHsmTst::SM::s::s1::s11::D::[else]}-->
+        <choice>
+         <guard brief="else"/>
+         <choice_glyph conn="7,31,4,-1,6">
+          <action box="0,2,10,2"/>
+         </choice_glyph>
+        </choice>
+        <tran_glyph conn="19,31,3,-1,-12">
+         <action box="-2,-2,6,2"/>
+        </tran_glyph>
+       </tran>
+       <!--${HSMs::QHsmTst::SM::s::s1::s11::G}-->
+       <tran trig="G" target="../../../5/4/4">
+        <action>BSP_display(&quot;s11-G;&quot;);</action>
+        <tran_glyph conn="31,27,1,3,20">
+         <action box="0,-2,6,2"/>
+        </tran_glyph>
+       </tran>
+       <state_glyph node="19,26,12,7">
+        <entry box="1,2,5,2"/>
+        <exit box="1,4,5,2"/>
+       </state_glyph>
+      </state>
+      <state_glyph node="13,15,21,21">
+       <entry box="1,2,5,2"/>
+       <exit box="1,4,5,2"/>
+      </state_glyph>
+     </state>
+     <!--${HSMs::QHsmTst::SM::s::s2}-->
+     <state name="s2">
+      <entry>BSP_display(&quot;s2-ENTRY;&quot;);</entry>
+      <exit>BSP_display(&quot;s2-EXIT;&quot;);</exit>
+      <!--${HSMs::QHsmTst::SM::s::s2::initial}-->
+      <initial target="../4/4">
+       <action>BSP_display(&quot;s2-INIT;&quot;);</action>
+       <initial_glyph conn="65,10,5,0,-8,15">
+        <action box="-4,0,6,2"/>
+       </initial_glyph>
+      </initial>
+      <!--${HSMs::QHsmTst::SM::s::s2::I}-->
+      <tran trig="I">
+       <!--${HSMs::QHsmTst::SM::s::s2::I::[!me->foo]}-->
+       <choice>
+        <guard>!me-&gt;foo</guard>
+        <action>me-&gt;foo = 1U;
+BSP_display(&quot;s2-I;&quot;);</action>
+        <choice_glyph conn="45,14,5,-1,8">
+         <action box="1,0,10,4"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="40,14,3,-1,5">
+        <action box="1,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s2::F}-->
+      <tran trig="F" target="../../4/7">
+       <action>BSP_display(&quot;s2-F;&quot;);</action>
+       <tran_glyph conn="40,24,3,0,-12,2">
+        <action box="-4,0,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s2::C}-->
+      <tran trig="C" target="../../4">
+       <action>BSP_display(&quot;s2-C;&quot;);</action>
+       <tran_glyph conn="40,20,3,1,-6">
+        <action box="-3,-2,6,2"/>
+       </tran_glyph>
+      </tran>
+      <!--${HSMs::QHsmTst::SM::s::s2::s21}-->
+      <state name="s21">
+       <entry>BSP_display(&quot;s21-ENTRY;&quot;);</entry>
+       <exit>BSP_display(&quot;s21-EXIT;&quot;);</exit>
+       <!--${HSMs::QHsmTst::SM::s::s2::s21::initial}-->
+       <initial target="../4">
+        <action>BSP_display(&quot;s21-INIT;&quot;);</action>
+        <initial_glyph conn="64,23,5,0,-4,2">
+         <action box="-2,0,5,2"/>
+        </initial_glyph>
+       </initial>
+       <!--${HSMs::QHsmTst::SM::s::s2::s21::G}-->
+       <tran trig="G" target="../../../4">
+        <action>BSP_display(&quot;s21-G;&quot;);</action>
+        <tran_glyph conn="45,22,3,1,-11">
+         <action box="-3,-2,8,2"/>
+        </tran_glyph>
+       </tran>
+       <!--${HSMs::QHsmTst::SM::s::s2::s21::A}-->
+       <tran trig="A" target="..">
+        <action>BSP_display(&quot;s21-A;&quot;);</action>
+        <tran_glyph conn="59,19,0,0,-3,4,3">
+         <action box="1,-2,6,2"/>
+        </tran_glyph>
+       </tran>
+       <!--${HSMs::QHsmTst::SM::s::s2::s21::B}-->
+       <tran trig="B" target="../4">
+        <action>BSP_display(&quot;s21-B;&quot;);</action>
+        <tran_glyph conn="66,27,1,1,-4">
+         <action box="-2,-2,5,2"/>
+        </tran_glyph>
+       </tran>
+       <!--${HSMs::QHsmTst::SM::s::s2::s21::s211}-->
+       <state name="s211">
+        <entry>BSP_display(&quot;s211-ENTRY;&quot;);</entry>
+        <exit>BSP_display(&quot;s211-EXIT;&quot;);</exit>
+        <!--${HSMs::QHsmTst::SM::s::s2::s21::s211::H}-->
+        <tran trig="H" target="../../../..">
+         <action>BSP_display(&quot;s211-H;&quot;);</action>
+         <tran_glyph conn="57,32,2,2,7">
+          <action box="1,0,6,2"/>
+         </tran_glyph>
+        </tran>
+        <!--${HSMs::QHsmTst::SM::s::s2::s21::s211::D}-->
+        <tran trig="D" target="../..">
+         <action>BSP_display(&quot;s211-D;&quot;);</action>
+         <tran_glyph conn="62,30,1,1,4">
+          <action box="0,-2,6,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="51,25,11,7">
+         <entry box="1,2,5,2"/>
+         <exit box="1,4,5,2"/>
+        </state_glyph>
+       </state>
+       <state_glyph node="45,19,21,15">
+        <entry box="1,2,5,2"/>
+        <exit box="1,4,5,2"/>
+       </state_glyph>
+      </state>
+      <state_glyph node="40,6,28,30">
+       <entry box="1,2,5,2"/>
+       <exit box="1,4,5,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="2,2,69,37">
+      <entry box="1,2,5,2"/>
+      <exit box="1,4,5,2"/>
+     </state_glyph>
+    </state>
+    <!--${HSMs::QHsmTst::SM::final}-->
+    <state name="final">
+     <entry>BSP_exit();
+</entry>
+     <state_glyph node="72,32,7,6">
+      <entry box="1,2,6,2"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="79,41"/>
+   </statechart>
+  </class>
+  <!--${HSMs::QHsmTst_ctor}-->
+  <operation name="QHsmTst_ctor" type="void" visibility="0x00" properties="0x00">
+   <code>QHsmTst *me = &amp;l_hsmtst;
+QHsm_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;QHsmTst_initial));</code>
+  </operation>
+ </package>
+ <!--${.}-->
+ <directory name=".">
+  <!--${.::qhsmtst.h}-->
+  <file name="qhsmtst.h">
+   <text>#ifndef QHSMTST_H
+#define QHSMTST_H
+
+enum QHsmTstSignals {
+    A_SIG = Q_USER_SIG,
+    B_SIG,
+    C_SIG,
+    D_SIG,
+    E_SIG,
+    F_SIG,
+    G_SIG,
+    H_SIG,
+    I_SIG,
+    TERMINATE_SIG,
+    IGNORE_SIG,
+    MAX_SIG
+};
+
+extern QHsm * const the_sm; /* opaque pointer to the test SM */
+
+$declare(HSMs::QHsmTst_ctor)
+
+/* BSP functions to dispaly a message and exit */
+void BSP_display(char const *msg);
+void BSP_exit(void);
+
+#endif /* QHSMTST_H */
+</text>
+  </file>
+  <!--${.::qhsmtst.c}-->
+  <file name="qhsmtst.c">
+   <text>#include &quot;qpc.h&quot;
+#include &quot;qhsmtst.h&quot;
+
+$declare(HSMs::QHsmTst)
+
+static QHsmTst l_hsmtst; /* the only instance of the QHsmTst class */
+
+/* global-scope definitions ---------------------------------------*/
+QHsm * const the_sm = &amp;l_hsmtst.super;  /* the opaque pointer */
+
+$define(HSMs::QHsmTst_ctor)
+$define(HSMs::QHsmTst)</text>
+  </file>
+ </directory>
+</model>

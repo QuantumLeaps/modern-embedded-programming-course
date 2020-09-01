@@ -1,0 +1,173 @@
+/****************************************************************************
+* MInimal Real-time Operating System (MIROS)
+* version 0.23.1 (matching lesson 23 step 1)
+*
+* This software is a teaching aid to illustrate the concepts underlying
+* a Real-Time Operating System (RTOS). The main goal of the software is
+* simplicity and clear presentation of the concepts, but without dealing
+* with various corner cases, portability, or error handling. For these
+* reasons, the software is generally NOT intended or recommended for use
+* in commercial applications.
+*
+* Copyright (C) 2018 Miro Samek. All Rights Reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <https://www.gnu.org/licenses/>.
+*
+* Contact Information:
+* https://www.state-machine.com
+****************************************************************************/
+#include <stdint.h>
+#include "miros.h" /* OS API */
+
+OSThread * volatile OS_curr; /* the currently runnig thread */
+OSThread * volatile OS_next; /* the next thread to run */
+
+#define OS_INT_DISABLE()    __asm volatile ("cpsid i")
+#define OS_INT_ENABLE()     __asm volatile ("cpsie i")
+
+#define SCB_ICSR   (*(uint32_t volatile *)0xE000ED04)
+#define SCB_SYSPRI ((uint32_t volatile *)0xE000ED14)
+
+#define OS_CONTEXT_SWITCH() (SCB_ICSR = (uint32_t)(1U << 28))
+
+void OS_init(void) {
+    OS_INT_DISABLE();
+    /* SCB_SYSPRI3: PendSV set to the lowest priority 0xFF */
+    SCB_SYSPRI[3] |= (0xFFU << 16);
+}
+
+void OS_run() {
+    OS_curr = (OSThread *)0;
+    OS_next = (OSThread *)0;
+    OS_sched();
+    OS_INT_ENABLE();
+}
+
+static void OS_threadRet(void) {
+    while (1) {
+    }
+}
+
+#if 0
+/* manual scheduler... */
+void OS_sched(void) {
+    /* set the next thread OS_next manually */
+    /* ... */
+
+    if (OS_curr != OS_next) {
+        OS_CONTEXT_SWITCH();
+    }
+}
+#endif
+
+/* round-robin scheduler... */
+typedef struct {
+    OSThread *list[32]; /* list of threads to schedule */
+    uint8_t   num;      /* number of threads in the list */
+    uint8_t   next;     /* next thread to schedule */
+} OSRoudRobinSched;
+
+static OSRoudRobinSched l_roundRobin;
+
+void OS_sched(void) {
+    OS_next = l_roundRobin.list[l_roundRobin.next];
+    ++l_roundRobin.next;
+    if (l_roundRobin.next == l_roundRobin.num) {
+        l_roundRobin.next = 0U;
+    }
+
+    if (OS_curr != OS_next) {
+        OS_CONTEXT_SWITCH();
+    }
+}
+
+void OSThread_start(
+    OSThread *me,
+    OSThreadHandler threadHandler,
+    void *stkSto, uint32_t stkSize)
+{
+    /* round down the stack top to the 8-byte boundary
+    * NOTE: ARM Cortex-M stack grows down from hi -> low memory
+    */
+    uint32_t *sp =
+        (uint32_t *)((((uint32_t)stkSto + stkSize) >> 3) << 3);
+    uint32_t *stk_limit;
+
+    /* synthesize the ARM Cortex-M exception stack frame...*/
+    *(--sp) = (1U << 24);   /* xPSR  (just the THUMB bit) */
+    *(--sp) = (uint32_t)threadHandler;  /* PC (the thread routine) */
+    *(--sp) = (uint32_t)&OS_threadRet;  /* LR (return from thread) */
+    *(--sp) = 0x0000000CU;  /* R12 */
+    *(--sp) = 0x00000003U;  /* R3  */
+    *(--sp) = 0x00000002U;  /* R2  */
+    *(--sp) = 0x00000001U;  /* R1  */
+    *(--sp) = (uint32_t)me; /* R0 (argument to the thread routine */
+    *(--sp) = 0x0000000BU;  /* R11 */
+    *(--sp) = 0x0000000AU;  /* R10 */
+    *(--sp) = 0x00000009U;  /* R9  */
+    *(--sp) = 0x00000008U;  /* R8  */
+    *(--sp) = 0x00000007U;  /* R7  */
+    *(--sp) = 0x00000006U;  /* R6  */
+    *(--sp) = 0x00000005U;  /* R5  */
+    *(--sp) = 0x00000004U;  /* R4  */
+
+    /* save the top of the stack in the thread's attibute */
+    me->sp = sp;
+
+    /* pre-fill the unused part of the stack with 0xDEADBEEF */
+    stk_limit = (uint32_t *)(((((uint32_t)stkSto - 1U) >> 3) + 1U) << 3);
+    for (sp = sp - 1U; sp >= stk_limit; --sp) {
+        *sp = 0xDEADBEEFU;
+    }
+
+    l_roundRobin.list[l_roundRobin.num] = me;
+    ++l_roundRobin.num;
+}
+
+/*****************************************************************************
+* The PendSV exception handler is used for handling context switch and is
+* the recommended context switch mechansism for ARM Cortex-M CPUs.
+*
+* The PendSV exception should have the lowest interrupt priority in the
+* system (0xFF, see OS_init). All other exceptions and interrupts should
+* have higher priority (lower numerical value of priority).
+*
+* Due to tail-chaining and its lowest priority, the PendSV exception will be
+* entered very efficiently immediately after the exit from the *last* nested
+* interrupt (or exception).
+*****************************************************************************/
+__attribute__ ((naked))
+void PendSV_Handler(void) {
+__asm volatile (
+    "  LDR     r1,=OS_curr       \n" /* r1 := &OS_curr */
+    "  LDR     r2,=OS_next       \n" /* r2 := &OS_next */
+
+    "  CPSID   i                 \n" /* disable interrupts (set PRIMASK) */
+    "  LDR     r3,[r1]           \n" /* r3 := OS_curr */
+    "  CMP     r3,#0             \n" 
+    "  BEQ     PendSV_restore    \n"
+    "  PUSH    {r4-r11}          \n" /* save r4-r11 on top of the stack */
+    "  STR     sp,[r3, #0]       \n" /* OS_curr.sp := sp */
+
+    "PendSV_restore:             \n"
+    "  LDR     r3,[r2]           \n" /* r3 := OS_next */
+    "  LDR     sp,[r3, #0]       \n" /* sp := OS_next.sp */
+    "  STR     r3,[r1]           \n" /* QS_curr := OS_next */
+    "  CPSIE   i                 \n" /* enable interrupts (clear PRIMASK) */
+
+    "  POP     {r4-r11}          \n" /* restore r4-r11 */
+    "  BX      lr                \n" /* return to the next thread */
+    );
+}
+

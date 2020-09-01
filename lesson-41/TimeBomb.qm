@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="5.1.3" links="1">
+ <documentation>About this model:
+-----------------
+The TimeBomb example from the video course &quot;Modern Embedded Systems Programming&quot;:
+
+https://www.youtube.com/c/StateMachineCOM
+
+
+This example demonstrates:
+- Active object TimeBomb) with hierarchical state machine
+- Automatic code genertation from the model
+- Integration between the generated code and other code, such as the Board Support Package (BSP)
+
+
+Building and running the example:
+This example builds with the uVision project &quot;lesson&quot; and is designed to run on the TivaC LaunchPad board.</documentation>
+ <!--${qpc}-->
+ <framework name="qpc"/>
+ <package file="./aos_package.qmp"/>
+ <!--${.}-->
+ <directory name=".">
+  <!--${.::main.c}-->
+  <file name="main.c">
+   <text>/* TimeBomb/Button with QP/C framework */
+#include &quot;qpc.h&quot;  /* QP/C API */
+#include &quot;bsp.h&quot;
+
+Q_DEFINE_THIS_MODULE(&quot;main&quot;) /* this module name for Q_ASSERT() */
+
+/* The TimeBomb AO =======================================================*/
+$declare${AOs::TimeBomb}
+
+$define${AOs::TimeBomb}
+
+static QEvt const *timeBomb_queue[10];
+static TimeBomb timeBomb;
+QActive *AO_TimeBomb = &amp;timeBomb.super;
+
+/* the main function =========================================================*/
+int main() {
+
+    BSP_init(); /* initialize the BSP */
+    QF_init();   /* initialize QP/C */
+
+    /* create AO and start it */
+    TimeBomb_ctor(&amp;timeBomb);
+    QACTIVE_START(AO_TimeBomb,
+                 2U,
+                 timeBomb_queue,
+                 sizeof(timeBomb_queue)/sizeof(timeBomb_queue[0]),
+                 (void *)0, 0U,
+                 (void *)0);
+
+    QF_run(); /* run QP/C... */
+    return 0; /* NOTE: the scheduler does NOT return */
+}
+</text>
+  </file>
+  <!--${.::my_file1.c}-->
+  <file name="my_file1.c">
+   <text>/* TimeBomb/Button with QP/C framework */
+#include &quot;qpc.h&quot;  /* QP/C API */
+#include &quot;bsp.h&quot;
+
+Q_DEFINE_THIS_MODULE(&quot;my_file1&quot;) /* this module name for Q_ASSERT() */
+
+$define${AOs::TimeBomb::ctor}
+</text>
+  </file>
+  <!--${.::my_file2.c}-->
+  <file name="my_file2.c">
+   <text>/* TimeBomb/Button with QP/C framework */
+#include &quot;qpc.h&quot;  /* QP/C API */
+#include &quot;bsp.h&quot;
+
+Q_DEFINE_THIS_MODULE(&quot;my_file2&quot;) /* this module name for Q_ASSERT() */
+
+$define${AOs}
+</text>
+  </file>
+  <!--${.::my_file3.c}-->
+  <file name="my_file3.c">
+   <text>/* TimeBomb/Button with QP/C framework */
+#include &quot;qpc.h&quot;  /* QP/C API */
+#include &quot;bsp.h&quot;
+
+Q_DEFINE_THIS_MODULE(&quot;my_file3&quot;) /* this module name for Q_ASSERT() */
+
+$define1 ${AOs::TimeBomb::SM::armed}
+</text>
+  </file>
+ </directory>
+</model>

@@ -1,0 +1,12 @@
+Pending the SysTick Interrupt from IAR EWARM
+
+System Control Block
++-ICSR
+  +-PENDSTSET <- 1
+
+
+Pending the SysTick Interrupt from CCS
+
+NVIC
++-NVIC_INT_CTRL
+  +-NVIC_INT_CTRL_PENDSTSET <- 1

@@ -1,0 +1,133 @@
+// TimeBomb example with State Machine Compiler (SMC)
+
+
+// code literally copied to the *_sm.c file...
+%{
+
+#include "uc_ao.h"  /* uC/AO API */
+#include "bsp.h"
+#include "timebomb.h"
+
+void TimeBomb_ctor(TimeBomb * const me) {
+    Active_ctor(&me->super, (DispatchHandler)&TimeBomb_dispatch);
+    timebombContext_Init(&me->_fsm, me);
+    TimeEvent_ctor(&me->te, TIMEOUT_SIG, &me->super);
+}
+
+void TimeBomb_dispatch(TimeBomb * const me, Event const * const e) {
+    /* temporary 'fsm' needed to fix the bug in SMC macro ENTRY_STATE() */
+    struct timebombContext *fsm = &me->_fsm;
+    switch (e->sig) {
+        case INIT_SIG:
+            timebombContext_EnterStartState(fsm);
+            break;
+        case BUTTON_PRESSED_SIG:
+            timebombContext_BUTTON(fsm, e);
+            break;
+        case TIMEOUT_SIG:
+            timebombContext_TIMEOUT(fsm, e);
+            break;
+    }
+}
+
+/* action functions... */
+static inline void TimeBomb_ledRedOn(TimeBomb * const me) {
+    BSP_ledRedOn();
+}
+static inline void TimeBomb_ledRedOff(TimeBomb * const me) {
+    BSP_ledRedOff();
+}
+static inline void TimeBomb_ledBlueOn(TimeBomb * const me) {
+    BSP_ledBlueOn();
+}
+static inline void TimeBomb_ledBlueOff(TimeBomb * const me) {
+    BSP_ledBlueOff();
+}
+static inline void TimeBomb_ledGreenOn(TimeBomb * const me) {
+    BSP_ledGreenOn();
+}
+static inline void TimeBomb_ledGreenOff(TimeBomb * const me) {
+    BSP_ledGreenOff();
+}
+static inline void TimeBomb_setBlinkCtr(TimeBomb * const me,
+                                        uint32_t blink_ctr)
+{
+    me->blink_ctr = blink_ctr;
+}
+static inline void TimeBomb_decBlinkCtr(TimeBomb * const me) {
+    --me->blink_ctr;
+}
+static inline void TimeBomb_armTE(TimeBomb * const me,
+                                  uint32_t timeout, uint32_t interval)
+{
+    TimeEvent_arm(&me->te, timeout, interval);
+}
+
+%}
+
+%class TimeBomb
+//%header timebomb.h // already included earlier
+
+// initial .............................................
+%start TimeBombMap::wait4button
+
+%map TimeBombMap
+%%
+
+// state ...............................................
+wait4button
+    Entry {
+        ledGreenOn();
+    }
+    Exit {
+        ledGreenOff();
+    }
+{
+    BUTTON(e : Event const *const)  // trigger
+        blink { // taraget state
+            setBlinkCtr(5U);
+        }
+}
+
+// state ...............................................
+blink
+    Entry {
+        ledRedOn();
+        armTE(OS_TICKS_PER_SEC/2, 0U);
+    }
+    Exit {
+        ledRedOff();
+    }
+{
+    TIMEOUT(e : Event const *const)   // trigger
+        pause { // target state
+            decBlinkCtr();
+        }
+}
+
+// state ...............................................
+pause
+    Entry {
+        armTE(OS_TICKS_PER_SEC/2, 0U);
+    }
+{
+    TIMEOUT(e : Event const *const)   // trigger
+        [ctxt->blink_ctr > 0U]        // guard
+        blink { // target state
+        }
+    TIMEOUT(e : Event const *const)   // trigger [else]
+        boom { // target state
+        }
+}
+
+// state ...............................................
+boom
+    Entry {
+        ledRedOn();
+        ledGreenOn();
+        ledBlueOn();
+    }
+{
+}
+
+%%

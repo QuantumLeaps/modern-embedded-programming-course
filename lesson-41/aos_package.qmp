@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--${AOs}-->
+<package name="AOs" stereotype="0x02">
+ <!--${AOs::TimeBomb}-->
+ <class name="TimeBomb" superclass="qpc::QActive">
+  <!--${AOs::TimeBomb::te}-->
+  <attribute name="te" type="QTimeEvt" visibility="0x02" properties="0x00"/>
+  <!--${AOs::TimeBomb::blink_ctr}-->
+  <attribute name="blink_ctr" type="uint32_t" visibility="0x02" properties="0x00"/>
+  <!--${AOs::TimeBomb::ctor}-->
+  <operation name="ctor" type="void" visibility="0x00" properties="0x00">
+   <code>QActive_ctor(&amp;me-&gt;super, (QStateHandler)&amp;TimeBomb_initial);
+QTimeEvt_ctorX(&amp;me-&gt;te, &amp;me-&gt;super, TIMEOUT_SIG, 0U);</code>
+  </operation>
+  <!--${AOs::TimeBomb::SM}-->
+  <statechart properties="0x01">
+   <!--${AOs::TimeBomb::SM::initial}-->
+   <initial target="../2/2">
+    <initial_glyph conn="4,4,5,1,28,12,-2">
+     <action box="0,-2,20,4"/>
+    </initial_glyph>
+   </initial>
+   <!--${AOs::TimeBomb::SM::defused}-->
+   <state name="defused">
+    <entry brief="BlueLED=ON;">BSP_ledBlueOn();</entry>
+    <exit brief="BlueLED=OFF;">BSP_ledBlueOff();</exit>
+    <!--${AOs::TimeBomb::SM::defused::BUTTON2_PRESSED}-->
+    <tran trig="BUTTON2_PRESSED" target="../../2">
+     <tran_glyph conn="60,16,2,1,22,-18">
+      <action box="-14,20,17,2"/>
+     </tran_glyph>
+    </tran>
+    <state_glyph node="44,6,18,10">
+     <entry box="1,2,17,3"/>
+     <exit box="1,5,17,3"/>
+    </state_glyph>
+   </state>
+   <!--${AOs::TimeBomb::SM::armed}-->
+   <state name="armed">
+    <exit brief="all-LEDs=OFF;">BSP_ledRedOff();
+BSP_ledGreenOff();
+BSP_ledBlueOff();</exit>
+    <!--${AOs::TimeBomb::SM::armed::initial}-->
+    <initial target="../2">
+     <initial_glyph conn="37,11,4,1,7,-7">
+      <action box="0,-2,10,2"/>
+     </initial_glyph>
+    </initial>
+    <!--${AOs::TimeBomb::SM::armed::BUTTON2_PRESSED}-->
+    <tran trig="BUTTON2_PRESSED" target="../../1">
+     <tran_glyph conn="42,26,1,2,11,-10">
+      <action box="0,-2,22,7"/>
+     </tran_glyph>
+    </tran>
+    <!--${AOs::TimeBomb::SM::armed::wait4button}-->
+    <state name="wait4button">
+     <entry brief="GreenLED-on;">BSP_ledGreenOn();</entry>
+     <exit brief="GreenLED-off;">BSP_ledGreenOff();</exit>
+     <!--${AOs::TimeBomb::SM::armed::wait4button::BUTTON_PRESSED}-->
+     <tran trig="BUTTON_PRESSED" target="../../3">
+      <action brief="blink_ctr=5;">me-&gt;blink_ctr = 5U;</action>
+      <tran_glyph conn="4,21,3,1,28,17,-2">
+       <action box="0,-2,22,7"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="4,12,26,20">
+      <entry box="1,2,17,2"/>
+      <exit box="1,4,19,2"/>
+     </state_glyph>
+    </state>
+    <!--${AOs::TimeBomb::SM::armed::blink}-->
+    <state name="blink">
+     <entry brief="Red-LED=ON,arm-TE-for-1/2sec;">BSP_ledRedOn();
+QTimeEvt_armX(&amp;me-&gt;te, BSP_TICKS_PER_SEC/2, 0U);</entry>
+     <exit brief="Red-LED=OFF;">BSP_ledRedOff();</exit>
+     <!--${AOs::TimeBomb::SM::armed::blink::TIMEOUT}-->
+     <tran trig="TIMEOUT" target="../../4">
+      <tran_glyph conn="4,44,3,1,30,12,-4">
+       <action box="0,-2,20,5"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="4,34,26,16">
+      <entry box="1,2,25,3"/>
+      <exit box="1,5,24,2"/>
+     </state_glyph>
+    </state>
+    <!--${AOs::TimeBomb::SM::armed::pause}-->
+    <state name="pause">
+     <entry brief="arm TE for 1/2sec;">QTimeEvt_armX(&amp;me-&gt;te, BSP_TICKS_PER_SEC/2, 0U);</entry>
+     <!--${AOs::TimeBomb::SM::armed::pause::TIMEOUT}-->
+     <tran trig="TIMEOUT">
+      <action brief="--blink_ctr;">--me-&gt;blink_ctr;</action>
+      <!--${AOs::TimeBomb::SM::armed::pause::TIMEOUT::[blink_ctr>0]}-->
+      <choice target="../../../3">
+       <guard brief="blink_ctr &gt; 0">me-&gt;blink_ctr &gt; 0U</guard>
+       <choice_glyph conn="36,60,4,1,-20,-6">
+        <action box="1,-5,25,4"/>
+       </choice_glyph>
+      </choice>
+      <!--${AOs::TimeBomb::SM::armed::pause::TIMEOUT::[else]}-->
+      <choice target="../../../5">
+       <guard brief="else"/>
+       <choice_glyph conn="36,60,4,1,10,-6">
+        <action box="0,5,16,5"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="4,60,3,-1,32">
+       <action box="1,-2,20,5"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="4,52,26,14">
+      <entry box="1,2,21,3"/>
+     </state_glyph>
+    </state>
+    <!--${AOs::TimeBomb::SM::armed::boom}-->
+    <state name="boom">
+     <entry brief="all-LEDs=ON;">BSP_ledRedOn();
+BSP_ledGreenOn();
+BSP_ledBlueOn();</entry>
+     <state_glyph node="4,68,26,10">
+      <entry box="1,2,17,3"/>
+     </state_glyph>
+    </state>
+    <state_glyph node="2,6,40,74">
+     <exit box="1,2,17,3"/>
+    </state_glyph>
+   </state>
+   <state_diagram size="64,84"/>
+  </statechart>
+ </class>
+</package>
