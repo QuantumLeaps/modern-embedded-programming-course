@@ -5,8 +5,18 @@
 int main() {
     SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run mode for GPIOF */
     SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
+
+    /* make sure the Run Mode and AHB-enable take effects
+    * before accessing the peripherals
+    */
+    __ISB(); /* Instruction Synchronization Barrier */
+    __DSB(); /* Data Memory Barrier */
+
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
+
+    /* turn all LEDs off */
+    GPIOF_AHB->DATA_Bits[LED_RED | LED_BLUE | LED_GREEN] = 0U;
 
     SysTick->LOAD = SYS_CLOCK_HZ/2U - 1U;
     SysTick->VAL  = 0U;

@@ -1,6 +1,6 @@
 /****************************************************************************
-* MInimal Real-time Operating System (MIROS)
-* version 0.26 (matching lesson 26)
+* MInimal Real-time Operating System (MiROS)
+* version 1.26 (matching lesson 26, see https://youtu.be/kLxxXNCrY60)
 *
 * This software is a teaching aid to illustrate the concepts underlying
 * a Real-Time Operating System (RTOS). The main goal of the software is
@@ -10,6 +10,8 @@
 * in commercial applications.
 *
 * Copyright (C) 2018 Miro Samek. All Rights Reserved.
+*
+* SPDX-License-Identifier: GPL-3.0-or-later
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -24,8 +26,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/>.
 *
-* Contact Information:
-* https://www.state-machine.com
+* Git repo:
+* https://github.com/QuantumLeaps/MiROS
 ****************************************************************************/
 #ifndef MIROS_H
 #define MIROS_H
@@ -67,4 +69,3 @@ void OSThread_start(
     void *stkSto, uint32_t stkSize);
 
 #endif /* MIROS_H */
-

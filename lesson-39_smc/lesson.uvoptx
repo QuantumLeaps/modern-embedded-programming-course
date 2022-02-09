@@ -103,7 +103,7 @@
         <bEvRecOn>1</bEvRecOn>
         <bSchkAxf>0</bSchkAxf>
         <bTchkAxf>0</bTchkAxf>
-        <nTsel>8</nTsel>
+        <nTsel>19</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -432,7 +432,7 @@
   </Group>
 
   <Group>
-    <GroupName>uCOS-II</GroupName>
+    <GroupName>uc-os2</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -444,7 +444,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_core.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_core.c</PathWithFileName>
       <FilenameWithoutPath>os_core.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -456,7 +456,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_flag.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_flag.c</PathWithFileName>
       <FilenameWithoutPath>os_flag.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -468,7 +468,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_mbox.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_mbox.c</PathWithFileName>
       <FilenameWithoutPath>os_mbox.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -480,7 +480,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_mem.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_mem.c</PathWithFileName>
       <FilenameWithoutPath>os_mem.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -492,7 +492,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_mutex.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_mutex.c</PathWithFileName>
       <FilenameWithoutPath>os_mutex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -504,7 +504,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_q.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_q.c</PathWithFileName>
       <FilenameWithoutPath>os_q.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -516,7 +516,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_sem.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_sem.c</PathWithFileName>
       <FilenameWithoutPath>os_sem.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -528,7 +528,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_task.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_task.c</PathWithFileName>
       <FilenameWithoutPath>os_task.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -540,7 +540,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_time.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_time.c</PathWithFileName>
       <FilenameWithoutPath>os_time.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -552,7 +552,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Source\os_tmr.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Source\os_tmr.c</PathWithFileName>
       <FilenameWithoutPath>os_tmr.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -560,7 +560,7 @@
   </Group>
 
   <Group>
-    <GroupName>uCOS-II_port</GroupName>
+    <GroupName>uc-os2_port</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -572,7 +572,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu.h</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu.h</PathWithFileName>
       <FilenameWithoutPath>os_cpu.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -584,7 +584,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu_a.asm</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu_a.asm</PathWithFileName>
       <FilenameWithoutPath>os_cpu_a.asm</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -596,7 +596,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_dbg.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_dbg.c</PathWithFileName>
       <FilenameWithoutPath>os_dbg.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -608,7 +608,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\os_cpu_c.c</PathWithFileName>
+      <PathWithFileName>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\os_cpu_c.c</PathWithFileName>
       <FilenameWithoutPath>os_cpu_c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

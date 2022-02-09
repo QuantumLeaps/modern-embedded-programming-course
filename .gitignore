@@ -37,6 +37,7 @@ version-*
 metrics.dox
 
 qpc/
+qtools/
 CMSIS/
 test*/
 tests/

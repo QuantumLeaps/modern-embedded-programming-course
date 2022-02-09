@@ -94,20 +94,30 @@ void BSP_init(void) {
     */
     SystemCoreClockUpdate();
 
+    /* enable clock for to the peripherals used by this application... */
     SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run mode for GPIOF */
-
-    GPIOF->LOCK = 0x4C4F434B; /* unlock GPIOCR register for SW2 */
-    *(uint32_t *)(&GPIOF->CR) = 0x01; /* commit the write */
-    
     SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
+    __ISB();
+    __DSB();
 
+    /* configure LEDs (digital output) */
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
+    GPIOF_AHB->DATA_Bits[LED_RED | LED_BLUE | LED_GREEN] = 0U;
 
-    /* configure switches */
+    /* configure switches... */
+
+    /* unlock access to the SW2 pin because it is PROTECTED */
+    GPIOF_AHB->LOCK = 0x4C4F434BU; /* unlock GPIOCR register for SW2 */
+    /* commit the write (cast const away) */
+    *(uint32_t volatile *)&GPIOF_AHB->CR = 0x01U;
+
     GPIOF_AHB->DIR &= ~(BTN_SW1 | BTN_SW2); /* input */
     GPIOF_AHB->DEN |= (BTN_SW1 | BTN_SW2); /* digital enable */
     GPIOF_AHB->PUR |= (BTN_SW1 | BTN_SW2); /* pull-up resistor enable */
+
+    *(uint32_t volatile *)&GPIOF_AHB->CR = 0x00U;
+    GPIOF_AHB->LOCK = 0x0; /* lock GPIOCR register for SW2 */
 }
 /*..........................................................................*/
 void BSP_start(void) {

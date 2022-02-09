@@ -73,10 +73,12 @@ void OS_sched(void) {
             }
         } while ((OS_readySet & (1U << (OS_currIdx - 1U))) == 0U);
     }
-    OS_next = OS_thread[OS_currIdx];
+    /* temporarty for the next thread */
+    OSThread * const next = OS_thread[OS_currIdx];
 
     /* trigger PendSV, if needed */
-    if (OS_next != OS_curr) {
+    if (next != OS_curr) {
+        OS_next = next;
         *(uint32_t volatile *)0xE000ED04 = (1U << 28);
     }
 }

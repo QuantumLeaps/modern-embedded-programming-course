@@ -1,6 +1,6 @@
 /****************************************************************************
-* MInimal Real-time Operating System (MIROS)
-* version 0.24 (matching lesson 24)
+* MInimal Real-time Operating System (MiROS), ARM-CLANG port.
+* version 1.26 (matching lesson 26, see https://youtu.be/kLxxXNCrY60)
 *
 * This software is a teaching aid to illustrate the concepts underlying
 * a Real-Time Operating System (RTOS). The main goal of the software is
@@ -10,6 +10,8 @@
 * in commercial applications.
 *
 * Copyright (C) 2018 Miro Samek. All Rights Reserved.
+*
+* SPDX-License-Identifier: GPL-3.0-or-later
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -24,8 +26,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/>.
 *
-* Contact Information:
-* https://www.state-machine.com
+* Git repo:
+* https://github.com/QuantumLeaps/MiROS
 ****************************************************************************/
 #include <stdint.h>
 #include "miros.h"
@@ -37,24 +39,43 @@ OSThread * volatile OS_curr; /* pointer to the current thread */
 OSThread * volatile OS_next; /* pointer to the next thread to run */
 
 OSThread *OS_thread[32 + 1]; /* array of threads started so far */
-uint8_t OS_threadNum; /* number of threads started so far */
-uint8_t OS_currIdx; /* current thread index for round robin scheduling */
+uint32_t OS_readySet; /* bitmask of threads that are ready to run */
+uint32_t OS_delayedSet; /* bitmask of threads that are delayed */
 
-void OS_init(void) {
+#define LOG2(x) (32U - __builtin_clz(x))
+
+OSThread idleThread;
+void main_idleThread() {
+    while (1) {
+        OS_onIdle();
+    }
+}
+
+void OS_init(void *stkSto, uint32_t stkSize) {
     /* set the PendSV interrupt priority to the lowest level 0xFF */
     *(uint32_t volatile *)0xE000ED20 |= (0xFFU << 16);
+
+    /* start idleThread thread */
+    OSThread_start(&idleThread,
+                   0U, /* idle thread priority */
+                   &main_idleThread,
+                   stkSto, stkSize);
 }
 
 void OS_sched(void) {
-    /* OS_next = ... */
-    ++OS_currIdx;
-    if (OS_currIdx == OS_threadNum) {
-        OS_currIdx = 0U;
+    /* choose the next thread to execute... */
+    OSThread *next;
+    if (OS_readySet == 0U) { /* idle condition? */
+        next = OS_thread[0]; /* the idle thread */
     }
-    OS_next = OS_thread[OS_currIdx];
+    else {
+        next = OS_thread[LOG2(OS_readySet)];
+        Q_ASSERT(next != (OSThread *)0);
+    }
 
     /* trigger PendSV, if needed */
-    if (OS_next != OS_curr) {
+    if (next != OS_curr) {
+        OS_next = next;
         *(uint32_t volatile *)0xE000ED04 = (1U << 28);
     }
 }
@@ -63,16 +84,49 @@ void OS_run(void) {
     /* callback to configure and start interrupts */
     OS_onStartup();
 
-    __disable_irq();
+    __asm volatile ("cpsid i");
     OS_sched();
-    __enable_irq();
+    __asm volatile ("cpsie i");
 
     /* the following code should never execute */
     Q_ERROR();
 }
 
+void OS_tick(void) {
+    uint32_t workingSet = OS_delayedSet;
+    while (workingSet != 0U) {
+        OSThread *t = OS_thread[LOG2(workingSet)];
+        uint32_t bit;
+        Q_ASSERT((t != (OSThread *)0) && (t->timeout != 0U));
+
+        bit = (1U << (t->prio - 1U));
+        --t->timeout;
+        if (t->timeout == 0U) {
+            OS_readySet   |= bit;  /* insert to set */
+            OS_delayedSet &= ~bit; /* remove from set */
+        }
+        workingSet &= ~bit; /* remove from working set */
+    }
+}
+
+void OS_delay(uint32_t ticks) {
+    uint32_t bit;
+    __asm volatile ("cpsid i");
+
+    /* never call OS_delay from the idleThread */
+    Q_REQUIRE(OS_curr != OS_thread[0]);
+
+    OS_curr->timeout = ticks;
+    bit = (1U << (OS_curr->prio - 1U));
+    OS_readySet &= ~bit;
+    OS_delayedSet |= bit;
+    OS_sched();
+    __asm volatile ("cpsie i");
+}
+
 void OSThread_start(
     OSThread *me,
+    uint8_t prio, /* thread priority */
     OSThreadHandler threadHandler,
     void *stkSto, uint32_t stkSize)
 {
@@ -81,6 +135,12 @@ void OSThread_start(
     */
     uint32_t *sp = (uint32_t *)((((uint32_t)stkSto + stkSize) / 8) * 8);
     uint32_t *stk_limit;
+
+    /* priority must be in ragne
+    * and the priority level must be unused
+    */
+    Q_REQUIRE((prio < Q_DIM(OS_thread))
+              && (OS_thread[prio] == (OSThread *)0));
 
     *(--sp) = (1U << 24);  /* xPSR */
     *(--sp) = (uint32_t)threadHandler; /* PC */
@@ -111,53 +171,55 @@ void OSThread_start(
         *sp = 0xDEADBEEFU;
     }
 
-    Q_ASSERT(OS_threadNum < Q_DIM(OS_thread));
-
     /* register the thread with the OS */
-    OS_thread[OS_threadNum] = me;
-    ++OS_threadNum;
+    OS_thread[prio] = me;
+    me->prio = prio;
+    /* make the thread ready to run */
+    if (prio > 0U) {
+        OS_readySet |= (1U << (prio - 1U));
+    }
 }
 
-__asm
+/* inline assembly syntax for Compiler 6 (ARMCLANG) */
+__attribute__ ((naked))
 void PendSV_Handler(void) {
-    IMPORT  OS_curr  /* extern variable */
-    IMPORT  OS_next  /* extern variable */
-
+__asm volatile (
     /* __disable_irq(); */
-    CPSID         I
+    "  CPSID         I                 \n"
 
     /* if (OS_curr != (OSThread *)0) { */
-    LDR           r1,=OS_curr
-    LDR           r1,[r1,#0x00]
-    CBZ           r1,PendSV_restore
+    "  LDR           r1,=OS_curr       \n"
+    "  LDR           r1,[r1,#0x00]     \n"
+    "  CBZ           r1,PendSV_restore \n"
 
     /*     push registers r4-r11 on the stack */
-    PUSH          {r4-r11}
+    "  PUSH          {r4-r11}          \n"
 
     /*     OS_curr->sp = sp; */
-    LDR           r1,=OS_curr
-    LDR           r1,[r1,#0x00]
-    STR           sp,[r1,#0x00]
+    "  LDR           r1,=OS_curr      \n"
+    "  LDR           r1,[r1,#0x00]    \n"
+    "  STR           sp,[r1,#0x00]    \n"
     /* } */
 
-PendSV_restore
+    "PendSV_restore:                  \n"
     /* sp = OS_next->sp; */
-    LDR           r1,=OS_next
-    LDR           r1,[r1,#0x00]
-    LDR           sp,[r1,#0x00]
+    "  LDR           r1,=OS_next      \n"
+    "  LDR           r1,[r1,#0x00]    \n"
+    "  LDR           sp,[r1,#0x00]    \n"
 
     /* OS_curr = OS_next; */
-    LDR           r1,=OS_next
-    LDR           r1,[r1,#0x00]
-    LDR           r2,=OS_curr
-    STR           r1,[r2,#0x00]
+    "  LDR           r1,=OS_next      \n"
+    "  LDR           r1,[r1,#0x00]    \n"
+    "  LDR           r2,=OS_curr      \n"
+    "  STR           r1,[r2,#0x00]    \n"
 
     /* pop registers r4-r11 */
-    POP           {r4-r11}
+    "  POP           {r4-r11}         \n"
 
     /* __enable_irq(); */
-    CPSIE         I
+    "  CPSIE         I                \n"
 
     /* return to the next thread */
-    BX            lr
+    "  BX            lr               \n"
+    );
 }

@@ -1,6 +1,6 @@
 /****************************************************************************
-* MInimal Real-time Operating System (MIROS) for IAR toolchain
-* version 0.26 (matching lesson 26)
+* MInimal Real-time Operating System (MiROS), IAR EWARM port.
+* version 1.26 (matching lesson 26, see https://youtu.be/kLxxXNCrY60)
 *
 * This software is a teaching aid to illustrate the concepts underlying
 * a Real-Time Operating System (RTOS). The main goal of the software is
@@ -10,6 +10,8 @@
 * in commercial applications.
 *
 * Copyright (C) 2018 Miro Samek. All Rights Reserved.
+*
+* SPDX-License-Identifier: GPL-3.0-or-later
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -24,8 +26,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program. If not, see <https://www.gnu.org/licenses/>.
 *
-* Contact Information:
-* https://www.state-machine.com
+* Git repo:
+* https://github.com/QuantumLeaps/MiROS
 ****************************************************************************/
 #include <stdint.h>
 #include <intrinsics.h> /* IAR intrinsic functions */
@@ -63,17 +65,19 @@ void OS_init(void *stkSto, uint32_t stkSize) {
 }
 
 void OS_sched(void) {
-    /* OS_next = ... */
+    /* choose the next thread to execute... */
+    OSThread *next;
     if (OS_readySet == 0U) { /* idle condition? */
-        OS_next = OS_thread[0]; /* the idle thread */
+        next = OS_thread[0]; /* the idle thread */
     }
     else {
-        OS_next = OS_thread[LOG2(OS_readySet)];
-        Q_ASSERT(OS_next != (OSThread *)0);
+        next = OS_thread[LOG2(OS_readySet)];
+        Q_ASSERT(next != (OSThread *)0);
     }
 
     /* trigger PendSV, if needed */
-    if (OS_next != OS_curr) {
+    if (next != OS_curr) {
+        OS_next = next;
         *(uint32_t volatile *)0xE000ED04 = (1U << 28);
     }
 }

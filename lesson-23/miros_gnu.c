@@ -90,7 +90,6 @@ void OSThread_start(
 __attribute__ ((naked, optimize("-fno-stack-protector")))
 void PendSV_Handler(void) {
 __asm volatile (
-
     /* __disable_irq(); */
     "  CPSID         I                 \n"
 

@@ -1,5 +1,8 @@
-[![Modern Embedded Programming Course](img/thumbnail.jpg)](https://www.youtube.com/playlist?list=PLPW8O6W-1chwyTzI3BHwBLbGQoPFxPAPM)
+## Brought to you by:
+[![Quantum Leaps](https://www.state-machine.com/attachments/logo_ql_400.png)](https://www.state-machine.com)
 
+---------------------------------------------------------------------
+[![Modern Embedded Programming Course](img/thumbnail.jpg)](https://www.youtube.com/playlist?list=PLPW8O6W-1chwyTzI3BHwBLbGQoPFxPAPM)
 
 # What is it?
 This repository is a companion to the ["Modern Embedded Systems Programming" video course](https://www.youtube.com/playlist?list=PLPW8O6W-1chwyTzI3BHwBLbGQoPFxPAPM),
@@ -16,16 +19,39 @@ This deeper understanding will allow you to use the C language more efficiently 
 The course has been going from January 2013, but it is never too late to join. Stay tuned...
 
 
----------------------------------------------------------------------
+# Updates
+All projects for ARM/KEIL uVision have been updated from the obsolete Compiler-5 to the newer Compiler-6.
+
+
 # Comments/Discussion
-If you'd like to discuss this course or related subjects, plese use the ["Issues" tab](https://github.com/QuantumLeaps/modern-embedded-course/issues).
+If you'd like to discuss this course or related subjects, plese post your questions or comments on YouTube, in the commend section under each pertaining video lesson.
 
 
----------------------------------------------------------------------
-# Contact Information
+# Course Resources
+Numerous resources for the video course are available through the companion webpage at:
 
-[www.state-machine.com/quickstart](https://www.state-machine.com/quickstart)
+[www.state-machine.com/video-course](https://www.state-machine.com/video-course)
+
+Among others, you can find there:
+- information about the hardware (board, logic analyzer, etc.)
+- [Troubleshooting TivaC LaunchPad](https://www.state-machine.com/course/AN_Troubleshooting_TivaC.pdf)
+- [Tiva TM4C123GH6PM Data Sheet](https://www.state-machine.com/course/TM4C123GH6PM_Datasheet.pdf)
+- [USB Drivers for TivaC](https://www.state-machine.com/course/MDK_Stellaris_ICDI_AddOn.exe)
+- [Flash Programmer for TivaC](https://www.ti.com/tool/LMFLASHPROGRAMMER)
+- and more
 
 
+# How to Help this Project?
+If you like this project, please:
+
+- [<b>subscribe to the Quantum Leaps YouTube channel</b>](https://www.youtube.com/channel/UCMGXFEew8I6gzjg3tWen4Gw?sub_confirmation=1)
+
+[![YouTube subscribe](img/yt-subscribe.png)](https://www.youtube.com/channel/UCMGXFEew8I6gzjg3tWen4Gw?sub_confirmation=1)
+
+- spread the word about the videos you like (e.g., by posting on other websites frequented by embedded folks)
+
+- give this GitHub repository a star (in the upper-right corner of your browser window):
+
+![GitHub star](img/github-star.jpg)
 
 

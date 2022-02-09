@@ -1,5 +1,6 @@
 #include "lm4f120h5qr.h"
 #include "delay.h"
+#include <intrinsics.h>
 
 #define LED_RED   (1U << 1)
 #define LED_BLUE  (1U << 2)
@@ -17,6 +18,13 @@ int main() {
 
     SYSCTL_RCGCGPIO_R |= (1U << 5);  /* enable clock for GPIOF */
     SYSCTL_GPIOHBCTL_R |= (1U << 5); /* enable AHB for GPIOF */
+
+    /* make sure the Run Mode and AHB-enable take effects
+    * before accessing the peripherals
+    */
+    __ISB(); /* Instruction Synchronization Barrier */
+    __DSB(); /* Data Memory Barrier */
+
     GPIO_PORTF_AHB_DIR_R |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIO_PORTF_AHB_DEN_R |= (LED_RED | LED_BLUE | LED_GREEN);
 

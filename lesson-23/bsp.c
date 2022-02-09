@@ -21,8 +21,15 @@ void SysTick_Handler(void) {
 }
 
 void BSP_init(void) {
-    SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run mode for GPIOF */
+    SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run Mode for GPIOF */
     SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
+
+    /* make sure the Run Mode and AHB-enable take effects
+    * before accessing the peripherals
+    */
+    __ISB(); /* Instruction Synchronization Barrier */
+    __DSB(); /* Data Memory Barrier */
+
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
 

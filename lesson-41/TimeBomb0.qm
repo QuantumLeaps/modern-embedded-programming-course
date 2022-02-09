@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model version="5.1.3" links="1">
+<model version="5.1.4" links="1">
  <documentation>About this model:
 -----------------
 The TimeBomb example from the video course &quot;Modern Embedded Systems Programming&quot;:

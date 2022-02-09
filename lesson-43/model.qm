@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="5.1.3" links="0">
+ <framework name="qpc"/>
+ <package name="AO_ptrs" stereotype="0x00">
+  <attribute name="AO_Blinky1" type="QActive * const" visibility="0x00" properties="0x00">
+   <code>= &amp;Blinky1_inst.super;</code>
+  </attribute>
+  <attribute name="AO_Blinky2" type="QActive * const" visibility="0x00" properties="0x00">
+   <code>= &amp;Blinky2_inst.super;</code>
+  </attribute>
+ </package>
+ <package name="AOs" stereotype="0x00">
+  <class name="Blinky1" superclass="qpc::QActive">
+   <attribute name="te" type="QTimeEvt" visibility="0x02" properties="0x00"/>
+   <attribute name="inst" type="Blinky1" visibility="0x00" properties="0x01"/>
+   <operation name="ctor" type="void" visibility="0x00" properties="0x00">
+    <code>QActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Blinky1_initial));
+QTimeEvt_ctorX(&amp;me-&gt;te, &amp;me-&gt;super, TIMEOUT_SIG, 0U);</code>
+   </operation>
+   <statechart properties="0x01">
+    <initial target="../1">
+     <action>QTimeEvt_armX(&amp;me-&gt;te, 2U, 2U);</action>
+     <initial_glyph conn="3,2,5,1,35,6,-2">
+      <action box="0,-2,34,4"/>
+     </initial_glyph>
+    </initial>
+    <state name="active">
+     <tran trig="TIMEOUT">
+      <action>for (uint32_t volatile i = 1500U; i != 0U; --i) {
+    BSP_ledGreenOn();
+    BSP_ledGreenOff();
+}</action>
+      <tran_glyph conn="2,12,3,-1,32">
+       <action box="0,-2,32,16"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="2,6,34,22"/>
+    </state>
+    <state_diagram size="40,30"/>
+   </statechart>
+  </class>
+  <class name="Blinky2" superclass="qpc::QActive">
+   <attribute name="inst" type="Blinky2" visibility="0x00" properties="0x01"/>
+   <operation name="ctor" type="void" visibility="0x00" properties="0x00">
+    <code>QActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Blinky2_initial));</code>
+   </operation>
+   <statechart properties="0x01">
+    <initial target="../1">
+     <initial_glyph conn="3,2,5,1,35,6,-2">
+      <action box="1,0,12,2"/>
+     </initial_glyph>
+    </initial>
+    <state name="active">
+     <tran trig="BUTTON_PRESS">
+      <action>for (uint32_t volatile i = 3*1500U; i != 0U; --i) {
+    BSP_ledBlueOn();
+    BSP_ledBlueOff();
+}</action>
+      <tran_glyph conn="2,12,3,-1,32">
+       <action box="0,-2,35,14"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="2,6,34,22"/>
+    </state>
+    <state_diagram size="40,30"/>
+   </statechart>
+  </class>
+ </package>
+ <directory name=".">
+  <file name="main_qm.c">
+   <text>#include &quot;qpc.h&quot;
+#include &quot;bsp.h&quot;
+
+Q_DEFINE_THIS_FILE
+
+$declare ${AOs}
+
+static QEvt const *blinky1_queue[10];
+static QEvt const *blinky2_queue[10];
+
+int main() {
+    BSP_init();
+    QF_init();
+
+    /* initialize and start Blinky1 AO */
+    Blinky1_ctor(&amp;Blinky1_inst);
+    QACTIVE_START(&amp;Blinky1_inst,
+                   5U, /* priority */
+                   blinky1_queue, Q_DIM(blinky1_queue), /* event queue */
+                   (void *)0, 0, /* stack memory, stack size (not used) */
+                   (void *)0); /* extra parameter (not used) */
+
+    /* initialize and start Blinky2 AO */
+    Blinky2_ctor(&amp;Blinky2_inst);
+    QACTIVE_START(&amp;Blinky2_inst,
+                   2U, /* priority */
+                   blinky2_queue, Q_DIM(blinky2_queue), /* event queue */
+                   (void *)0, 0, /* stack memory, stack size (not used) */
+                   (void *)0); /* extra parameter (not used) */
+
+    /* transfer control to the RTOS to run the threads */
+    return QF_run();
+}
+
+/*=======================================================================*/
+$define ${AO_ptrs}
+$define ${AOs}</text>
+  </file>
+ </directory>
+</model>

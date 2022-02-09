@@ -339,7 +339,7 @@
               <MiscControls>-Wconditional-uninitialized -Wsometimes-uninitialized</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.;..\qpc\3rd_party\ucos-ii\Source;..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM;..\qpc\3rd_party\CMSIS\Include;..\qpc\3rd_party\ek-tm4c123gxl</IncludePath>
+              <IncludePath>.;..\qpc\3rd_party\uc-os2\Source;..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM;..\qpc\3rd_party\CMSIS\Include;..\qpc\3rd_party\ek-tm4c123gxl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -441,82 +441,82 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>uCOS-II</GroupName>
+          <GroupName>uc-os2</GroupName>
           <Files>
             <File>
               <FileName>os_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_core.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_core.c</FilePath>
             </File>
             <File>
               <FileName>os_flag.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_flag.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_flag.c</FilePath>
             </File>
             <File>
               <FileName>os_mbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_mbox.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_mbox.c</FilePath>
             </File>
             <File>
               <FileName>os_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_mem.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_mem.c</FilePath>
             </File>
             <File>
               <FileName>os_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_mutex.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_mutex.c</FilePath>
             </File>
             <File>
               <FileName>os_q.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_q.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_q.c</FilePath>
             </File>
             <File>
               <FileName>os_sem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_sem.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_sem.c</FilePath>
             </File>
             <File>
               <FileName>os_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_task.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_task.c</FilePath>
             </File>
             <File>
               <FileName>os_time.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_time.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_time.c</FilePath>
             </File>
             <File>
               <FileName>os_tmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Source\os_tmr.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Source\os_tmr.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>uCOS-II_port</GroupName>
+          <GroupName>uc-os2_port</GroupName>
           <Files>
             <File>
               <FileName>os_cpu.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu.h</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu.h</FilePath>
             </File>
             <File>
               <FileName>os_cpu_a.asm</FileName>
               <FileType>2</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu_a.asm</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu_a.asm</FilePath>
             </File>
             <File>
               <FileName>os_dbg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_dbg.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_dbg.c</FilePath>
             </File>
             <File>
               <FileName>os_cpu_c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\qpc\3rd_party\ucos-ii\Ports\ARM-Cortex-M\ARMv7-M\os_cpu_c.c</FilePath>
+              <FilePath>..\qpc\3rd_party\uc-os2\Ports\ARM-Cortex-M\ARMv7-M\os_cpu_c.c</FilePath>
             </File>
           </Files>
         </Group>

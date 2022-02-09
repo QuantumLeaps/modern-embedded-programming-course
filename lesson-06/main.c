@@ -32,6 +32,9 @@ int main() {
     GPIO_PORTF_DIR_R |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIO_PORTF_DEN_R |= (LED_RED | LED_BLUE | LED_GREEN);
 
+    /* start with turning all LEDs off */
+    GPIO_PORTF_DATA_R &= ~(LED_RED | LED_BLUE | LED_GREEN);
+
     GPIO_PORTF_DATA_R |= LED_BLUE;
     while (1) {
         GPIO_PORTF_DATA_R |= LED_RED;

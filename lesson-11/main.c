@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <intrinsics.h>
 
 #include "lm4f120h5qr.h"
 #include "delay.h"
@@ -36,7 +37,8 @@ int main() {
 
     u16c = 100U;
     //s32  = 10 - u16c;  // NOT portable!
-    s32  = 10 - (int16_t)u16c;
+    //s32  = 10 - (int16_t)u16c; // INCORRECT: unintended sign extension
+    s32  = 10 - (int32_t)u16c;
 
     //if (u32e > -1) {  // ALWAYS false!
     if ((int32_t)u32e > -1) {
@@ -54,10 +56,19 @@ int main() {
 
     SYSCTL_RCGCGPIO_R |= (1U << 5);  /* enable clock for GPIOF */
     SYSCTL_GPIOHBCTL_R |= (1U << 5); /* enable AHB for GPIOF */
+
+    /* make sure the Run Mode and AHB-enable take effects
+    * before accessing the peripherals
+    */
+    __ISB(); /* Instruction Synchronization Barrier */
+    __DSB(); /* Data Memory Barrier */
+
     GPIO_PORTF_AHB_DIR_R |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIO_PORTF_AHB_DEN_R |= (LED_RED | LED_BLUE | LED_GREEN);
 
-    GPIO_PORTF_AHB_DATA_BITS_R[LED_BLUE] = LED_BLUE;
+    /* turn all LEDs off */
+    GPIO_PORTF_AHB_DATA_BITS_R[LED_RED | LED_BLUE | LED_GREEN] = 0U;
+
     while (1) {
         GPIO_PORTF_AHB_DATA_BITS_R[LED_RED] = LED_RED;
         delay(500000);

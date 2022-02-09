@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 /*..........................................................................*/
-Q_NORETURN Q_onAssert(char_t const * const module, int_t const loc) {
+Q_NORETURN Q_onAssert(char const * const module, int_t const loc) {
     FPRINTF_S(stderr, "Assertion failed in %s:%d\n", module, loc);
     QF_onCleanup();
     exit(-1);
