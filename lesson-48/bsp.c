@@ -260,7 +260,9 @@ void BSP_ledGreenOff(void) {
 /*..........................................................................*/
 /* error-handling function called by exception handlers in the startup code */
 Q_NORETURN Q_onAssert(char const * module, int_t location) {
-    /* TBD: damage control */
+    /* TBD: Perform corrective actions and damage control
+    * SPECIFIC to your particular system.
+    */
     (void)module;   /* unused parameter */
     (void)location; /* unused parameter */
     GPIOF_AHB->DATA_Bits[LED_RED | LED_GREEN | LED_BLUE] = 0xFFU; /* all ON */

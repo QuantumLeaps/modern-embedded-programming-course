@@ -207,6 +207,7 @@ void QF_onCleanup(void) {
 /*..........................................................................*/
 void BSP_ledRedOn(void) {
     GPIOF_AHB->DATA_Bits[LED_RED] = LED_RED;
+
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("red");
         QS_U8(1U, 1U);
@@ -216,6 +217,7 @@ void BSP_ledRedOn(void) {
 /*..........................................................................*/
 void BSP_ledRedOff(void) {
     GPIOF_AHB->DATA_Bits[LED_RED] = 0U;
+
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("red");
         QS_U8(1U, 0U);
@@ -224,6 +226,7 @@ void BSP_ledRedOff(void) {
 /*..........................................................................*/
 void BSP_ledBlueOn(void) {
     GPIOF_AHB->DATA_Bits[LED_BLUE] = LED_BLUE;
+
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("blue");
         QS_U8(1U, 1U);
@@ -233,6 +236,7 @@ void BSP_ledBlueOn(void) {
 /*..........................................................................*/
 void BSP_ledBlueOff(void) {
     GPIOF_AHB->DATA_Bits[LED_BLUE] = 0U;
+
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("blue");
         QS_U8(1U, 0U);
@@ -242,6 +246,7 @@ void BSP_ledBlueOff(void) {
 /*..........................................................................*/
 void BSP_ledGreenOn(void) {
     GPIOF_AHB->DATA_Bits[LED_GREEN] = LED_GREEN;
+
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("green");
         QS_U8(1U, 1U);
@@ -251,6 +256,7 @@ void BSP_ledGreenOn(void) {
 /*..........................................................................*/
 void BSP_ledGreenOff(void) {
     GPIOF_AHB->DATA_Bits[LED_GREEN] = 0U;
+
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("green");
         QS_U8(1U, 0U);
@@ -259,13 +265,13 @@ void BSP_ledGreenOff(void) {
 
 /*..........................................................................*/
 /* error-handling function called by exception handlers in the startup code */
-Q_NORETURN Q_onAssert(char const * module, int_t location) {
+void Q_onAssert(char const *module, int loc) {
     /* TBD: damage control */
-    (void)module;   /* unused parameter */
-    (void)location; /* unused parameter */
+    (void)module; /* avoid the "unused parameter" compiler warning */
+    (void)loc;    /* avoid the "unused parameter" compiler warning */
     GPIOF_AHB->DATA_Bits[LED_RED | LED_GREEN | LED_BLUE] = 0xFFU; /* all ON */
 #ifndef NDEBUG /* debug build? */
-    while (location != 0) { /* tie the CPU in this endless loop */
+    while (loc != 0) { /* tie the CPU in this endless loop */
     }
 #endif
     NVIC_SystemReset(); /* reset the CPU */

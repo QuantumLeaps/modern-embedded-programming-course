@@ -36,11 +36,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Full formatting.</state>
+                    <state>Full formatting, without multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Full formatting.</state>
+                    <state>Full formatting, without multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -1048,9 +1048,9 @@
             <data />
         </settings>
     </configuration>
-    <mfc_discard>
+    <mfc>
         <configuration>Debug</configuration>
-    </mfc_discard>
+    </mfc>
     <file>
         <name>$PROJ_DIR$\bsp.c</name>
     </file>

@@ -3,6 +3,7 @@
 
 #include "bsp.h"
 #include "miros.h"
+#include "qassert.h"
 #include "TM4C123GH6PM.h" /* the TM4C MCU Peripheral Access Layer (TI) */
 
 /* on-board LEDs */
@@ -87,9 +88,9 @@ void OS_onStartup(void) {
     NVIC_SetPriority(SysTick_IRQn, 0U);
 }
 
-void Q_onAssert(char const *module, int loc) {
+void Q_onAssert(char const * module, int_t loc) {
     /* TBD: damage control */
-    (void)module; /* avoid the "unused parameter" compiler warning */
-    (void)loc;    /* avoid the "unused parameter" compiler warning */
+    (void)module; /* unused parameter */
+    (void)loc;    /* unused parameter */
     NVIC_SystemReset();
 }

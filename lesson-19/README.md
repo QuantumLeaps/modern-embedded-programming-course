@@ -15,7 +15,7 @@ call to __libc_init_array(); (line 389)
 
 This call caused the linker error:
 
-error: lesson.out uses VFP register arguments, ...\libc.a(lib_a-init.o) does not 
+error: lesson.out uses VFP register arguments, ...\libc.a(lib_a-init.o) does not
 
 
 Quantum Leaps,
