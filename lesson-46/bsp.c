@@ -175,7 +175,7 @@ void BSP_init(void) {
     //QS_GLB_FILTER(QS_UA_RECORDS); /* all User records */
     //QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
     QS_GLB_FILTER(QS_ALL_RECORDS); /* all QS records */
-    QS_GLB_FILTER(-QS_QF_TICK); /* disable */ 
+    QS_GLB_FILTER(-QS_QF_TICK); /* disable */
 
     /* prodice the QS dictionaries... */
     QS_OBJ_DICTIONARY(AO_TimeBomb);

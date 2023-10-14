@@ -15,7 +15,7 @@ typedef struct {
         OFF_STATE,
         ON_STATE
     } state; /* the "state variable" */
-    
+
     TimeEvent te;
     uint32_t blink_time;
 } BlinkyButton;

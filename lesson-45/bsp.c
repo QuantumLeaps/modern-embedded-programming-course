@@ -37,7 +37,7 @@ void SysTick_Handler(void) {
     uint32_t tmp;
 
     GPIOD_AHB->DATA_Bits[PD0_PIN] = PD0_PIN;
-    
+
     QF_TICK_X(0U, (void *)0); /* process all QP/C time events */
 
     /* Perform the debouncing of buttons. The algorithm for debouncing
@@ -208,14 +208,14 @@ int fputc(int c, FILE *stream) {
     (void)stream; /* unused parameter */
 
     GPIOD_AHB->DATA_Bits[PD1_PIN] = PD1_PIN;
-    
+
     /* busy-wait as long as UART busy */
     while ((UART0->FR & UART_BUSY) != 0) {
     }
     UART0->DR = c; /* write the byte into Data Register */
 
     GPIOD_AHB->DATA_Bits[PD1_PIN] = 0;
-    
+
     return c;
 }
 

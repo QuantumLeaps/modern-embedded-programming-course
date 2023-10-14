@@ -15,20 +15,20 @@ int main() {
         } state = INITIAL;
         static uint32_t start;
         static uint8_t prev_button = 1U; /* SW1 is inactive high */
-       
+
         /* buffering of intputs... */
         struct {
             uint16_t sig;
-            
+
             /* event parameters */
             uint32_t now;
             uint8_t button;
         } evt, *e;
-        
+
         evt.sig = SAMPLE_SIG;
         evt.now = BSP_tickCtr();
         evt.button = BSP_SW1();
-        
+
         e = &evt;
         switch (state) {
             case INITIAL:

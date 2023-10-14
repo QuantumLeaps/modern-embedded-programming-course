@@ -35,7 +35,7 @@ void BSP_init(void) {
     GPIOF_AHB->DIR &= ~BTN_SW1; /* input */
     GPIOF_AHB->DEN |= BTN_SW1; /* digital enable */
     GPIOF_AHB->PUR |= BTN_SW1; /* pull-up resistor enable */
-    
+
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
 

@@ -33,13 +33,10 @@ lint*.txt
 *.bak
 *.qlc
 JLink*.*
-version-*
-metrics.dox
 
 qpc/
 qtools/
 CMSIS/
-test*/
 tests/
 
 Debug/

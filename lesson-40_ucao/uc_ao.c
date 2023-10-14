@@ -25,7 +25,7 @@ static char const this_module[] = "uc_ao"; /* this module name for Q_ASSERT() */
 /* Hierarchical State Machine facilities... */
 static Event const entryEvt = { ENTRY_SIG };
 static Event const exitEvt  = { EXIT_SIG };
-        
+
 void Hsm_ctor(Hsm * const me, StateHandler initial) {
     me->state = initial;
 }
@@ -42,7 +42,7 @@ void Hsm_dispatch(Hsm * const me, Event const * const e) {
 
     Q_ASSERT(me->state != (StateHandler)0);
     status = (*me->state)(me, e);
-    
+
     if (status == TRAN_STATUS) { /* transition taken? */
         (*prev_state)(me, &exitEvt);
         (*me->state)(me, &entryEvt);

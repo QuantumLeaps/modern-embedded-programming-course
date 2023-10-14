@@ -71,7 +71,7 @@ typedef struct Active Active; /* forward declaration */
 /* Active Object base class */
 struct Active {
     Hsm super;        /* inherit Hsm */
-    
+
     INT8U thread;     /* private thread (the unique uC/OS-II task priority) */
     OS_EVENT *queue;  /* private message queue */
 

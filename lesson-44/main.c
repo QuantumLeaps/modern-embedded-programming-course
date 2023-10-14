@@ -46,7 +46,7 @@ QState Blinky1_active(Blinky1 * const me, QEvt const * const e) {
             QTimeEvt_disarm(&me->te);
             QTimeEvt_armX(&me->te, ((BlinkPatternEvt const *)e)->ticks,
                                    ((BlinkPatternEvt const *)e)->ticks);
-            me->iter = ((BlinkPatternEvt const *)e)->iter;    
+            me->iter = ((BlinkPatternEvt const *)e)->iter;
             status_ = Q_HANDLED();
             break;
         }
@@ -141,8 +141,8 @@ int main() {
     BSP_init();
     QF_init();
 
-    QF_poolInit(evtPool, sizeof(evtPool), sizeof(evtPool[0])); 
-    
+    QF_poolInit(evtPool, sizeof(evtPool), sizeof(evtPool[0]));
+
     /* initialize and start blinky1 thread */
     Blinky1_ctor(&blinky1);
     QACTIVE_START(&blinky1,
