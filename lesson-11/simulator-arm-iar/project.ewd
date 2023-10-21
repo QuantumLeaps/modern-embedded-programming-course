@@ -92,7 +92,7 @@
                 </option>
                 <option>
                     <name>UseFlashLoader</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CLowLevel</name>
@@ -286,10 +286,6 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
-                    <name>CatchSFERR</name>
-                    <state>1</state>
-                </option>
-                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -405,6 +401,10 @@
                 </option>
                 <option>
                     <name>CatchINTERR</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>CatchSFERR</name>
                     <state>1</state>
                 </option>
                 <option>
@@ -708,7 +708,7 @@
                 <option>
                     <name>IjetTraceSizeList</name>
                     <version>0</version>
-                    <state>2</state>
+                    <state>4</state>
                 </option>
                 <option>
                     <name>FlashBoardPathSlave</name>
@@ -1188,7 +1188,7 @@
                 <option>
                     <name>CCSTLinkProbeList</name>
                     <version>1</version>
-                    <state>0</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCSTLinkTargetVccEnable</name>
@@ -1304,10 +1304,6 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
-                    <name>CCXds100CatchSFERR</name>
-                    <state>0</state>
-                </option>
-                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -1400,6 +1396,10 @@
                     <state>0</state>
                 </option>
                 <option>
+                    <name>CCXds100CatchSFERR</name>
+                    <state>0</state>
+                </option>
+                <option>
                     <name>CCXds100CatchHARDERR</name>
                     <state>0</state>
                 </option>
@@ -1409,7 +1409,7 @@
                 </option>
                 <option>
                     <name>CCXds100CpuClockEdit</name>
-                    <state>72.0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>CCXds100SwoClockAuto</name>
