@@ -5,9 +5,6 @@
 #include "bsp.h"
 
 #include "TM4C123GH6PM.h"        /* the device specific header (TI) */
-#include "rom.h"                 /* the built-in ROM functions (TI) */
-#include "sysctl.h"              /* system control driver (TI) */
-#include "gpio.h"                /* GPIO driver (TI) */
 /* add other drivers if necessary... */
 
 /* Local-scope objects -----------------------------------------------------*/
@@ -32,6 +29,28 @@
     #define UART_TXFIFO_DEPTH   16U
 
 #endif
+
+/* Error handler  ==========================================================*/
+/* error-handling function called by exception handlers in the startup code */
+Q_NORETURN Q_onError(char const * module, int_t id) {
+    /* TBD: Perform corrective actions and damage control
+    * SPECIFIC to your particular system.
+    */
+    (void)module;   /* unused parameter */
+    (void)id;       /* unused parameter */
+    GPIOF_AHB->DATA_Bits[LED_RED | LED_GREEN | LED_BLUE] = 0xFFU; /* all ON */
+#ifndef NDEBUG /* debug build? */
+    while (1) { /* tie the CPU in this endless loop */
+    }
+#endif
+    NVIC_SystemReset(); /* reset the CPU */
+}
+//............................................................................
+void assert_failed(char const * const module, int_t const id); // prototype
+void assert_failed(char const * const module, int_t const id) {
+    Q_onError(module, id);
+}
+
 
 /* ISRs  ===============================================*/
 void SysTick_Handler(void) {
@@ -255,22 +274,6 @@ void BSP_ledGreenOff(void) {
         QS_STR("green");
         QS_U8(1U, 0U);
     QS_END()
-}
-
-/*..........................................................................*/
-/* error-handling function called by exception handlers in the startup code */
-Q_NORETURN Q_onAssert(char const * module, int_t location) {
-    /* TBD: Perform corrective actions and damage control
-    * SPECIFIC to your particular system.
-    */
-    (void)module;   /* unused parameter */
-    (void)location; /* unused parameter */
-    GPIOF_AHB->DATA_Bits[LED_RED | LED_GREEN | LED_BLUE] = 0xFFU; /* all ON */
-#ifndef NDEBUG /* debug build? */
-    while (location != 0) { /* tie the CPU in this endless loop */
-    }
-#endif
-    NVIC_SystemReset(); /* reset the CPU */
 }
 
 /* QS callbacks ============================================================*/

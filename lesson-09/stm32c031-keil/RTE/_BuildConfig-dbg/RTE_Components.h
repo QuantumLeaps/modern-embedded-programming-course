@@ -4,7 +4,7 @@
  *      *** Do not modify ! ***
  *
  * Project: 'lesson' 
- * Target:  'Debug' 
+ * Target:  'BuildConfig-dbg' 
  */
 
 #ifndef RTE_COMPONENTS_H

@@ -1,0 +1,15 @@
+"C:\tools\IAR\ARM\arm\bin\armPROC.dll" 
+
+"C:\tools\IAR\ARM\arm\bin\armLMIFTDI.dll" 
+
+"C:\GitHub\modern-embedded-programming-course\lesson-04\tm4c123-iar\dbg\c.out" 
+
+--plugin="C:\tools\IAR\ARM\arm\bin\armbat.dll" 
+
+--device_macro="C:\tools\IAR\ARM\arm/config/debugger/TexasInstruments/TM4C123.dmac" 
+
+--flash_loader="C:\tools\IAR\ARM\arm/config/flashloader/TexasInstruments/FlashTC4_H6_o.board" 
+
+
+
+

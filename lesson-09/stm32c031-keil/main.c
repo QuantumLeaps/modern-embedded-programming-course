@@ -1,4 +1,4 @@
-#include "stm32c031.h"
+#include "stm32c031xx.h"  // CMSIS-compatible interface
 #include "delay.h"
 
 // LED marked "LD4" on the NUCLEO-C031C6 board
@@ -18,26 +18,26 @@ int main(void) {
     (void)fact(5U);
 
     // enable GPIOA clock port for the LEDs
-    RCC_IOPENR_R |= (1U << 0U);
+    RCC->IOPENR |= (1U << 0U);
 
     // NUCLEO-C031C6 board has LED LD4 on GPIOA pin LD4_PIN
     // and external LED LD5 on GPIO LD5_PIN
     // set the LED pins as push-pull output, no pull-up, pull-down
-    GPIOA_MODER_R   &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
-    GPIOA_MODER_R   |=  ((1U << 2U*LD4_PIN) | (1U << 2U*LD5_PIN));
-    GPIOA_OTYPER_R  &= ~((1U <<    LD4_PIN) | (1U <<    LD5_PIN));
-    GPIOA_OSPEEDR_R &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
-    GPIOA_OSPEEDR_R |=  ((1U << 2U*LD4_PIN) | (1U << 2U*LD5_PIN));
-    GPIOA_PUPDR_R   &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
+    GPIOA->MODER   &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
+    GPIOA->MODER   |=  ((1U << 2U*LD4_PIN) | (1U << 2U*LD5_PIN));
+    GPIOA->OTYPER  &= ~((1U <<    LD4_PIN) | (1U <<    LD5_PIN));
+    GPIOA->OSPEEDR &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
+    GPIOA->OSPEEDR |=  ((1U << 2U*LD4_PIN) | (1U << 2U*LD5_PIN));
+    GPIOA->PUPDR   &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
 
-    GPIOA_BSRR_R = (1U << LD5_PIN); // turn LD5 on
+    GPIOA->BSRR = (1U << LD5_PIN); // turn LD5 on
 
     while (1) { // endless loop
-        GPIOA_BSRR_R = (1U << LD4_PIN); // turn LD4 on
+        GPIOA->BSRR = (1U << LD4_PIN); // turn LD4 on
 
         delay(500000);
 
-        GPIOA_BSRR_R = (1U << (LD4_PIN + 16U)); // turn LD4 off
+        GPIOA->BSRR = (1U << (LD4_PIN + 16U)); // turn LD4 off
         delay(250000);
 
     }

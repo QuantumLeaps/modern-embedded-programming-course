@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Debug</TargetName>
+      <TargetName>BuildConfig-dbg</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
@@ -48,14 +48,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\Objects\</OutputDirectory>
+          <OutputDirectory>.\dbg\</OutputDirectory>
           <OutputName>lesson</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Listings\</ListingPath>
+          <ListingPath>.\dbg\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -412,13 +412,13 @@
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
         <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
         <targetInfos>
-          <targetInfo name="Debug"/>
+          <targetInfo name="BuildConfig-dbg"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32C0 CMSIS">
         <package name="STM32C0xx_DFP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.0.0"/>
         <targetInfos>
-          <targetInfo name="Debug"/>
+          <targetInfo name="BuildConfig-dbg"/>
         </targetInfos>
       </component>
     </components>
@@ -428,7 +428,7 @@
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32C0 CMSIS"/>
         <package name="STM32C0xx_DFP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.0.0"/>
         <targetInfos>
-          <targetInfo name="Debug"/>
+          <targetInfo name="BuildConfig-dbg"/>
         </targetInfos>
       </file>
       <file attr="config" category="source" name="Drivers\CMSIS\Device\ST\STM32C0xx\Source\Templates\system_stm32c0xx.c" version="1.0.0">
@@ -436,7 +436,7 @@
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32C0 CMSIS"/>
         <package name="STM32C0xx_DFP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.0.0"/>
         <targetInfos>
-          <targetInfo name="Debug"/>
+          <targetInfo name="BuildConfig-dbg"/>
         </targetInfos>
       </file>
     </files>
