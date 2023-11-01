@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model version="5.2.5" links="1">
+<model version="5.3.0" links="1">
  <documentation>About this model:
 -----------------
 The TimeBomb example from the video course &quot;Modern Embedded Systems Programming&quot;:
@@ -12,6 +12,10 @@ This example demonstrates:
 - Automatic code genertation from the model
 - Integration between the generated code and other code, such as the Board Support Package (BSP)
 
+NOTE:
+The &quot;TimeBomb&quot; state machine has been modified for the NUCLEO board,
+which has only one built-in LED (LD4) and only one button (PB1).
+The example additionally uses an external LED (LD5).
 
 Building and running the example:
 This example builds with the uVision project &quot;lesson&quot; and is designed to run on the TivaC LaunchPad board.</documentation>
@@ -42,17 +46,10 @@ QTimeEvt_ctorX(&amp;me-&gt;te, &amp;me-&gt;super, TIMEOUT_SIG, 0U);</code>
     <state name="defused">
      <entry brief="BlueLED=ON;">BSP_ledBlueOn();</entry>
      <exit brief="BlueLED=OFF;">BSP_ledBlueOff();</exit>
-     <!--${AOs::TimeBomb::SM::defused::BUTTON2_PRESSED}-->
-     <tran trig="BUTTON2_PRESSED" target="../../2">
+     <!--${AOs::TimeBomb::SM::defused::BUTTON_PRESSED}-->
+     <tran trig="BUTTON_PRESSED" target="../../2">
       <tran_glyph conn="60,20,2,1,18,-18">
        <action box="-14,20,17,2"/>
-      </tran_glyph>
-     </tran>
-     <!--${AOs::TimeBomb::SM::defused::BUTTON_PRESSED}-->
-     <tran trig="BUTTON_PRESSED">
-      <action>Q_ERROR_ID(100);</action>
-      <tran_glyph conn="44,16,3,-1,14">
-       <action box="0,-2,10,2"/>
       </tran_glyph>
      </tran>
      <state_glyph node="44,6,18,14">
@@ -71,8 +68,8 @@ BSP_ledBlueOff();</exit>
        <action box="0,-2,10,2"/>
       </initial_glyph>
      </initial>
-     <!--${AOs::TimeBomb::SM::armed::BUTTON2_PRESSED}-->
-     <tran trig="BUTTON2_PRESSED" target="../../1">
+     <!--${AOs::TimeBomb::SM::armed::BUTTON_PRESSED}-->
+     <tran trig="BUTTON_PRESSED" target="../../1">
       <tran_glyph conn="42,26,1,2,11,-6">
        <action box="0,-2,22,7"/>
       </tran_glyph>

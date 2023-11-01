@@ -1,4 +1,12 @@
 #include "tm4c.h"   // the same as "lm4f120h5qr.h" in the video
+/*
+#define SYSCTL_RCGCGPIO_R (*((unsigned int *)0x400FE608U))
+
+#define GPIO_PORTF_BASE   0x40025000U
+#define GPIO_PORTF_DIR_R  (*((unsigned int *)(GPIO_PORTF_BASE + 0x400U)))
+#define GPIO_PORTF_DEN_R  (*((unsigned int *)(GPIO_PORTF_BASE + 0x51CU)))
+#define GPIO_PORTF_DATA_R (*((unsigned int *)(GPIO_PORTF_BASE + 0x3FCU)))
+*/
 
 int main(void) {
     SYSCTL_RCGCGPIO_R = 0x20U;  // enable clock for GPIOF

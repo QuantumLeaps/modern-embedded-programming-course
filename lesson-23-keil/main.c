@@ -39,6 +39,7 @@ int main() {
                    &main_blinky2,
                    stack_blinky2, sizeof(stack_blinky2));
 
+    //BSP_ledRedOn();
     while (1) {
     }
 

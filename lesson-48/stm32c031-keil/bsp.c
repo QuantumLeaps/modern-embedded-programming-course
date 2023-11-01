@@ -190,7 +190,7 @@ void QF_onCleanup(void) {
 
 /*..........................................................................*/
 void BSP_ledRedOn(void) {
-    GPIOA->BSRR = (1U << LD5_PIN); // turn LD5 on
+    GPIOA->BSRR = (1U << LD4_PIN); // turn LD4 on
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("red");
         QS_U8(1U, 1U);
@@ -199,7 +199,7 @@ void BSP_ledRedOn(void) {
 
 /*..........................................................................*/
 void BSP_ledRedOff(void) {
-    GPIOA->BSRR = (1U << (LD5_PIN + 16U)); // turn LD5 off
+    GPIOA->BSRR = (1U << (LD4_PIN + 16U)); // turn LD4 off
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("red");
         QS_U8(1U, 0U);
@@ -207,7 +207,7 @@ void BSP_ledRedOff(void) {
 }
 /*..........................................................................*/
 void BSP_ledBlueOn(void) {
-    GPIOA->BSRR = (1U << LD4_PIN);  // turn LD4 on
+    //GPIOA->BSRR = (1U << LD4_PIN);  // turn LD4 on
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("blue");
         QS_U8(1U, 1U);
@@ -216,7 +216,7 @@ void BSP_ledBlueOn(void) {
 
 /*..........................................................................*/
 void BSP_ledBlueOff(void) {
-    GPIOA->BSRR = (1U << (LD4_PIN + 16U));  // turn LD4 off
+    //GPIOA->BSRR = (1U << (LD4_PIN + 16U));  // turn LD4 off
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("blue");
         QS_U8(1U, 0U);
@@ -225,7 +225,7 @@ void BSP_ledBlueOff(void) {
 
 /*..........................................................................*/
 void BSP_ledGreenOn(void) {
-    GPIOA->BSRR = (1U << LD4_PIN);  // turn LD4 on
+    GPIOA->BSRR = (1U << LD5_PIN);  // turn LD5 on
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("green");
         QS_U8(1U, 1U);
@@ -234,7 +234,7 @@ void BSP_ledGreenOn(void) {
 
 /*..........................................................................*/
 void BSP_ledGreenOff(void) {
-    GPIOA->BSRR = (1U << (LD4_PIN + 16U));  // turn LD4 off
+    GPIOA->BSRR = (1U << (LD5_PIN + 16U));  // turn LD5 off
     QS_BEGIN_ID(QS_USER, 0)
         QS_STR("green");
         QS_U8(1U, 0U);
