@@ -2,6 +2,7 @@
 #include <stdint.h>  /* Standard integers. WG14/N843 C99 Standard */
 
 #include "bsp.h"
+#include "miros.h"
 #include "TM4C123GH6PM.h" /* the TM4C MCU Peripheral Access Layer (TI) */
 
 /* on-board LEDs */
@@ -13,16 +14,24 @@ static uint32_t volatile l_tickCtr;
 
 void SysTick_Handler(void) {
     ++l_tickCtr;
+
+    __disable_irq();
+    OS_sched();
+    __enable_irq();
 }
 
 void BSP_init(void) {
-    SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run mode for GPIOF */
     SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
+    SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run Mode for GPIOF */
+
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
 
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
+
+    /* set the SysTick interrupt priority (highest) */
+    NVIC_SetPriority(SysTick_IRQn, 0U);
 
     __enable_irq();
 }
@@ -66,7 +75,6 @@ void BSP_ledGreenOn(void) {
 void BSP_ledGreenOff(void) {
     GPIOF_AHB->DATA_Bits[LED_GREEN] = 0U;
 }
-
 
 //............................................................................
 _Noreturn void assert_failed(char const * const module, int const id);

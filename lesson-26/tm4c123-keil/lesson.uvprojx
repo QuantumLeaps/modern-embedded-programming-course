@@ -399,6 +399,16 @@
               <FileType>5</FileType>
               <FilePath>.\bsp.h</FilePath>
             </File>
+            <File>
+              <FileName>miros.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\miros.c</FilePath>
+            </File>
+            <File>
+              <FileName>miros.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\miros.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

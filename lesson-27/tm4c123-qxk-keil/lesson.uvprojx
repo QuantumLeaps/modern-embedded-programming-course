@@ -340,7 +340,7 @@
               <MiscControls>-Wno-declaration-after-statement</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\ek-tm4c123gxl;..\CMSIS\Include</IncludePath>
+              <IncludePath>..\qpc\include;..\qpc\ports\arm-cm\qxk\armclang;..\ek-tm4c123gxl;..\CMSIS\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -458,6 +458,86 @@
               <FileName>mpu_armv7.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\CMSIS\Include\mpu_armv7.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>qpc</GroupName>
+          <Files>
+            <File>
+              <FileName>qf_act.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_act.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_actq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_actq.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_defer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_defer.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_dyn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_dyn.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_ps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_ps.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qact.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qact.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qeq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qeq.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_sema.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk_sema.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_xthr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk_xthr.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qxk\armclang\qxk_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>qep_hsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qep_hsm.c</FilePath>
             </File>
           </Files>
         </Group>

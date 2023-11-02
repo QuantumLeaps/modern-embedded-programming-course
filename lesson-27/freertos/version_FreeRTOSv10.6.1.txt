@@ -1,0 +1,11 @@
+This directory contains FreeRTOS 10.6.1 released August 17, 2023.
+
+To reduce the size, the portable sub-directory has been pruned and
+several FreeRTOS ports have been removed. To get the complete
+FreeRTOS release, please refer to the original on GitHub:
+
+https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V10.6.1
+
+
+Quantum Leaps, LLC
+August 29, 2023

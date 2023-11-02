@@ -340,7 +340,7 @@
               <MiscControls>-Wno-declaration-after-statement</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\ek-tm4c123gxl;..\CMSIS\Include</IncludePath>
+              <IncludePath>.;..\freertos\include;..\freertos\portable\GCC\ARM_CM4F;..\ek-tm4c123gxl;..\CMSIS\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -458,6 +458,36 @@
               <FileName>mpu_armv7.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\CMSIS\Include\mpu_armv7.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FreeRTOS</GroupName>
+          <Files>
+            <File>
+              <FileName>list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\freertos\list.c</FilePath>
+            </File>
+            <File>
+              <FileName>queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\freertos\queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>tasks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\freertos\tasks.c</FilePath>
+            </File>
+            <File>
+              <FileName>port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\freertos\portable\GCC\ARM_CM4F\port.c</FilePath>
+            </File>
+            <File>
+              <FileName>FreeRTOSConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\FreeRTOSConfig.h</FilePath>
             </File>
           </Files>
         </Group>
