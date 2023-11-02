@@ -42,7 +42,7 @@ This course focuses on the **essential and fundamental concepts** in embedded pr
 - State machines, including modern hierarchical state machines
 - Automatic code generation
 - Software tracing
-- Assertions and Design by Contract 
+- Assertions and Design by Contract
 
 ### ARM Cortex-M Architecture
 This course focuses on the prevalent [<b>ARM Cortex-M</b>](https://www.state-machine.com/course/ARM-Cortex-M_for_beginners.pdf) architecture, which over the past decade became unquesionably dominat in the embedded MCU market. Familiarity with ARM Cortex-M is the most sought after skill that employers are looking for.

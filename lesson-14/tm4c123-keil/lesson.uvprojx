@@ -340,7 +340,7 @@
               <MiscControls>-Wno-declaration-after-statement</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\CMSIS\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -400,14 +400,16 @@
               <FilePath>.\tm4c_cmsis.h</FilePath>
             </File>
             <File>
-              <FileName>startup_TM4C123.s</FileName>
+              <FileName>README.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\README.txt</FilePath>
+            </File>
+            <File>
+              <FileName>startup_tm4c.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\startup_TM4C123.s</FilePath>
+              <FilePath>.\startup_tm4c.s</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -415,14 +417,7 @@
 
   <RTE>
     <apis/>
-    <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
-        <targetInfos>
-          <targetInfo name="Debug"/>
-        </targetInfos>
-      </component>
-    </components>
+    <components/>
     <files>
       <file attr="config" category="source" condition="Compiler ARMCC" name="Device\Source\ARM\startup_TM4C123.s" version="1.0.0">
         <instance index="0" removed="1">RTE\Device\TM4C123GH6PM\startup_TM4C123.s</instance>

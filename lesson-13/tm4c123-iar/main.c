@@ -44,7 +44,7 @@ Window w = {
 Window w2;
 Triangle t;
 
-int main() {
+int main(void) {
     Point *pp;
     Window *wp;
 
@@ -70,14 +70,8 @@ int main() {
     pp->x = 1U;
     wp->top_left = *pp;
 
-    SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
     SYSCTL->GPIOHSCTL |= (1U << 5); /* enable AHB for GPIOF */
-
-    /* make sure the Run Mode and AHB-enable take effects
-    * before accessing the peripherals
-    */
-    __ISB(); /* Instruction Synchronization Barrier */
-    __DSB(); /* Data Memory Barrier */
+    SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
 
     GPIOF_HS->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_HS->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
@@ -94,5 +88,5 @@ int main() {
 
         delay(500000);
     }
-    //return 0;
+    //return 0; // unreachable code
 }

@@ -48,7 +48,7 @@
                 </option>
                 <option>
                     <name>RunToEnable</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>RunToName</name>
@@ -88,7 +88,7 @@
                 </option>
                 <option>
                     <name>OCLastSavedByProductVersion</name>
-                    <state>9.10.2.39304</state>
+                    <state>9.32.1.54977</state>
                 </option>
                 <option>
                     <name>UseFlashLoader</name>
@@ -112,7 +112,7 @@
                 </option>
                 <option>
                     <name>FlashLoadersV3</name>
-                    <state>$TOOLKIT_DIR$\config\flashloader\TexasInstruments\FlashTC4_H6_o.board</state>
+                    <state>$TOOLKIT_DIR$/config/flashloader/TexasInstruments/FlashTC4_H6_o.board</state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck1</name>
@@ -140,7 +140,7 @@
                 </option>
                 <option>
                     <name>OverrideDefFlashBoard</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OCImagesOffset1</name>
@@ -286,10 +286,6 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
-                    <name>CatchSFERR</name>
-                    <state>1</state>
-                </option>
-                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -405,6 +401,10 @@
                 </option>
                 <option>
                     <name>CatchINTERR</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>CatchSFERR</name>
                     <state>1</state>
                 </option>
                 <option>
@@ -708,7 +708,7 @@
                 <option>
                     <name>IjetTraceSizeList</name>
                     <version>0</version>
-                    <state>2</state>
+                    <state>4</state>
                 </option>
                 <option>
                     <name>FlashBoardPathSlave</name>
@@ -989,7 +989,7 @@
                 </option>
                 <option>
                     <name>LmiftdiSpeed</name>
-                    <state>100</state>
+                    <state>500</state>
                 </option>
                 <option>
                     <name>CCLmiftdiDoLogfile</name>
@@ -1072,7 +1072,7 @@
             <name>STLINK_ID</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>7</version>
+                <version>8</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1188,7 +1188,15 @@
                 <option>
                     <name>CCSTLinkProbeList</name>
                     <version>1</version>
-                    <state>0</state>
+                    <state>2</state>
+                </option>
+                <option>
+                    <name>CCSTLinkTargetVccEnable</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>CCSTLinkTargetVoltage</name>
+                    <state>###Uninitialized###</state>
                 </option>
             </data>
         </settings>
@@ -1292,13 +1300,9 @@
             <name>XDS100_ID</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>8</version>
+                <version>9</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
-                <option>
-                    <name>CCXds100CatchSFERR</name>
-                    <state>0</state>
-                </option>
                 <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
@@ -1392,6 +1396,10 @@
                     <state>0</state>
                 </option>
                 <option>
+                    <name>CCXds100CatchSFERR</name>
+                    <state>0</state>
+                </option>
+                <option>
                     <name>CCXds100CatchHARDERR</name>
                     <state>0</state>
                 </option>
@@ -1401,7 +1409,7 @@
                 </option>
                 <option>
                     <name>CCXds100CpuClockEdit</name>
-                    <state>72.0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>CCXds100SwoClockAuto</name>
@@ -1417,7 +1425,7 @@
                 </option>
                 <option>
                     <name>CCXds100ResetList</name>
-                    <version>0</version>
+                    <version>1</version>
                     <state>0</state>
                 </option>
                 <option>
@@ -1466,6 +1474,10 @@
                     <name>OCXDSDigitalStatesConfigFile</name>
                     <state>1</state>
                 </option>
+                <option>
+                    <name>OCSelectedCoreName</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <debuggerPlugins>
@@ -1511,6 +1523,18 @@
             </plugin>
             <plugin>
                 <file>$TOOLKIT_DIR$\plugins\rtos\ThreadX\ThreadXArmPlugin.ENU.ewplugin</file>
+                <loadFlag>0</loadFlag>
+            </plugin>
+            <plugin>
+                <file>$TOOLKIT_DIR$\plugins\rtos\uCOS-II\uCOS-II-286-KA-CSpy.ewplugin</file>
+                <loadFlag>0</loadFlag>
+            </plugin>
+            <plugin>
+                <file>$TOOLKIT_DIR$\plugins\rtos\uCOS-II\uCOS-II-KA-CSpy.ewplugin</file>
+                <loadFlag>0</loadFlag>
+            </plugin>
+            <plugin>
+                <file>$TOOLKIT_DIR$\plugins\rtos\uCOS-III\uCOS-III-KA-CSpy.ewplugin</file>
                 <loadFlag>0</loadFlag>
             </plugin>
             <plugin>
