@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "TM4C123.h"
+#include "tm4c_cmsis.h"
 #include "delay.h"
 
 #define LED_RED   (1U << 1)
@@ -70,36 +70,22 @@ int main() {
     pp->x = 1U;
     wp->top_left = *pp;
 
-    SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
     SYSCTL->GPIOHSCTL |= (1U << 5); /* enable AHB for GPIOF */
+    SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
 
-    /* make sure the Run Mode and AHB-enable take effects
-    * before accessing the peripherals
-    */
-    __ISB(); /* Instruction Synchronization Barrier */
-    __DSB(); /* Data Memory Barrier */
-
-    GPIOF_HS->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
-    GPIOF_HS->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
+    GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
+    GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
 
     /* turn all LEDs off */
-    GPIOF_HS->DATA_Bits[LED_RED | LED_BLUE | LED_GREEN] = 0U;
+    GPIOF_AHB->DATA_Bits[LED_RED | LED_BLUE | LED_GREEN] = 0U;
 
-    GPIOF_HS->DATA_Bits[LED_BLUE] = LED_BLUE;
+    GPIOF_AHB->DATA_Bits[LED_BLUE] = LED_BLUE;
     while (1) {
-        GPIOF_HS->DATA_Bits[LED_RED] = LED_RED;
+        GPIOF_AHB->DATA_Bits[LED_RED] = LED_RED;
         delay(500000);
 
-        GPIOF_HS->DATA_Bits[LED_RED] = 0;
-
+        GPIOF_AHB->DATA_Bits[LED_RED] = 0;
         delay(500000);
     }
     //return 0;
-}
-
-void Q_onAssert(char const *module, int loc) {
-    /* TBD: damage control */
-    (void)module; /* avoid the "unused parameter" compiler warning */
-    (void)loc;    /* avoid the "unused parameter" compiler warning */
-    NVIC_SystemReset();
 }

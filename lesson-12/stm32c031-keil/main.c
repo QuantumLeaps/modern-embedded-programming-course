@@ -8,14 +8,50 @@
 // D12 (longer leg) on the CN9 connector
 #define LD5_PIN  6U
 
-unsigned fact(unsigned n); // prototype
+typedef struct {
+    uint8_t y;
+    uint16_t x;
+} Point;
+
+Point p1, p2;
+
+typedef struct {
+    Point top_left;
+    Point bottom_right;
+} Window;
+
+typedef struct {
+     Point corners[3];
+} Triangle;
+
+Window w, w2;
+Triangle t;
 
 int main(void) {
-    unsigned volatile x;
+    Point *pp;
+    Window *wp;
 
-    x = fact(0U);
-    x = 2U + 3U*fact(1U);
-    (void)fact(5U);
+    p1.x = sizeof(Point);
+    p1.y = 0xAAU;
+
+    w.top_left.x = 1U;
+    w.bottom_right.y = 2U;
+
+    t.corners[0].x = 1U;
+    t.corners[2].y = 2U;
+
+    p2 = p1;
+    w2 = w;
+
+    pp = &p1;
+    wp = &w2;
+
+    (*pp).x = 1U;
+
+    (*wp).top_left = *pp;
+
+    pp->x = 1U;
+    wp->top_left = *pp;
 
     // enable GPIOA clock port for the LEDs
     RCC->IOPENR |= (1U << 0U);
@@ -43,16 +79,3 @@ int main(void) {
     }
     //return 0; // unreachable code
 }
-
-unsigned fact(unsigned n) {
-// 0! = 1
-// n! = n*(n-1)!  for n > 0
-
-    if (n == 0U) {
-        return 1U;
-    }
-    else {
-        return n * fact(n - 1U);
-    }
-}
-

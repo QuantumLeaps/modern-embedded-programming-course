@@ -71,15 +71,15 @@ int main() {
 
     SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
     SYSCTL->GPIOHSCTL |= (1U << 5); /* enable AHB for GPIOF */
-    GPIOF_HS->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
-    GPIOF_HS->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
+    GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
+    GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
 
-    GPIOF_HS->DATA_Bits[LED_BLUE] = LED_BLUE;
+    GPIOF_AHB->DATA_Bits[LED_BLUE] = LED_BLUE;
     while (1) {
-        GPIOF_HS->DATA_Bits[LED_RED] = LED_RED;
+        GPIOF_AHB->DATA_Bits[LED_RED] = LED_RED;
         delay(500000);
 
-        GPIOF_HS->DATA_Bits[LED_RED] = 0;
+        GPIOF_AHB->DATA_Bits[LED_RED] = 0;
 
         delay(500000);
     }
