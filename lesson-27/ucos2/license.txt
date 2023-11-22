@@ -1,0 +1,29 @@
+ATTENTION ALL USERS OF THIS REPOSITORY:
+
+The original work found in this repository is provided by Silicon Labs under the
+Apache License, Version 2.0.
+
+Any third party may contribute derivative works to the original work in which
+modifications are clearly identified as being licensed under:
+
+  (1) the Apache License, Version 2.0 or a compatible open source license; or
+  (2) under a proprietary license with a copy of such license deposited.
+
+All posted derivative works must clearly identify which license choice has been
+elected.
+
+No such posted derivative works will be considered to be a “Contribution” under
+the Apache License, Version 2.0.
+
+SILICON LABS MAKES NO WARRANTY WITH RESPECT TO ALL POSTED THIRD PARTY CONTENT
+AND DISCLAIMS ALL OTHER WARRANTIES OR LIABILITIES, INCLUDING ALL WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, OWNERSHIP,
+NON-INFRINGEMENT, AND NON-MISAPPROPRIATION.
+
+In the event a derivative work is desired to be submitted to Silicon Labs as a
+“Contribution” under the Apache License, Version 2.0, a “Contributor” must give
+written email notice to micrium@weston-embedded.com. Unless an email response in
+the affirmative to accept the derivative work as a “Contribution”, such email
+submission should be considered to have not been incorporated into the original
+work.
+
