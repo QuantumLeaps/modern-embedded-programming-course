@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.c" />
+    <ClCompile Include="qhsmtst.c" />
+    <ClCompile Include="..\qpc\src\qf\qep_hsm.c">
+      <Filter>QEP</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="qhsmtst.h" />
+    <ClInclude Include="qf_port.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="QEP">
+      <UniqueIdentifier>{ee79d87d-043f-4f52-9525-2d3df056d571}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

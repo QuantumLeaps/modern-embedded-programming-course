@@ -6,7 +6,7 @@
 
 #include <stdbool.h>             /* needed by the TI drivers */
 
-#include "TM4C123GH6PM.h" /* the TM4C MCU Peripheral Access Layer (TI) */
+#include "TM4C123GH6PM_QL.h" /* the TM4C MCU Peripheral Access Layer (TI) */
 /* add other drivers if necessary... */
 
 /* Local-scope objects -----------------------------------------------------*/
@@ -35,7 +35,7 @@ void App_TimeTickHook(void) {
     * adapted from the book "Embedded Systems Dictionary" by Jack Ganssle
     * and Michael Barr, page 71.
     */
-    current = ~GPIOF_AHB->DATA_Bits[BTN_SW1]; /* read SW1 */
+    current = ~GPIOF_AHB->DATA_Bits[BTN_SW1 | BTN_SW2]; /* read SW1 & SW2 */
     tmp = buttons.depressed; /* save the debounced depressed buttons */
     buttons.depressed |= (buttons.previous & current); /* set depressed */
     buttons.depressed &= (buttons.previous | current); /* clear released */
@@ -51,6 +51,18 @@ void App_TimeTickHook(void) {
             /* post the "button-released" event from ISR */
             static Event const buttonReleasedEvt = {BUTTON_RELEASED_SIG};
             Active_post(AO_TimeBomb, &buttonReleasedEvt);
+        }
+    }
+    if ((tmp & BTN_SW2) != 0U) {  /* debounced SW2 state changed? */
+        if ((buttons.depressed & BTN_SW2) != 0U) { /* is SW2 depressed? */
+            /* post the "button-pressed" event from ISR */
+            static Event const button2PressedEvt = {BUTTON2_PRESSED_SIG};
+            Active_post(AO_TimeBomb, &button2PressedEvt);
+        }
+        else { /* the button is released */
+            /* post the "button-released" event from ISR */
+            static Event const button2ReleasedEvt = {BUTTON2_RELEASED_SIG};
+            Active_post(AO_TimeBomb, &button2ReleasedEvt);
         }
     }
 }

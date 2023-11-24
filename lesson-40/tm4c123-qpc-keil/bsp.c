@@ -1,12 +1,10 @@
 /*****************************************************************************
-* BSP for EK-TM4C123GXL with uC/OS-II RTOS
+* BSP for EK-TM4C123GXL with QP/C framework
 *****************************************************************************/
-#include "uc_ao.h"  /* uC/AO API */
+#include "qpc.h"  /* QP/C API */
 #include "bsp.h"
 
-#include <stdbool.h>             /* needed by the TI drivers */
-
-#include "TM4C123GH6PM.h" /* the TM4C MCU Peripheral Access Layer (TI) */
+#include "TM4C123GH6PM_QL.h"        /* the device specific header (TI) */
 /* add other drivers if necessary... */
 
 /* Local-scope objects -----------------------------------------------------*/
@@ -19,8 +17,43 @@
 #define BTN_SW1      (1U << 4)
 #define BTN_SW2      (1U << 0)
 
-/* uCOS-II application hooks ===============================================*/
-void App_TimeTickHook(void) {
+/* Test pins */
+#define PD0_PIN      (1U << 0)
+#define PD1_PIN      (1U << 1)
+
+#ifdef Q_SPY
+
+    #define UART_BAUD_RATE      115200U
+    #define UART_FR_TXFE        (1U << 7)
+    #define UART_FR_RXFE        (1U << 4)
+    #define UART_TXFIFO_DEPTH   16U
+
+#endif
+
+/* Assertion handler  ======================================================*/
+Q_NORETURN Q_onAssert(char const * module, int_t id) {
+    /* TBD: Perform corrective actions and damage control
+    * SPECIFIC to your particular system.
+    */
+    (void)module;   /* unused parameter */
+    (void)id;       /* unused parameter */
+    GPIOF_AHB->DATA_Bits[LED_RED | LED_GREEN | LED_BLUE] = 0xFFU; /* all ON */
+#ifndef NDEBUG /* debug build? */
+    while (1) { /* tie the CPU in this endless loop */
+    }
+#endif
+    NVIC_SystemReset(); /* reset the CPU */
+}
+//............................................................................
+/* assert-handling function called by exception handlers in the startup code */
+void assert_failed(char const * const module, int_t const id); // prototype
+void assert_failed(char const * const module, int_t const id) {
+    Q_onAssert(module, id);
+}
+
+
+/* ISRs  ===============================================*/
+void SysTick_Handler(void) {
     /* state of the button debouncing, see below */
     static struct ButtonsDebouncing {
         uint32_t depressed;
@@ -29,13 +62,13 @@ void App_TimeTickHook(void) {
     uint32_t current;
     uint32_t tmp;
 
-    TimeEvent_tick(); /* process all uC/AO time events */
+    QF_TICK_X(0U, (void *)0); /* process all QP/C time events */
 
     /* Perform the debouncing of buttons. The algorithm for debouncing
     * adapted from the book "Embedded Systems Dictionary" by Jack Ganssle
     * and Michael Barr, page 71.
     */
-    current = ~GPIOF_AHB->DATA_Bits[BTN_SW1]; /* read SW1 */
+    current = ~GPIOF_AHB->DATA_Bits[BTN_SW1 | BTN_SW2]; /* read SW1 & SW2 */
     tmp = buttons.depressed; /* save the debounced depressed buttons */
     buttons.depressed |= (buttons.previous & current); /* set depressed */
     buttons.depressed &= (buttons.previous | current); /* clear released */
@@ -44,40 +77,57 @@ void App_TimeTickHook(void) {
     if ((tmp & BTN_SW1) != 0U) {  /* debounced SW1 state changed? */
         if ((buttons.depressed & BTN_SW1) != 0U) { /* is SW1 depressed? */
             /* post the "button-pressed" event from ISR */
-            static Event const buttonPressedEvt = {BUTTON_PRESSED_SIG};
-            Active_post(AO_TimeBomb, &buttonPressedEvt);
+            static QEvt const buttonPressedEvt
+                              = QEVT_INITIALIZER(BUTTON_PRESSED_SIG);
+            QACTIVE_POST(AO_TimeBomb, &buttonPressedEvt, 0U);
         }
         else { /* the button is released */
             /* post the "button-released" event from ISR */
-            static Event const buttonReleasedEvt = {BUTTON_RELEASED_SIG};
-            Active_post(AO_TimeBomb, &buttonReleasedEvt);
+            static QEvt const buttonReleasedEvt
+                              = QEVT_INITIALIZER(BUTTON_RELEASED_SIG);
+            QACTIVE_POST(AO_TimeBomb, &buttonReleasedEvt, 0U);
+        }
+    }
+    if ((tmp & BTN_SW2) != 0U) {  /* debounced SW2 state changed? */
+        if ((buttons.depressed & BTN_SW2) != 0U) { /* is SW2 depressed? */
+            /* post the "button-pressed" event from ISR */
+            static QEvt const button2PressedEvt
+                              = QEVT_INITIALIZER(BUTTON2_PRESSED_SIG);
+            QACTIVE_POST(AO_TimeBomb, &button2PressedEvt, 0U);
+        }
+        else { /* the button is released */
+            /* post the "button-released" event from ISR */
+            static QEvt const button2ReleasedEvt
+                              = QEVT_INITIALIZER(BUTTON2_RELEASED_SIG);
+            QACTIVE_POST(AO_TimeBomb, &button2ReleasedEvt, 0U);
         }
     }
 }
 /*..........................................................................*/
-void App_TaskIdleHook(void) {
+void QV_onIdle(void) {
 #ifdef NDEBUG
     /* Put the CPU and peripherals to the low-power mode.
     * you might need to customize the clock management for your application,
-    * see the datasheet for your particular Cortex-M3 MCU.
+    * see the datasheet for your particular Cortex-M MCU.
     */
-    __WFI(); /* Wait-For-Interrupt */
+    QV_CPU_SLEEP();  /* atomically go to sleep and enable interrupts */
+#else
+    QF_INT_ENABLE(); /* just enable interrupts */
 #endif
 }
-/*..........................................................................*/
-void App_TaskCreateHook (OS_TCB *ptcb) { (void)ptcb; }
-void App_TaskDelHook    (OS_TCB *ptcb) { (void)ptcb; }
-void App_TaskReturnHook (OS_TCB *ptcb) { (void)ptcb; }
-void App_TaskStatHook   (void)         {}
-void App_TaskSwHook     (void)         {}
-void App_TCBInitHook    (OS_TCB *ptcb) { (void)ptcb; }
-
 
 /* BSP functions ===========================================================*/
 void BSP_init(void) {
+    /* NOTE: SystemInit() has been already called from the startup code
+    *  but SystemCoreClock needs to be updated
+    */
+    SystemCoreClockUpdate();
+
     /* enable clock for to the peripherals used by this application... */
-    SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
     SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run mode for GPIOF */
+    SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
+    __ISB();
+    __DSB();
 
     /* configure LEDs (digital output) */
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
@@ -99,23 +149,21 @@ void BSP_init(void) {
     GPIOF_AHB->LOCK = 0x0; /* lock GPIOCR register for SW2 */
 }
 /*..........................................................................*/
-void BSP_start(void) {
-    /* NOTE: SystemInit() has been already called from the startup code
-    *  but SystemCoreClock needs to be updated
-    */
-    SystemCoreClockUpdate();
-
+void QF_onStartup(void) {
     /* set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
     * NOTE: do NOT call OS_CPU_SysTickInit() from uC/OS-II
     */
-    SysTick_Config(SystemCoreClock / OS_TICKS_PER_SEC);
+    SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
 
     /* set priorities of ALL ISRs used in the system, see NOTE1 */
-    NVIC_SetPriority(SysTick_IRQn,  CPU_CFG_KA_IPL_BOUNDARY + 1U);
+    NVIC_SetPriority(SysTick_IRQn,  QF_AWARE_ISR_CMSIS_PRI + 1U);
     /* ... */
 
     /* enable IRQs in the NVIC... */
     /* ... */
+}
+/*..........................................................................*/
+void QF_onCleanup(void) {
 }
 
 /*..........................................................................*/
@@ -145,24 +193,5 @@ void BSP_ledGreenOn(void) {
 /*..........................................................................*/
 void BSP_ledGreenOff(void) {
     GPIOF_AHB->DATA_Bits[LED_GREEN] = 0U;
-}
-
-//............................................................................
-Q_NORETURN Q_onAssert(char const * const module, int const id) {
-    (void)module; // unused parameter
-    (void)id;     // unused parameter
-#ifndef NDEBUG
-    // light up all LEDs
-    GPIOF_AHB->DATA_Bits[LED_GREEN | LED_RED | LED_BLUE] = 0xFFU;
-    // for debugging, hang on in an endless loop...
-    for (;;) {
-    }
-#endif
-    NVIC_SystemReset();
-}
-// error-handling function called by exception handlers in the startup code
-Q_NORETURN assert_failed(char const * const module, int const id);
-Q_NORETURN assert_failed(char const * const module, int const id) {
-    Q_onAssert(module, id);
 }
 
