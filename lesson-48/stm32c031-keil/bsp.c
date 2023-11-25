@@ -1,5 +1,5 @@
 /*****************************************************************************
-* BSP for EK-TM4C123GXL with QP/C framework
+* BSP for STM32 NUCLEO-C031C6 with QP/C framework
 *****************************************************************************/
 #include "qpc.h"  /* QP/C API */
 #include "bsp.h"
