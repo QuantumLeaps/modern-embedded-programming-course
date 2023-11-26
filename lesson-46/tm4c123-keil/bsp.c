@@ -7,6 +7,8 @@
 #include "TM4C123GH6PM_QL.h"        /* the device specific header (TI) */
 /* add other drivers if necessary... */
 
+Q_DEFINE_THIS_FILE   // define this file for Q_ASSERT()
+
 /* Local-scope objects -----------------------------------------------------*/
 /* LEDs on the board */
 #define LED_RED      (1U << 1)
@@ -45,33 +47,28 @@ Q_NORETURN Q_onAssert(char const * module, int_t id) {
     NVIC_SystemReset(); /* reset the CPU */
 }
 //............................................................................
-/* assert-handling function called by exception handlers in the startup code */
+// assert-handling function called by exception handlers in the startup code
 void assert_failed(char const * const module, int_t const id); // prototype
 void assert_failed(char const * const module, int_t const id) {
     Q_onAssert(module, id);
 }
 
 
-/* ISRs  ===============================================*/
+// ISRs  ======================================================================
 void SysTick_Handler(void) {
-    /* state of the button debouncing, see below */
-    static struct ButtonsDebouncing {
+    GPIOD_AHB->DATA_Bits[PD0_PIN] = PD0_PIN;
+
+    QTIMEEVT_TICK_X(0U, (void *)0); // time events at rate 0
+
+    // Perform the debouncing of buttons. The algorithm for debouncing
+    // adapted from the book "Embedded Systems Dictionary" by Jack Ganssle
+    // and Michael Barr, page 71.
+    static struct {
         uint32_t depressed;
         uint32_t previous;
     } buttons = { 0U, 0U };
-    uint32_t current;
-    uint32_t tmp;
-
-    GPIOD_AHB->DATA_Bits[PD0_PIN] = PD0_PIN;
-
-    QF_TICK_X(0U, (void *)0); /* process all QP/C time events */
-
-    /* Perform the debouncing of buttons. The algorithm for debouncing
-    * adapted from the book "Embedded Systems Dictionary" by Jack Ganssle
-    * and Michael Barr, page 71.
-    */
-    current = ~GPIOF_AHB->DATA_Bits[BTN_SW1 | BTN_SW2]; /* read SW1 & SW2 */
-    tmp = buttons.depressed; /* save the debounced depressed buttons */
+    uint32_t current = ~GPIOF_AHB->DATA_Bits[BTN_SW1 | BTN_SW2]; /* read SW1 & SW2 */
+    uint32_t tmp = buttons.depressed; /* save the debounced depressed buttons */
     buttons.depressed |= (buttons.previous & current); /* set depressed */
     buttons.depressed &= (buttons.previous | current); /* clear released */
     buttons.previous   = current; /* update the history */
@@ -125,7 +122,7 @@ void SysTick_Handler(void) {
     }
     GPIOD_AHB->DATA_Bits[PD0_PIN] = 0U;
 }
-/*..........................................................................*/
+//............................................................................
 void QV_onIdle(void) {
 #ifdef Q_SPY
     QF_INT_ENABLE();
@@ -187,15 +184,12 @@ void BSP_init(void) {
     *(uint32_t volatile *)&GPIOF_AHB->CR = 0x00U;
     GPIOF_AHB->LOCK = 0x0; /* lock GPIOCR register for SW2 */
 
-    QS_INIT((void *)0); /* initialize the QS software tracing */
+    // initialize the QS software tracing...
+    if (!QS_INIT((void *)0)) {
+        Q_ERROR();
+    }
 
-    /* setup the QS filters... */
-    //QS_GLB_FILTER(QS_UA_RECORDS); /* all User records */
-    //QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
-    QS_GLB_FILTER(QS_ALL_RECORDS); /* all QS records */
-    QS_GLB_FILTER(-QS_QF_TICK); /* disable */
-
-    /* prodice the QS dictionaries... */
+    // prodice the QS dictionaries...
     QS_OBJ_DICTIONARY(AO_TimeBomb);
 
     QS_SIG_DICTIONARY(BUTTON_PRESSED_SIG, (void *)0);
@@ -203,8 +197,15 @@ void BSP_init(void) {
     QS_SIG_DICTIONARY(BUTTON2_PRESSED_SIG, (void *)0);
     QS_SIG_DICTIONARY(BUTTON2_RELEASED_SIG, (void *)0);
     QS_SIG_DICTIONARY(TIMEOUT_SIG, (void *)0);
+
+    // setup the QS filters...
+    //QS_GLB_FILTER(QS_UA_RECORDS); /* all User records */
+    //QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
+    QS_GLB_FILTER(QS_ALL_RECORDS); /* all QS records */
+    QS_GLB_FILTER(-QS_QF_TICK); /* disable */
 }
-/*..........................................................................*/
+
+//............................................................................
 void QF_onStartup(void) {
     /* set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
     * NOTE: do NOT call OS_CPU_SysTickInit() from uC/OS-II

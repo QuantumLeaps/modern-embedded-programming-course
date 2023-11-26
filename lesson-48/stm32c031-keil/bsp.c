@@ -128,10 +128,6 @@ void QV_onIdle(void) {
 
 /* BSP functions ===========================================================*/
 void BSP_init(void) {
-    // NOTE: SystemInit() has been already called from the startup code
-    // but SystemCoreClock needs to be updated
-    SystemCoreClockUpdate();
-
     // enable GPIOA clock port for the LED LD4
     RCC->IOPENR |= (1U << 0U);
 
@@ -175,6 +171,7 @@ void QF_onStartup(void) {
     /* set up the SysTick timer to fire at BSP_TICKS_PER_SEC rate
     * NOTE: do NOT call OS_CPU_SysTickInit() from uC/OS-II
     */
+    SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
 
     /* set priorities of ALL ISRs used in the system, see NOTE1 */
