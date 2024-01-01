@@ -156,9 +156,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>42</LineNumber>
+          <LineNumber>16</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1528</Address>
+          <Address>1842</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -167,7 +167,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\bsp.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\lesson\bsp.c\42</Expression>
+          <Expression>\\lesson\bsp.c\16</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
