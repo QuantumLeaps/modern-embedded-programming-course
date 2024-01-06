@@ -1,13 +1,13 @@
-#include <stdint.h> // C99 standard integers
-
-#include "tm4c_cmsis.h"
+#include "tm4c_cmsis.h"  // CMSIS-compatible interface
 #include "delay.h"
+
+#include <stdint.h> // C99 standard integers
 
 #define LED_RED   (1U << 1)
 #define LED_BLUE  (1U << 2)
 #define LED_GREEN (1U << 3)
 
-typedef struct {
+typedef struct /* __attribute__((packed)) */ {
     uint8_t y;
     uint16_t x;
 } Point;
@@ -68,7 +68,7 @@ int main(void) {
 
         GPIOF_AHB->DATA_Bits[LED_RED] = 0;
 
-        delay(500000);
+        delay(250000);
     }
     //return 0; // unreachable code
 }

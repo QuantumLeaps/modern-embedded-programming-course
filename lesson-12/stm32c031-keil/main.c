@@ -8,7 +8,7 @@
 // D12 (longer leg) on the CN9 connector
 #define LD5_PIN  6U
 
-typedef struct {
+typedef struct /* __attribute__((packed)) */ {
     uint8_t y;
     uint16_t x;
 } Point;
