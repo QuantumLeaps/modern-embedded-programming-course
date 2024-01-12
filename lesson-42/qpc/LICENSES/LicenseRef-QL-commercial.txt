@@ -1,0 +1,96 @@
+Quantum Leaps Commercial Licenses
+
+Copyright (C) 2005 Quantum Leaps, LLC <https://www.state-machine.com>
+
+Quantum Leaps commercial licenses are traditinal closed-source, paid-for
+licenses designed for licensees interested in retaining the proprietary
+status of their code.
+
+The Quantum Leaps commercial licenses expressly supersede the GPL open source
+license. This means that when you license the QP/C or QP/C++  Real-Time
+Embedded Frameworks under a Quantum Leaps commercial license, you specifically
+do not use the software under the open source license and therefore you are
+not subject to any of its terms.
+
+Quantum Leaps commercial licensing options are described below:
+
+
+Single Product License
+----------------------
+Single Product License allows a given company (“Licensee”) to embed the
+specified type(s) of the QP Real-Time Embedded Framework(s) into one end-
+product of the Licensee (Single Product). Licensee can distribute/sell an
+unlimited number of units of the Single Product (royalty-free licensing),
+for the life of the Single Product. A different Single Product license is
+required for each different end product (i.e. model) even if the end-product
+is in the same family as a previously licensed end product. This license
+is specific to the Licensee and the name and model of the Signle Product,
+which needs to be defined in the license. The general rule we apply is:
+
+If you consider it a separate product…so do we!
+
+Volume discounts are offered if several Single Products are licensed at once
+with one license agreement.
+
+
+Product Line License
+--------------------
+Product Line License allows a given company (“Licensee”) to embed the
+specified type(s) of the QP Real-Time Embedded Framework(s) into any number
+of end-products within a family of related products (Product Line). Licensee
+can distribute/sell an unlimited number of units of each of those products
+(royalty-free licensing), for the life of the end-products within the
+Product Line. Product Line License applies to all end-products that do
+similar functions within the same Product Line.
+
+
+Any-Product License
+-------------------
+Any-Product License allows a given company (“Licensee”) to embed the
+specified type(s) of the QP Real-Time Embedded Framework(s) into any end-
+product of that company. The Licensee can distribute/sell an unlimited number
+of the products containing the licensed QP framework type(s) (royalty-free
+licensing).
+
+
+Site License
+------------
+Site-License allows a given company (“Licensee”) to embed the specified
+type(s) of the QP Real-Time Embedded Framework(s) into any end-customer
+product, as long as the products are designed at a given physical location
+(Site), which must be defined in the license. This license gives the
+Licensee also limited sublicensing rights for its clients and is specifically
+designed for development contractors and consultants, who develop embedded
+software for other companies.
+
+
+OEM License
+-----------
+OEM License allows a given company (“Licensee”) to embed the specified
+type(s) of the QP Real-Time Embedded Framework(s) in any product of that
+company (Original Equipment Manufacturer) and gives limited sublicensing
+rights to system integrators, subsystem vendors, subcontractors, and other
+affiliates. OEM licenses are customizable to match exactly the specific
+licensing needs of a given Licensee.
+
+
+Education License
+-----------------
+Education License allows a given accredited educational institution
+(“Licensee”) to use and embed the specified type(s) of the QP Real-Time
+Embedded Framework(s) in any project completed at that educational
+institution. To be eligible for this license, the institution must be
+focused mainly on teaching students. The Education Licenses are free
+and will be granted liberally upon request.
+
+
+****
+NOTE: Please use the contact information below to find the current prices
+of the Quantum Leaps commercial licenses and to request the license
+agreements and price quotes.
+****
+
+Contact Information:
+====================
+- https://www.state-machine.com/licensing
+- mailto:info@state-machine.com

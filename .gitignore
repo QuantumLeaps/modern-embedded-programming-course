@@ -34,9 +34,6 @@ lint*.txt
 *.qlc
 JLink*.*
 
-qpc/
-qtools/
-CMSIS/
 tests/
 
 Debug/
