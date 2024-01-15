@@ -43,7 +43,7 @@ unsigned fact(unsigned n) {
 // 0! = 1
 // n! = n*(n-1)!  for n > 0
     unsigned foo[6];
-    foo[n] = n;
+    foo[n] = n; // <== index 'n' might be out of bounds!
 
     if (n == 0U) {
         return 1U;
