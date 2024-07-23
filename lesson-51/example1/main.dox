@@ -1,0 +1,27 @@
+/*! @mainpage
+
+@section about About this Example
+Simple example for Doxygen.
+
+@verbatim
++---example/     <-- this example
+|   |   main.dox <-- example description
+|   |
+|   +---inc
+|   |       header.h <-- example header file
+|   |
+|   +---src
+|   |       source.c <-- example source file
+|   |
+|   \---test
+|           test1.c  <-- example test file
+|           test2.c  <-- example test file
+@endverbatim
+
+@section exa_gen Doxygen-Generated Documentation
+The following sections contain the _Doxygen_-generated documentation of this example:
+- @ref header.h
+- @ref source.c
+- @ref test1.c
+- @ref test2.c
+*/

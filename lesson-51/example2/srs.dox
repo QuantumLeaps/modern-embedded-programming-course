@@ -1,0 +1,58 @@
+/*! @page srs Software Requirements Specification
+
+This is an example Software Requirements Specification (SRS), illustrating the typical structure and the use of _Spexygen_ commands to define the __traceable__ requirement work artifacts.
+
+@note
+Try clicking on the provided traceability links as well as _searching_ the UIDs in the Doxygen "search" box.
+
+@section srs-def Concepts &amp; Definitions
+Description of concepts and definitions...
+
+@section srs_req Requirements
+Definitions of formal requirements specifications with _Spexygen_ commands.
+
+@subsection SRS_EXA_FF_00 SRS_EXA_FF_00
+My project shall provide a free function foo().
+@par Description
+Longer description of the requirement
+
+@subsection SRS_EXA_Foo_00 SRS_EXA_Foo_00
+My project shall provide a class Foo.}
+@par Description
+Longer description of the requirement
+
+@subsection SRS_EXA_Foo_01 SRS_EXA_Foo_01
+Class Foo shall provide a public attribute x.}
+@par Description
+Longer description of the requirement
+@par Backward Traceability
+- @ref SRS_EXA_Foo_00
+
+@subsection SRS_EXA_Foo_02 SRS_EXA_Foo_02
+Class Foo shall provide a constructor.
+@par Description
+Longer description of the requirement
+@par Backward Traceability
+- @ref SRS_EXA_Foo_00
+
+@subsection SRS_EXA_Foo_03 SRS_EXA_Foo_03
+Class Foo shall provide a verify operation.
+@par Description
+Longer description of the requirement
+@par Backward traceability
+- @ref SRS_EXA_Foo_00
+
+@subsection SRS_EXA_Foo_04 SRS_EXA_Foo_04
+Class Foo shall provide an update operation.
+@par Description
+Longer description of the requirement
+@par Backward traceability
+- @ref SRS_EXA_Foo_00
+
+@subsection SRS_EXA_Foo_05 SRS_EXA_Foo_05
+Class Foo shall be a singleton.
+@par Description
+Longer description of the requirement
+@par Backward Traceability
+- @ref SRS_EXA_Foo_00
+*/

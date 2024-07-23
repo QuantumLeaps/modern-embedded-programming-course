@@ -416,7 +416,7 @@
       <TargetName>BuildConfig-spy</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -837,31 +837,31 @@
           <targetInfo name="BuildConfig-spy"/>
         </targetInfos>
       </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Event Processor" Cvariant="qep" Cvendor="QuantumLeaps" Cversion="7.3.0">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
+      <component Cbundle="qpc" Cclass="RTEF" Cgroup="Event Processor" Cvariant="qep" Cvendor="QuantumLeaps" Cversion="7.3.4">
+        <package name="qpc" schemaVersion="1.7.7" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.4"/>
         <targetInfos>
           <targetInfo name="BuildConfig-dbg"/>
           <targetInfo name="BuildConfig-spy"/>
         </targetInfos>
       </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Framework" Cvariant="qf" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qep">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
+      <component Cbundle="qpc" Cclass="RTEF" Cgroup="Framework" Cvariant="qf" Cvendor="QuantumLeaps" Cversion="7.3.4" condition="Comp_qep">
+        <package name="qpc" schemaVersion="1.7.7" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.4"/>
         <targetInfos>
           <targetInfo name="BuildConfig-dbg"/>
           <targetInfo name="BuildConfig-spy"/>
         </targetInfos>
       </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qv" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qf">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
+      <component Cbundle="qpc" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qv" Cvendor="QuantumLeaps" Cversion="7.3.4" condition="Comp_qf">
+        <package name="qpc" schemaVersion="1.7.7" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.4"/>
         <targetInfos>
           <targetInfo name="BuildConfig-dbg"/>
           <targetInfo name="BuildConfig-spy"/>
         </targetInfos>
       </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Software tracing" Cvariant="qs" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qep">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
+      <component Cbundle="qpc" Cclass="RTEF" Cgroup="Software tracing" Cvariant="qs" Cvendor="QuantumLeaps" Cversion="7.3.4" condition="Comp_qep">
+        <package name="qpc" schemaVersion="1.7.7" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.4"/>
         <targetInfos>
-          <targetInfo excluded="1" name="BuildConfig-dbg" versionMatchMode=""/>
+          <targetInfo name="BuildConfig-dbg"/>
           <targetInfo name="BuildConfig-spy"/>
         </targetInfos>
       </component>
@@ -887,8 +887,8 @@
       </file>
       <file attr="config" category="header" condition="CoreM" name="ports\arm-cm\qv\config\qp_config.h" version="7.3.0">
         <instance index="0">RTE\RTEF\qp_config.h</instance>
-        <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qv" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qf"/>
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
+        <component Cbundle="qpc" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qv" Cvendor="QuantumLeaps" Cversion="7.3.4" condition="Comp_qf"/>
+        <package name="qpc" schemaVersion="1.7.7" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.4"/>
         <targetInfos>
           <targetInfo name="BuildConfig-dbg"/>
           <targetInfo name="BuildConfig-spy"/>
