@@ -1,0 +1,163 @@
+# Doxyfile 1.11.0
+
+@INCLUDE = $(SPEXYGEN)/Spexyfile
+
+#---------------------------------------------------------------------------
+# Project related configuration options
+#---------------------------------------------------------------------------
+PROJECT_NAME           = Spexygen
+PROJECT_NUMBER         = 2.2.1
+PROJECT_BRIEF          = "Reference Manual"
+PROJECT_LOGO           = $(SPEXYGEN)/spexygen-awesome/img/logo_spexygen.webp
+PROJECT_ICON           =
+
+FULL_PATH_NAMES        = NO
+EXTENSION_MAPPING      =
+TYPEDEF_HIDES_STRUCT   = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_PRIV_VIRTUAL   = YES
+EXTRACT_PACKAGE        = YES
+EXTRACT_STATIC         = YES
+
+#---------------------------------------------------------------------------
+# Build related configuration options
+#---------------------------------------------------------------------------
+EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_LOCAL_METHODS  = YES
+EXTRACT_ANON_NSPACES   = NO
+FORCE_LOCAL_INCLUDES   = YES
+INLINE_INFO            = YES
+SORT_MEMBER_DOCS       = NO
+#---------------------------------------------------------------------------
+# Configuration options related to the input files
+#---------------------------------------------------------------------------
+# NOTE:
+# In "C with classes", the order matters for correct generation of
+# documentation for member functions (e.g., Foo::Foo_ctor()).
+# Specifically, the files with documentation (e.g., header.dox) must be
+# listed *after* the referenced code (e.g., header.h).
+#---------------------------------------------------------------------------
+INPUT = \
+    main.dox \
+    ../example/main.dox \
+    $(SPEXYGEN)/spexygen-awesome/help.dox
+
+@INCLUDE = spex/Spexyinc
+
+ENABLED_SECTIONS       = IN_SPEXYGEN
+OPTIMIZE_OUTPUT_FOR_C  = YES
+
+RECURSIVE              = NO
+EXCLUDE                =
+EXCLUDE_SYMLINKS       = NO
+EXCLUDE_PATTERNS       =
+EXCLUDE_SYMBOLS        =
+EXAMPLE_PATH           =
+EXAMPLE_PATTERNS       = *
+EXAMPLE_RECURSIVE      = NO
+IMAGE_PATH             = ./img \
+                         $(SPEXYGEN)/spexygen-awesome/img
+#---------------------------------------------------------------------------
+# Configuration options related to source browsing
+#---------------------------------------------------------------------------
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+STRIP_CODE_COMMENTS    = NO
+#---------------------------------------------------------------------------
+# Configuration options related to the HTML output
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+HTML_OUTPUT            = ./html
+HTML_FILE_EXTENSION    = .html
+HTML_HEADER            = $(SPEXYGEN)/spexygen-awesome/spexy-header.html
+HTML_FOOTER            = $(SPEXYGEN)/spexygen-awesome/spexy-footer.html
+HTML_STYLESHEET        =
+#Spexygen HTML_EXTRA_STYLESHEET  =
+#Spexygen HTML_EXTRA_FILES       =
+HTML_COLORSTYLE        = DARK
+HTML_COLORSTYLE_HUE    = 209
+HTML_COLORSTYLE_SAT    = 255
+HTML_COLORSTYLE_GAMMA  = 113
+HTML_DYNAMIC_MENUS     = YES
+HTML_DYNAMIC_SECTIONS  = NO
+HTML_CODE_FOLDING      = YES
+HTML_COPY_CLIPBOARD    = YES
+HTML_PROJECT_COOKIE    =
+HTML_INDEX_NUM_ENTRIES = 100
+GENERATE_DOCSET        = NO
+DOCSET_FEEDNAME        =
+DOCSET_FEEDURL         =
+DOCSET_BUNDLE_ID       = com.state-machine.doc
+DOCSET_PUBLISHER_ID    = com.state-machine.doc
+DOCSET_PUBLISHER_NAME  = QuantumLeaps
+GENERATE_HTMLHELP      = NO
+CHM_FILE               =
+HHC_LOCATION           =
+GENERATE_CHI           = NO
+CHM_INDEX_ENCODING     =
+BINARY_TOC             = NO
+TOC_EXPAND             = NO
+SITEMAP_URL            =
+GENERATE_QHP           = NO
+QCH_FILE               =
+QHP_NAMESPACE          = com.state-machine.qp
+QHP_VIRTUAL_FOLDER     = doc
+QHP_CUST_FILTER_NAME   =
+QHP_CUST_FILTER_ATTRS  =
+QHP_SECT_FILTER_ATTRS  =
+QHG_LOCATION           =
+GENERATE_ECLIPSEHELP   = NO
+ECLIPSE_DOC_ID         = com.state-machine.qp
+DISABLE_INDEX          = NO
+GENERATE_TREEVIEW      = YES
+FULL_SIDEBAR           = NO
+ENUM_VALUES_PER_LINE   = 4
+TREEVIEW_WIDTH         = 335
+EXT_LINKS_IN_WINDOW    = NO
+OBFUSCATE_EMAILS       = NO
+HTML_FORMULA_FORMAT    = png
+FORMULA_FONTSIZE       = 10
+FORMULA_MACROFILE      =
+USE_MATHJAX            = NO
+MATHJAX_VERSION        = MathJax_2
+MATHJAX_FORMAT         = HTML-CSS
+MATHJAX_RELPATH        =
+MATHJAX_EXTENSIONS     =
+MATHJAX_CODEFILE       =
+SEARCHENGINE           = YES
+SERVER_BASED_SEARCH    = NO
+EXTERNAL_SEARCH        = NO
+SEARCHENGINE_URL       =
+SEARCHDATA_FILE        = searchdata.xml
+EXTERNAL_SEARCH_ID     = Spexygen
+EXTRA_SEARCH_MAPPINGS  =
+#---------------------------------------------------------------------------
+# Configuration options related to the LaTeX output
+#---------------------------------------------------------------------------
+GENERATE_LATEX         = NO
+LATEX_OUTPUT           = ./latex
+LATEX_CMD_NAME         = latex
+LATEX_HEADER           = $(SPEXYGEN)/spexygen-awesome/spexy-header.tex
+LATEX_FOOTER           = $(SPEXYGEN)/spexygen-awesome/spexy-footer.tex
+MAKEINDEX_CMD_NAME     = makeindex
+LATEX_MAKEINDEX_CMD    = makeindex
+COMPACT_LATEX          = NO
+PAPER_TYPE             = letter
+EXTRA_PACKAGES         =
+#---------------------------------------------------------------------------
+# Configuration options related to the preprocessor
+#---------------------------------------------------------------------------
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = NO
+EXPAND_ONLY_PREDEF     = NO
+SEARCH_INCLUDES        = YES
+INCLUDE_PATH           =
+INCLUDE_FILE_PATTERNS  =
+PREDEFINED             =
+EXPAND_AS_DEFINED      =
+SKIP_FUNCTION_MACROS   = NO
+#---------------------------------------------------------------------------
+# Configuration options related to external references
+#---------------------------------------------------------------------------
+DOT_PATH               = C:/tools/graphviz/bin

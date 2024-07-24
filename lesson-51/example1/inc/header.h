@@ -13,22 +13,20 @@ Free function longer description.
 */
 uint8_t const *free_fun(uint32_t x);
 
-/*!
+/**
 @brief Class Foo brief description
 @par Details
 Class Foo longer description.
 */
 typedef struct Foo {
-    /*! @brief Attribute x of class Foo brief description
-    @par Details
-    Attribute x of class Foo: longer description.
-    */
+    //! @brief Attribute x of class Foo brief description
+    //! @par Details
+    //! Attribute x of class Foo: longer description.
     uint32_t x;
 
-    /*! @brief Foo::x_dis, Duplicate Inverse Storage for attribute Foo::x
-    @par Details
-    Duplicate Inverse Storage (DIS) for attribute Foo::x: longer description.
-    */
+    /// \brief Foo::x_dis, Duplicate Inverse Storage for attribute Foo::x
+    /// \par Details
+    /// Duplicate Inverse Storage (DIS) for attribute Foo::x: longer description.
     uint32_t x_dis;
 } Foo;
 
@@ -58,11 +56,6 @@ Constructor of class Foo longer description.
 */
 void Foo_update_(Foo* const me);
 
-/*!
-@brief Foo instance brief description (singleton)
-@par Details
-Foo instance longer description.
-*/
-extern Foo const Foo_inst;
+extern Foo const Foo_inst; //!< @brief Foo instance brief description (singleton)
 
 #endif // HEADER_H_

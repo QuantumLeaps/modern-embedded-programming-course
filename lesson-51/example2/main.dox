@@ -1,4 +1,5 @@
-/*! @mainpage
+/*!
+@mainpage
 
 @section about About this Example
 Simple example for Doxygen.
@@ -20,6 +21,10 @@ Simple example for Doxygen.
 @endverbatim
 
 @section exa_gen Doxygen-Generated Documentation
+
+@image html  doxygen-logo.png "image caption"
+@image latex doxygen-logo.png "image caption"
+
 The following sections contain the _Doxygen_-generated documentation of this example:
 - @subpage srs
 - @ref header.h

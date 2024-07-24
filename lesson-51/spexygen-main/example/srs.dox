@@ -1,0 +1,74 @@
+/*! @page srs Software Requirements Specification
+@ifnot LATEX
+@nav_prev{exa}
+<div style="clear:both;"></div>
+@endif
+
+This is an example Software Requirements Specification (SRS), illustrating the typical structure and the use of _Spexygen_ commands to define the __traceable__ requirement work artifacts.
+
+@note
+Please note the generated _forward-traceability_ and the _backward-traceability_ links (augmented with the brief descriptions) in the "work artifacts" and "code artifacts". Also, try clicking on the provided traceability links as well as _searching_ the UIDs in the Doxygen "search" box.
+
+@section srs-def Concepts &amp; Definitions
+Description of concepts and definitions...
+
+@section srs_req Requirements
+Definitions of formal requirements specifications with _Spexygen_ commands.
+
+@uid{SRS_EXA_FF_00,My project shall provide a free function foo().}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_fw_trace
+@enduid
+
+@uid{SRS_EXA_Foo_00,My project shall provide a class Foo.}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_fw_trace
+@enduid
+
+@uid{SRS_EXA_Foo_01,Class Foo shall provide a public attribute x.}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_bw_trace{brief}
+- @tr{SRS_EXA_Foo_00}
+@uid_fw_trace
+@enduid
+
+@uid{SRS_EXA_Foo_02,Class Foo shall provide a constructor.}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_bw_trace{brief}
+- @tr{SRS_EXA_Foo_00}
+@uid_fw_trace
+@enduid
+
+@uid{SRS_EXA_Foo_03,Class Foo shall provide a verify operation.}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_bw_trace{brief}
+- @tr{SRS_EXA_Foo_00}
+@uid_fw_trace
+@enduid
+
+@uid{SRS_EXA_Foo_04,Class Foo shall provide an update operation.}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_bw_trace{brief}
+- @tr{SRS_EXA_Foo_00}
+@uid_fw_trace
+@enduid
+
+@uid{SRS_EXA_Foo_05,Class Foo shall be a singleton.}
+@uid_litem{Description}
+Longer description of the requirement
+@uid_bw_trace{brief}
+- @tr{SRS_EXA_Foo_00}
+@uid_fw_trace
+@enduid
+
+@ifnot LATEX
+<div style="clear:both;"></div>
+@nav_prev{exa}
+@endif
+*/

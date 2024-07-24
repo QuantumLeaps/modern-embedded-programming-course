@@ -1,0 +1,63 @@
+# Doxyfile 1.11.0
+
+#---------------------------------------------------------------------------
+# Project related configuration options
+#---------------------------------------------------------------------------
+# Spexygen: Commands
+#---------------------------------------------------------------------------
+ALIASES += \
+"uid{2}=@addindex \1^^@subsection \1 \1^^<table><tr><th style=\"text-align:left; width:var(--content-maxwidth)\">\1 : \2^^" \
+"uid_litem{1}=<tr><td><b>\1</b><br>^^" \
+"uid_bw_trace=<tr><td><b>Backward Traceability</b><br>^^" \
+"uid_bw_trace{1}=<tr><td><b>Backward Traceability</b><br>^^" \
+"uid_fw_trace=<tr><td><b>Forward Traceability</b><br>^^" \
+"uid_fw_trace{1}=<tr><td><b>Forward Traceability</b><br>^^" \
+"enduid=</table>" \
+"code_uid{2}=@brief \2^^" \
+"code_alias{2}=@brief <b>\1</b> : \2^^@anchor \1" \
+"code_litem{1}=@par \1^^" \
+"code_bw_trace=@par Backward Traceability^^" \
+"code_bw_trace{1}=@par Backward Traceability^^" \
+"code_fw_trace=@par Forward Traceability^^" \
+"code_fw_trace{1}=@par Forward Traceability^^" \
+"endcode_uid=" \
+"tr{1}=@ref \1 \"\1\"" \
+"precondition{2}=@par Precondition `\1:\2`^^" \
+"postcondition{2}=@par Postcondition `\1:\2`^^" \
+"invariant{2}=@par Invariant `\1:\2`^^" \
+"nav{2}=<span class=\"prev_button\">@ref \1</span><span class=\"next_button\">@ref \2</span>" \
+"nav_prev{1}=<span class=\"prev_button\">@ref \1</span>" \
+"nav_next{1}=<span class=\"next_button\">@ref \1</span>" \
+"next{1}=<span class=\"next_button\">@ref \1</span>" \
+"caption{1}=<div class=\"caption\"><center><em>\1</em></center></div>" \
+"webref{2}=<a target=\"_blank\" rel=\"noopener\" href=\"\1\">\2&uarr;</a>"
+
+#---------------------------------------------------------------------------
+# Configuration options related to the HTML output
+#---------------------------------------------------------------------------
+# Spexygen: spexygen-awesome style
+#---------------------------------------------------------------------------
+HTML_EXTRA_STYLESHEET  = $(SPEXYGEN)/spexygen-awesome/doxygen-awesome.css \
+                         $(SPEXYGEN)/spexygen-awesome/doxygen-awesome-sidebar-only.css \
+                         $(SPEXYGEN)/spexygen-awesome/doxygen-awesome-sidebar-only-darkmode-toggle.css \
+                         $(SPEXYGEN)/spexygen-awesome/spexy-awesome.css
+HTML_EXTRA_FILES       = $(SPEXYGEN)/spexygen-awesome/doxygen-awesome-darkmode-toggle.js \
+                         $(SPEXYGEN)/spexygen-awesome/doxygen-awesome-fragment-copy-button.js \
+                         $(SPEXYGEN)/spexygen-awesome/doxygen-awesome-paragraph-link.js \
+                         $(SPEXYGEN)/spexygen-awesome/image-preview.js
+
+#---------------------------------------------------------------------------
+# Spexygen: customized HTML header/footer
+# (can be overridden by the including Doxyfile)
+#---------------------------------------------------------------------------
+HTML_HEADER            = $(SPEXYGEN)/spexygen-awesome/spexy-header.html
+HTML_FOOTER            = $(SPEXYGEN)/spexygen-awesome/spexy-footer.html
+
+#---------------------------------------------------------------------------
+# Configuration options related to the LaTeX output
+#---------------------------------------------------------------------------
+# Spexygen: customized LaTeX header/footer
+# (can be overridden by the including Doxyfile)
+#---------------------------------------------------------------------------
+LATEX_HEADER           = $(SPEXYGEN)/spexygen-awesome/spexy-header.tex
+LATEX_FOOTER           = $(SPEXYGEN)/spexygen-awesome/spexy-footer.tex

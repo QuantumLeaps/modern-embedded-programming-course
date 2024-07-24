@@ -8,11 +8,12 @@ void tearDown(void) {
 }
 
 /*!
-@brief constructor test
-@par Details
+@code_uid{TUN_PRJ_Foo_ctor_01, constructor test}
+@code_litem{Details}
 This test checks that Foo_ctor() produces valid instance.
-@par Backward Traceability
-- @ref Foo_ctor()
+@code_bw_trace{brief}
+- @tr{Foo_ctor()}
+@endcode_uid
 */
 void TUN_PRJ_Foo_ctor_01(void) {
     Foo_ctor(&Foo_inst, 0x12345678);
@@ -21,11 +22,12 @@ void TUN_PRJ_Foo_ctor_01(void) {
 }
 
 /*!
-@brief verify positive test}
-@par Details
+@code_uid{TUN_PRJ_Foo_verify_00, verify positive test}
+@code_litem{Details}
 This test checks that Foo_verify_() distinguishes valid instance.
-@par Backward Traceability
-- @ref Foo_verify_()
+@code_bw_trace{brief}
+- @tr{Foo_verify_()}
+@endcode_uid
 */
 void TUN_PRJ_Foo_verify_00(void) {
     Foo_ctor(&Foo_inst, 0x12345678);
@@ -33,11 +35,12 @@ void TUN_PRJ_Foo_verify_00(void) {
 }
 
 /*!
-@brief verify negative test}
-@par Details
+@code_uid{TUN_PRJ_Foo_verify_01, verify negative test}
+@code_litem{Details}
 This test checks that Foo_verify_() distinguishes invalid instance.
-@par Backward Traceability
-- @ref Foo_verify_()
+@code_bw_trace{brief}
+- @tr{Foo_verify_()}
+@endcode_uid
 */
 void TUN_PRJ_Foo_verify_01(void) {
     Foo_ctor(&Foo_inst, 0x12345678);

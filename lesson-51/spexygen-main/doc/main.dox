@@ -1,0 +1,543 @@
+/*! @mainpage Spexygen
+@anchor main
+
+@image html  banner_spexygen.webp
+@image latex banner_spexygen.jpg width=6.5in
+
+@ifnot LATEX
+@nav_next{work}
+<div style="clear:both"></div>
+@endif
+
+@remark
+- This _Spexygen_ documentation has been created with _Spexygen_.
+- _Spexygen_ is available on @webref{https://github.com/QuantumLeaps/spexygen,GitHub under the permissive MIT open-source license}.
+@if LATEX
+![](logo_spexygen.png)
+@else
+[![](logo_spexygen.png)](https://github.com/QuantumLeaps/spexygen)
+@endif
+
+@section spx_about About Spexygen
+@webref{https://github.com/QuantumLeaps/spexygen,<em>Spexygen</em>} is a @webref{https://Doxygen.nl,Doxygen} extension for creating @ref tr "traceable" technical specifications, such as:
+- traceable @ref srs "requirement specifications"
+- traceable @ref header.h "source code"
+- traceable @ref test1.c "tests"
+- traceable specifications of other kind
+
+@note
+By extending Doxygen with a uniform __traceability management__ not just for source code, but also for all other specifications, _Spexygen_ supports regulatory compliance with functional safety standards such as IEC 61508, IEC 62304, ISO 26262 and others.
+
+@subsection spx_feat Spexygen Features
+The main objectives and features of _Spexygen_ are:
+- uniform management of @ref tr "traceability" within all documents in the system, including source code
+- provision of commands for creating well-structured, uniformely formatted, fully @ref tr "traceable" "work artifacts"
+- automating the generation of @ref tr-fw "forward traceability" links in the documentation (_Spexygen_ generates @ref tr-fw-rec "recursive forward traceability" enabling impact analysis to identify the potential consequences of a change of a given artifact)
+- automating the generation of brief descriptions for the @ref tr-bw "backward traceability" links
+- enabling DRY documentation (designed according to the "Don't Repeat Yourself" principle) by eliminating repetitions in specifying dependencies among "work artifacts"
+- genearting cross-linked, __searchable__, nicely formatted documentation in HTML (modern @webref{https://github.com/jothepro/Doxygen-awesome-css, Doxygen-awesome HTML style})
+- genearting cross-linked, nicely formatted documentation in PDF (modern LaTeX template)
+- representing documentation in human-readable text files, which can be stored in any version control system (VCS).
+
+
+@section tr Traceability
+__Traceability__ is the cornerstone of any formal documentation system, especially those intended for managing __functional safety__. It enables product teams to associate every work artifact (e.g., a specific requirement) with all the related project artifacts (e.g., design, code, or tests), both backward and forward. Traceability lets everyone to see how every work artifact relates to the requirement &mdash; and vice versa &mdash; at any point during development. This ability fosters team collaboration and enables early detection of possible production risks.
+
+@attention
+_Spexygen_ provides consistent and __automated__ management of traceability within the whole documentation set.
+
+@subsection tr-uid Unique Identifiers (UIDs)
+Traceability is enabled by the consistent use of __Unique Identifiers (UIDs)__, which are short text labels associated with _all_ work artifacts, such as requirements, architecture elements, design elements, coding standard deviations, tests, functional safety documents, etc.
+
+@note
+The structure of UIDs is __flexible__ to accommodate various existing naming conventions. But for compatibility with the widest possible range of cross-referencing systems and tools, the UIDs are __restricted__ to generally follow the _rules for identifiers in programming languages_, such as identifiers in C, C++, or Python. Specifically, valid UIDs can contain only upper-case letters (A..Z), numbers (0..9), and underscores ('_'). Among others, UIDs cannot contain spaces, punctuation, parentheses, or any special characters like !, \@, #, \$, etc.
+
+@remark
+Restricting the UIDs to the programming language identifiers allows you to _use the UIDs as identifiers_. For example, you might name test functions as their UIDs. Additionally, such UIDs become __searchable__ with the Doxygen built-in search (the "Search Box").
+
+
+The most important feature of UIDs is their __uniqueness__ within the whole system under consideration. To avoid name conflicts, it is advantageous to establish general rules for constructing the UIDs. Throughout _Spexygen_ documentation, the UIDs have the general structure consisting of fields separated by underscores:
+
+@verbatim
+ +------------------ [1] Work artifact class (e.g., 'SRS' for Software Requirement Specification)
+ |   +-------------- [2] Component unique identifier (e.g, 'PRJ' for my "Project")
+ |   |   +---------- [3] Work artifact ID (abbreviation or number)
+ |   |   |  +------- [4] Work artifact number
+ |   |   |  |   +--- [5] Optional variant letter ('A', 'B', 'C'...)
+ |   |   |  |   |+-- [6] Optional version number (1, 2, 3...)
+ |   |   |  |   ||
+SRS_xxx_yyy_zz[_A2]
+@endverbatim
+Examples: @tr{SRS_PRJ_Foo_01}, @tr{TUN_PRJ_free_fun_00}
+
+The various fields in the UID are as follows:
+
+`[1]` the UID starts with a fields corresponding to the _class_ of the work artifact. Here are the suggested artifact class names:
+  + <b>DOC</b>  Document
+  + <b>SRS</b>  Software Requirement Specification
+  + <b>SSR</b>  Software Safety Requirement
+  + <b>SAS</b>  Software Architecture Specification
+  + <b>SDS</b>  Software Design Specification
+  + <b>FSM</b>  Functional Safety Management artifact
+  + <b>SHR</b>  Software Hazard and Risk artifact
+  + <b>DVR</b>  Deviation Record (e.g. coding standard violation)
+  + <b>DVP</b>  Deviation Permit (e.g. coding standard violation)
+  + <b>TUN</b>  Test (unit)
+  + <b>TIN</b>  Test (integration)
+  + <b>TAC</b>  Test (acceptance)
+
+`[2]` the Component Unique Identifier (CUI), which should be unique enough to avoid name conflicts with other software components in a larger system.
+
+`[3]` "Work artifact ID" field identifies the artifact within the "work artifact class" `[1]`. This  is the most flexible part in the UID to accommodate other existing conventions, such as MISRA deviations, the `work artifact ID` field should be easily identifiable with the MISRA Rule/Directive ID, such as `D04_01` for "Directive 4.1", or `R10_04` for "Rule 10.4". Still, please note that the more structured UID convention of using two-digits for feature groups (e.g., `D04_10` instead of `D4_10`) provide additional benefits, such as correct order under a simple alphabetical sort. This property is missing in the original MISRA IDs (e.g., a simple alphabetical sort will place Rule 10.8 _before_ Rule 8.10).
+
+`[4]` "Work artifact number" filed identifies the aspect of the work artifact
+
+`[5]` optionally, the UID might contain a variant letter ('A', 'B', 'C',...)
+
+`[6]` optionally, the UID might end with a single-digit version number (0..9).
+
+Alternatively, UIDs of __code__ elements follow the rules established by Doxygen, with the following general form:
+@verbatim
+     +-------------- [1] Namespace (e.g., class or module)
+     |          +--- [2] element (e.g., attribute or operation)
+     |          |
+[namespace]_[element]
+@endverbatim
+Examples: @tr{Foo_ctor()}, @tr{TUN_PRJ_Foo_ctor_01}
+
+@subsection tr-bw Backward Traceability
+Backward traceability begins at a specific work artifact and links it to the original artifact. For example, architecture element can be linked with an upstream requirement, or code artifact with the upstream design. Backward traceability gives visibility into why specific artifacts were created and how different pieces of a system fit together. Tracing in this way also allows testers to find gaps or missing work artifacts.
+
+@remark
+Backward traceability is the most natural and efficient way of specifying hierarchical relationships, such as superclass-subclass in object-oriented programming (OOP). Class inheritance is universally represented in the subclasses, which store their superclass (backward traceability). In contrast, superclasses don't show their subclasses (@ref tr-fw "forward traceability"). The _Spexygen_ documentation applies this approach to all work artifacts, starting with the requirements at the top, through architecture, design, __source code__, tests, deviations, etc.
+
+As illustrated in the diagram below, __backward traceability is provided explicitly__ in the _Spexygen_ documentation and the source code. Specifically, the downstream work artifacts provide trace information to the related upstream artifact by means of the @ref tr-uid "Unique Identifier (UIDs)".
+
+@image html  spx_tr.svg width=1500px
+@image latex spx_tr.eps
+@caption{Schematic View of Backward Traceability in the _Spexygen_ documentation}
+
+@note
+The _Spexygen_ documentation traceability system includes the __source code__. This is achieved by placing special backward traceability links, such as `@tr{SRS_PRJ_Foo_03}` or `@tr{free_fun()}`, inside the _Spexygen_ documentation for the source code.
+
+
+@subsection tr-fw Forward Traceability
+Forward traceability begins at the original artifact and links it with all the resulting forward work items. For example, a requirement can be linked with source code elements that implement that requirement. This type of trace ensures that each original artifact (e.g., requirement) is not only satisfied but verified and validated. In the _Spexygen_ documentation the forward traceability is __generated automatically__ by the `spexygen.py` Python script.
+
+@anchor tr-fw-rec
+@note
+Forward traceability is typically __recursive__ meaning that if artifact A traces to B and B traces to C, then artifact A also traces to C. _Spexygen_ generates __recursive forward trace__, which enables the teams to perform _impact analysis_ to identify the potential consequences of a change of a given artifact.
+
+
+@subsection tr-bi Bidirectional Traceability
+Bidirectional traceability is the ability to perform both forward and backward traceability. Bidirectional traceability is the optimal type of traceability because it gives teams full visibility from requirements through architecture, design, source code, tests, and back again. The system implemented in the _Spexygen_ documentation provides such bidirectional traceability.
+
+@remark
+The whole system of traceability offered in _Spexygen_ is __extensible__ and can be used in any technical documentation system.
+
+@ifnot LATEX
+<div style="clear:both"></div>
+@nav_next{work}
+@endif
+*/
+//############################################################################
+/*! @page work Working with Spexygen
+
+@ifnot LATEX
+@nav{tr,doc}
+<div style="clear:both"></div>
+@endif
+
+@section spx_work Spexygen Workflow
+_Spexygen_ can be viewed as a pre-processor for @webref{https://Doxygen.nl,Doxygen} with the workflow similar to that of Doxygen. The diagram below shows the documentation generation steps, the
+relation between _Spexygen_ and Doxygen, and the flow of information between them. The numbered sections following the diagram explain the labeled elements:
+
+<br>
+@image html  spx_flow.svg width=1500px
+@image latex spx_flow.eps
+@caption{Spexygen information flow.}
+
+`[1]` Developers prepare documents (e.g., `srs.dox`) according to the conventions established by Doxygen. The individual "work artifacts" are created with a set of @ref spx_use-doc-uid "custom commands" provided by _Spexygen_ (file `Spexyfile`). For example, command \c \@uid{} starts a definition of a new "work artifact" such as a requirement.
+
+`[2]` Developers also apply the special @ref spx_use-doc-code "custom commands" provided by _Spexygen_ to annotate the source code (e.g., `header.h`). For example, command \c \@code_uid{} starts a definition of a new "code artifact".
+
+`[3]` Developers prepare a _Spexygen_ configuration file (e.g., `spex.json` in the diagram), which describes the documents to be traced and generated by _Spexygen_.
+
+`[4]` The `spexygen.py` Python script processes the files and generates forward-traceabilty in requested locations in the provided files.
+
+`[5]` The `spexygen.py` Python script creates a specified directory (`spex` in the diagram, see also `"gen-dir":` tag in `spexy.json`) to save the generated files.
+
+`[6-7]` The `spexygen.py` Python script generates the augmented files into a specified directory. The generated files contain all the original information plus the tracing information generated by _Spexygen_ (shown in red in the diagram)
+
+`[8]` The `spexygen.py` Python script also generates the `Spexyinc` file that contains the information about all generated files.
+
+`[9]` Developers can prepare other documentation, not processed by _Spexygen_, but also included in the final Doxygen-generated documentation.
+
+`[10]` The Doxygen configuration file (`Doxyfile`) includes the `Spexyfile` (with the _Spexygen_ custom commands) and the generated `Spexyinc` file (with files generated by _Spexygen_ and to be processed by Doxygen)
+
+`[11]` Doxygen processes the files generarted by _Spexygen_ (see `[6-7]`) and other files (see `[9]`) according to the `Doxyfile` (see `[10]`)
+
+`[12]` If Doxygen is configured to produce HTML output, it applies the modern @webref{https://jothepro.github.io/Doxygen-awesome-css/,Doxygen-awesome HTML styling} (included in _Spexygen_)
+
+`[13]` If Doxygen is configured to produce PDF output, it applies the modern LaTeX template provided by _Spexygen_
+
+@note
+The _Spexygen_ workflow is illustrated in the provided @ref exa "example".
+
+@subpage doc "&nbsp;"
+@subpage gen "&nbsp;"
+
+@ifnot LATEX
+<div style="clear:both"></div>
+@nav{tr,doc}
+@endif
+*/
+//############################################################################
+/*! @page doc Preparing Spexygen Documentation
+
+@ifnot LATEX
+@nav{work,gen}
+<div style="clear:both"></div>
+@endif
+
+As described in the @ref spx_work "<em>spexygen</em> workflow", _Spexygen_ works with the documentation and annotated code prepared according to the Doxygen conventions. However, _Spexygen_ provides a layer of customized commands for defining @ref tr "traceable" "work artifacts", which can be of two kinds:
+1. @ref spx_use-doc-uid "work artifacts" created in pure documentation, such as requirements specification; and
+2. @ref spx_use-doc-code "code artifacts" created by Doxygen for various elements of source code, such as classes, functions, macros, etc.
+
+@section spx_use-doc-uid Defining Work Artifacts
+__Work artifacts__ (e.g., requirements) are defined by means of the following _Spexygen_ custom commands:
+<table>
+<tr><th class = "middle">Command <th>Purpose
+<tr><td><b>\@uid{uid,brief}</b> <td>starts the definition of a "work artifact"<br> parameter: <b>uid</b>  -- the @ref tr-uid "UID" of the "work artifact"<br> parameter: <b>brief</b> -- brief description of the "work artifact"
+<tr><td><b>\@uid_litem{item}</b> <td>adds new line - item in the "work artifact" definition<br>parameter: <b>title</b> -- Title of the line item(e.g., Details)
+<tr><td><b>\@uid_bw_trace{brief}</b> <td>adds the backward trace section in in the "work artifact" definition<br>parameter: <b>brief</b> -- request _Spexygen_ to add the brief item description
+<tr><td><b>\@uid_bw_trace</b> <td>adds the backward trace section in in the "work artifact" definition<br> overloaded version without requesting the brief description
+<tr><td><b>\@uid_fw_trace</b>  <td>adds the forward trace section in in the "work artifact" definition<br> this is a request to _Spexygen_ to __generate__ the recursive @ref tr-fw "forward traceability" for the "work artifact"
+<tr><td><b>\@enduid</b> <td>ends the definition "work artifact" <br> must be placed at the end of "work artifact" definition
+<tr><td><b>\@tr{uid}</b> <td>references the given UID<br> parameter: <b>uid</b>  -- the @ref tr-uid "UID" of the "work artifact"
+</table>
+@remark
+The _Spexygen_ custom commands are defined as `ALIAS=...` in `Spexyfile`.
+
+The following snippet illustrates how a "work artifact" (a requirement) has been documented for _Spexygen_ (see also file srs.dox):
+@verbatim
+[1] @section srs_req Requirements
+    ...
+[2] @uid{SRS_PRJ_Foo_03,My project class Foo shall provide a verify operation.}
+[3] @uid_litem{Description}
+    Longer description of the requirement
+[4] @uid_bw_trace{brief}
+[5] - @tr{SRS_PRJ_Foo_00}
+[6] @uid_fw_trace
+[7] @enduid
+@endverbatim
+
+`[1]` _Spexygen_ "work artifacts" must be defined in the scope of a Doxygen <b>\@section</b>.
+
+`[2]` each "work artifact" is defined with the _Spexygen_ command <b>\@uid{}</b>, which takes two arguments:
+  1. the UID associated with the artifact (e.g., `SRS_PRJ_Foo_03`)
+  2. the brief description of the artifact (e.g., `My project class Foo shall provide a verify operation.`)
+@attention
+The whole <b>\@uid{}</b> command must be defined in a single line of text and the brief description must not contain commas `,`
+
+<p></p>
+`[3]` the "work artifact" definition can contain "line items", such as "Description" coded by means of the <b>\@uid_litem{Description}</b> _Spexygen_ command. A "work artifact" can have multiple line items defined with the <b>\@uid_litem{}</b> _Spexygen_ command.
+
+`[4]` the "work artifact" can specify @ref tr-bw "backward traceability" by means of the <b>\@uid_bw_trace</b> _Spexygen_ command. If this command provides argument `{brief}`, _Spexygen_ will generate the brief description for each of the provided traceability links (see the next step `[5]`)
+
+`[5]` the traceability links to the upstream artifacts must be provided explicitly by means of the <b>\@tr{uid}</b> _Spexygen_ command. The command establishes traceability to the @ref tr-uid "UID" provided in the argument (e.g., `SRS_PRJ_Foo_00`)
+
+`[6]` the "work artifact" can specify forward traceability by means of the <b>\@uid_fw_trace</b> _Spexygen_ command
+@note
+The <b>\@uid_fw_trace</b> _Spexygen_ command is just a __placeholder__ for _Spexygen_ to generate the forward traceability links at this place.
+
+`[7]` The artifact definition must end with the _Spexygen_ <b>\@enduid</b> command
+
+The following screen shot shows how the "work artifact" defined in the code snipped above is rendered in HTML:
+
+@image html  spx-uid.jpg
+@image latex spx-uid.jpg width=5.5in
+@caption{Examples of "work artifacts" (requirements)}
+
+@section spx_use-doc-code Defining Code Artifacts
+__Code artifacts__ (e.g., functions, macros, classes) are naturally handled by Doxygen and the _Spexygen_ system must comply with the exiting Doxygen conventions. The "code artifacts" are defined by means of the following _Spexygen_ custom commands:
+<table>
+<tr><th class = "middle">Command <th>Purpose
+<tr><td><b>\@code_uid{uid,brief }</b> <td>starts the definition of a "code artifact"<br> parameter: <b>uid</b>  --the @ref tr-uid "UID" of the "code artifact"<br> parameter: <b>brief</b> -- brief description of the "code artifact"
+<tr><td><b>\@code_litem{item }</b> <td>adds new line-item in the "code artifact" definition<br>parameter: <b>title</b> --Title of the line item(e.g., Details)
+<tr><td><b>\@code_bw_trace{brief}</b> <td>adds the backward trace section in in the "code artifact" definition<br>parameter: <b>brief</b> -- request _Spexygen_ to add the brief item description
+<tr><td><b>\@code_bw_trace</b> <td>adds the backward trace section in in the "code artifact" definition<br> overloaded version without requesting the brief description
+<tr><td><b>\@code_fw_trace</b>  <td>adds the forward trace section in in the "code artifact" definition<br> this is a request to _Spexygen_ to __generate__ the recursive @ref tr-fw "forward traceability" for the "code artifact"
+<tr><td><b>\@endcode_uid</b> <td>ends the definition "code artifact" <br> must be placed at the end of "code artifact" definition
+<tr><td><b>\@tr{uid}</b> <td>references the given UID<br> parameter: <b>uid</b> -- the @ref tr-uid "UID" of the "code artifact"
+</table>
+@remark
+The _Spexygen_ custom commands are defined as `ALIAS=...` in `Spexyfile`.
+
+The following snippet illustrates how a "code artifact" (function `free_fun()`) has been documented (see also file header.h):
+@verbatim
+    /*!
+[1] @code_uid{Foo_verify_(), Operation verify_() of class Foo brief description}
+[2] @code_litem{Details}
+    Operation verify_() of class Foo longer description.
+
+    @param[in]  me - the instance pointer (OOP in C)
+
+[3] @code_bw_trace{brief}
+[4] - @tr{SRS_PRJ_Foo_03}
+[5] @code_fw_trace
+[6] @endcode_uid
+    */
+[7] bool Foo_verify_(Foo const* const me);
+@endverbatim
+
+`[1]` each "code artifact" is defined with the _Spexygen_ command <b>\@code_uid{}</b>, which takes two arguments :
+1. the UID associated with the artifact(e.g., `Foo_verify_()`)
+2. the brief description of the artifact(e.g., `Operation verify_() of class Foo brief description`)
+@attention
+The whole <b>\@code_uid{}</b> command must be defined in a single line of text and the brief description must not contain commas `,`
+
+<p></p>
+`[2]` the "code artifact" definition can contain "line items", such as "Details" coded by means of the <b>\@code_litem{Details}</b> _Spexygen_ command. A "code artifact" can have multiple items defined with the <b>\@code_litem{...}</b> _Spexygen_ command.
+
+`[3]` the "code artifact" can specify @ref tr-bw "backward traceability" by means of the <b>\@uid_bw_trace</b> _Spexygen_ command. If this command provides argument `{brief}`, _Spexygen_ will generate the brief description for each of the provided traceability links(see the next step `[4]`)
+
+`[4]` the traceability links to the upstream artifacts must be provided explicitly by means of the <b>\@tr{uid}</b> _Spexygen_ command. The command establishes traceability to the @ref tr-uid "UID" provided in the argument(e.g., `SRS_PRJ_Foo_03`)
+
+`[5]` the "code artifact" can specify forward traceability by means of the <b>\@code_fw_trace</b> _Spexygen_ command
+@note
+The <b>\@code_fw_trace</b> _Spexygen_ command is just a __placeholder__ for _Spexygen_ to generate the forward traceability links at this place.
+
+`[6]` The "code artifact" definition must end with the _Spexygen_ <b>\@endcode_uid</b> command
+
+`[7]` Finally, the "code artifact" needs to be declared, so that Doxygen can analyze the syntax of the specific programming language.
+
+
+The following screen shot shows how the "code artifact" defined in the code snipped above is rendered in HTML :
+
+@image html  spx-code.jpg
+@image latex spx-code.jpg width=5.5in
+@caption{ Examples of "code artifacts" (function) }
+
+
+@ifnot LATEX
+<div style="clear:both"></div>
+@nav{work,gen}
+@endif
+*/
+//############################################################################
+/*! @page gen Generating Spexygen Documentation
+
+@ifnot LATEX
+@nav{doc,exa}
+<div style="clear:both"></div>
+@endif
+
+As shown in the @ref work "spexygen workflow diagram", _Spexygen_ documentation generation is handled by the Python script `spexygen.py`. This script processes the input files in two passes. In the first pass (called "trace"), the `spexygen.py` script parses the files for the special _Spexygen_ commands and collects the information about the dependencies among the various artifacts (based on their @ref tr-uid "UIDs"). In the second pass (called "gen"), the `spexygen.py` script generates the output-files by replacing the special forward traceability commands (<b>\@ui_fw_trace</b> and <b>\@code_fw_trace</b>) with the actual traceability links collected during the first pass.
+
+@section gen_spex Spexygen Configuration File
+Similar to Doxygen, _Spexygen_ is configured by an external configuration file with the default name `spex.json`. That file specifies about the input files and output directory and files. The file is structure according to the @webref{https://www.json.org/,JSON format}. Below is an annotated example of `spex.json` file:
+
+@verbatim
+    {
+[1] "trace": [
+        "../example/exa.dox",
+        "../example/srs.dox",
+        "../example/dev.dox",
+        "../example/inc",
+        "../example/src",
+        "../example/test"
+    ]
+
+[2] "gen-dir": "spex",
+[3] "gen-inc": "Spexyinc",
+[4] "gen": [
+        "../example/exa.dox",
+        "../example/srs.dox",
+        "../example/dev.dox",
+        "../example/inc",
+        "../example/src",
+        "../example/test"
+    ],
+    }
+@endverbatim
+
+`[1]` The `"trace":` JSON array contains a list of the input files that _Spexygen_ will "trace".
+@remark
+The `"trace":` array is optional and if it is not provided, _Spexygen_ will "trace" the files specified in the `"gen":` array.
+
+<p></p>
+`[2]` The `"gen-dir":` JSON string specifies the output-directory into which _Spexygen_ will generate the output
+@remark
+The "gen-dir":` JSON string is optional and if not provided, _Spexygen_ will use the default directory `spex`
+
+<p></p>
+`[3]` The "gen-inc": JSON string specifies the spexygen include-file for Doxygen, which contains the list of the generated files. It is intended for inclusion in the `Doxyfile`. The spexygen include-file is generated in the output-directory.
+@remark
+The "gen-inc":` JSON string is optional and if not provided, _Spexygen_ will NOT generate the include-file.
+
+<p></p>
+`[4]` The `"gen":` JSON array contains a list of the files that _Spexygen_ will generate by replacing the special forward traceability commands (<b>\@ui_fw_trace</b> and <b>\@code_fw_trace</b>) with the actual traceability links collected during the "trace" pass.
+
+
+@section gen_run Running Spexygen
+The `spexygen.py` Python script can be executed from a command prompt. Typically, you run the script in the directory, where you have your `spex.json` script.Here is an example run:
+
+@verbatim
+cd spexygen/doc  <-- the directory with the spex.json config file
+python ../spexygen.py
+
+Spexygen: traceable technical documentation system 2.0.0
+Copyright (c) 2005-2024 Quantum Leaps, www.state-machine.com
+
+Tracing: ../example/exa.dox
+Tracing: ../example/srs.dox
+Tracing: ../example/dev.dox
+Tracing: ../example/inc/header.h
+Tracing: ../example/src/source.c
+Tracing: ../example/test/test1.c
+Tracing: ../example/test/test2.c
+Generating: spex/exa.dox
+Generating: spex/srs.dox
+Generating: spex/dev.dox
+Generating: spex/header.h
+  No forward trace for UID: "Foo"
+  No forward trace for UID: "Foo_inst"
+Generating: spex/source.c
+Generating: spex/test1.c
+Generating: spex/test2.c
+@endverbatim
+
+@note
+The `spexygen.py` script takes one command-line parameter, which is the name of the configuration file. If not provided, the default name is `spex.json`.
+
+@remark
+The `spexygen.py` Python script is also available in the @webref{https://pypi.org/project/spexygen,PyPi package manager} and can be installed with the standard Python package installer `pip`:
+@verbatim
+pip install spexygen
+@endverbatim
+After such installation, you run _Spexygen_ simply as follows:
+@verbatim
+spexygen
+@endverbatim
+
+Either way, depending on your settings _Spexygen_ will create the output-directory (e.g., `spex`) with all the generated files.
+
+@subsection gen_inc Spexygen Include File
+_Spexygen_ can generate the spexygen include-file for Doxygen, which contains the list of the generated files. It is intended for inclusion in the `Doxyfile`. The spexygen include-file is generated in the output-directory. Here is an example:
+
+@verbatim
+INPUT += \
+spex/exa.dox \
+spex/srs.dox \
+spex/dev.dox \
+spex/header.h \
+spex/source.c \
+spex/test1.c \
+spex/test2.c
+@endverbatim
+
+
+@section gen_doxy Doxygen Configuration File
+The _Spexygen_ output (plus other files) can be now fed to Doxygen. However, before you can run Doxygen, you need the @webref{https://www.Doxygen.nl/manual/config.html,Doxygen configuration file}. That configuration file must include the @ref spx_use-doc-uid "spexygen special commands" and the files generated by _Spexygen_. Here is an example of an annotated `Doxyfile` with these elements:
+
+@verbatim
+[1] @INCLUDE = $(SPEXYGEN)/Spexyfile
+[2] INPUT = main.dox
+[3] @INCLUDE = spex/Spexyinc
+[4] INPUT += ...
+@endverbatim
+
+`[1]` The Doxygen `\@INCLUDE` tag includes the `Spexyfile` located in the `$(SPEXYGEN)` directory defined here by means of an environment variable.
+@attention
+The `SPEXYGEN` environment variable must be defined in your system to point to the _spexgyen_ installation directory.
+
+<p></p>
+`[2]` The @webref{https://www.Doxygen.nl/manual/config.html#cfg_input,`INPUT` tag} specifies the input files for Doxygen. Here you can specify files that you wish to include in the Doxygen output, but which have not been processed by _Spexygen_.
+
+`[3]` This Doxygen `\@INCLUDE = spex/Spexyinc` tag includes the @ref gen_inc "spexgyen-include file" with the Doxygen input generated by _Spexygen_.
+
+`[4]` Any additional Doxygen `INPUT` (not produced by _spexyen_) can be specified as well (please note the `+=` operator as opposed to `=`)
+
+
+@section gen_doxy-run Running Doxygen
+Once the `$(SPEXYGEN)` environment variable has been defined, Doxygen can be run as usual from the directolry with the `Doxyfile`:
+
+@verbatim
+Doxygen
+@endverbatim
+
+
+@subsection gen_all Combining Spexygen &amp; Doxygen
+In practice, most convenient is combining _Spexygen_ and Doxygen and run both automatically one after another. Here is an example Windows batch file that automates the process (see `spexygen/doc/make.bat`):
+
+@note
+The provided `make.bat` can generate @webref{https://www.state-machine.com/spexygen,HTML} and @webref{https://www.state-machine.com/spexygen/DOC-MAN-SPX.pdf,PDF} output formats.
+
+@verbatim
+@setlocal
+
+@echo usage:
+@echo make
+@echo make -PDF
+
+:: tools (adjust to your system)----------------------------------------------
+:: Doxygen/Spexygen tools
+@set DOXYGEN=Doxygen
+@set SPEXYGEN=..
+
+@echo Generate Spexygen tracing ----------------------------------------------
+rmdir /S /Q  .\spex
+python %SPEXYGEN%/spexygen.py spex.json
+
+::============================================================================
+@if "%1"=="-PDF" goto PDF
+
+@echo Generate HTML Documentation --------------------------------------------
+@set HTML_OUT=html
+
+@echo.
+@echo cleanup
+rmdir /S /Q %HTML_OUT%
+
+@echo generating HTML...
+%DOXYGEN% Doxyfile
+
+@echo Adding custom files...
+copy %SPEXYGEN%\spexygen-awesome\jquery.js %HTML_OUT%
+
+::qclean %HTML_OUT%
+goto END
+
+:PDF
+@echo Generate PDF Documentation --------------------------------------------
+@set LATEX_OUT=latex
+
+@echo.
+@echo cleanup
+rmdir /S /Q  %LATEX_OUT%
+
+@echo generating LATEX...
+%DOXYGEN% Doxyfile-PDF
+
+:: Generate LaTex/PDF Documentation...
+@echo generating PDF...
+@cd %LATEX_OUT%
+@call make.bat
+@copy refman.pdf ..\DOC-MAN-SPX.pdf
+@cd ..
+rmdir /S /Q  %LATEX_OUT%
+
+:END
+@echo Final cleanup ----------------------------------------------------------
+rmdir /S /Q  .\spex
+
+@endlocal
+@endverbatim
+
+
+@ifnot LATEX
+<div style="clear:both"></div>
+@nav{doc,exa}
+@endif
+*/

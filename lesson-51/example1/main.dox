@@ -19,6 +19,10 @@ Simple example for Doxygen.
 @endverbatim
 
 @section exa_gen Doxygen-Generated Documentation
+
+@image html  doxygen-logo.png "image caption"
+@image latex doxygen-logo.png "image caption"
+
 The following sections contain the _Doxygen_-generated documentation of this example:
 - @ref header.h
 - @ref source.c

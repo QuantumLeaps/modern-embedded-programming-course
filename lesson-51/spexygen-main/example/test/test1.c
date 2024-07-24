@@ -8,11 +8,12 @@ void tearDown(void) {
 }
 
 /*!
-@brief zero input test
-@par Details
+@code_uid{TUN_PRJ_free_fun_00, zero input test}
+@code_litem{Details}
 This test checks that zero input to free_fun() produces zero array.
-@par Backward Traceability
-- @ref free_fun()
+@code_bw_trace{brief}
+- @tr{free_fun()}
+@endcode_uid
 */
 void TUN_PRJ_free_fun_00(void) {
     uint8_t const *result = free_fun(0U);
@@ -23,11 +24,12 @@ void TUN_PRJ_free_fun_00(void) {
 }
 
 /*!
-@brief non-zero input
-@par Details
+@code_uid{TUN_PRJ_free_fun_01, non-zero input test}
+@code_litem{Details}
 This test checks that non-zero input to free_fun() produces expected array.
-@par Backward Traceability
-- @ref free_fun()
+@code_bw_trace
+- @tr{free_fun()}
+@endcode_uid
 */
 void TUN_PRJ_free_fun_01(void) {
     uint8_t const* result = free_fun(0x1A2B3C4CU);

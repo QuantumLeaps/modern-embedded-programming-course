@@ -1,0 +1,29 @@
+# Doxyfile 1.11.0
+
+@INCLUDE = Doxyfile
+
+#---------------------------------------------------------------------------
+# Configuration options related to the LateX output
+#---------------------------------------------------------------------------
+PROJECT_NAME           = Example
+PROJECT_BRIEF          = For Spexygen 2.2.1
+PROJECT_NUMBER         = Document: DOC_MAN_EXA
+
+#---------------------------------------------------------------------------
+# Project related configuration options
+#---------------------------------------------------------------------------
+GENERATE_HTML          = NO
+GENERATE_LATEX         = YES
+
+ENABLED_SECTIONS      += LATEX
+
+#---------------------------------------------------------------------------
+# Configuration options related to the input files
+#
+# NOTE:
+# The differet INPUT than in Doxyfile is handled in spex-PDF.json 
+#---------------------------------------------------------------------------
+
+# no source code for this document
+SOURCE_BROWSER         = NO
+VERBATIM_HEADERS       = NO

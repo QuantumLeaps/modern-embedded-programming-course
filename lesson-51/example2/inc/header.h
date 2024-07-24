@@ -15,7 +15,7 @@ Free function longer description.
 */
 uint8_t const *free_fun(uint32_t x);
 
-/*!
+/**
 @brief Class Foo brief description
 @par Details
 Class Foo longer description.
@@ -23,21 +23,19 @@ Class Foo longer description.
 - @ref SRS_EXA_Foo_00
 */
 typedef struct Foo {
-    /*! @brief Attribute x of class Foo brief description
-    @par Details
-    Attribute x of class Foo: longer description.
-    @par Backward Traceability
-    - @ref SRS_EXA_Foo_01
-    */
+    //! @brief Attribute x of class Foo brief description
+    //! @par Details
+    //! Attribute x of class Foo: longer description.
+    //! @par Backward Traceability
+    //! - @ref SRS_EXA_Foo_01
     uint32_t x;
 
-    /*! @brief Foo::x_dis, Duplicate Inverse Storage for attribute Foo::x
-    @par Details
-    Duplicate Inverse Storage (DIS) for attribute Foo::x: longer description.
-    @par Backward Traceability
-    - @ref Foo::x
-    - @ref Foo_verify_()
-    */
+    /// \brief Foo::x_dis, Duplicate Inverse Storage for attribute Foo::x
+    /// \par Details
+    /// Duplicate Inverse Storage (DIS) for attribute Foo::x: longer description.
+    /// \par Backward Traceability
+    /// - @ref Foo::x
+    /// - @ref Foo_verify_()
     uint32_t x_dis;
 } Foo;
 

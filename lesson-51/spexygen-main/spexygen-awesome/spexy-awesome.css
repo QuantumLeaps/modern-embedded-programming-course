@@ -1,0 +1,308 @@
+/******** Overrides from doxygen-awesome *****/
+html {
+    --side-nav-fixed-width: 320px;
+    --side-top-background: #ecf0f5;
+    --side-nav-arrow-opacity: 1;
+    --side-nav-background-hover: #E0E0E0;
+    --top-height: 210px;
+    --remark-color: #eeeeee;
+    --remark-color-dark: #777777;
+    --remark-color-darker: #333333;
+}
+
+@media (prefers-color-scheme: dark) {
+    html:not(.light-mode) {
+        --remark-color: #555555;
+        --remark-color-dark: #aaaaaa;
+        --remark-color-darker: #eeeeee;
+    }
+}
+
+html.dark-mode {
+    --remark-color: #555555;
+    --remark-color-dark: #aaaaaa;
+    --remark-color-darker: #eeeeee;
+}
+
+p {
+    margin-block-end: 0.25em;
+}
+
+ul {
+    margin-block-start: 0.25em;
+}
+
+dl.remark {
+    background: var(--remark-color);
+    border-left: 8px solid var(--remark-color-dark);
+    color: var(--remark-color-darker);
+}
+
+dl.remark dt {
+    color: var(--remark-color-dark);
+}
+
+
+#top {
+  background: var(--side-top-background);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) {
+    --side-top-background: #353638;
+    --side-nav-background-hover: #000000;
+  }
+}
+
+html.dark-mode {
+  --side-top-background: #353638;
+  --side-nav-background-hover: #000000;
+}
+
+#projectlogo {
+  text-align: left;
+}
+
+#projectname {
+  font-size: 250%;
+  line-height: normal;
+}
+
+#projectnumber {
+  font-size: 80%;
+}
+
+#projectbrief {
+  font-size: 120%;
+}
+
+#doc-content {
+  padding-top: 0;
+  border-left: 1px solid var(--separator-color);
+}
+
+div.header .summary {
+  font-size: inherit;
+}
+
+div.ingroups {
+  font-size: 0.5em;
+}
+
+#nav-tree .arrow {
+  font-size: 0.8em;
+}
+
+#nav-tree .selected {
+  font-size: 0.8em;
+  background-color: var(--side-top-background);
+}
+
+#nav-tree .item:hover {
+  background-color: var(--side-nav-background-hover);
+}
+
+#nav-path {
+  border-left: 1px solid var(--separator-color);
+}
+
+dl.post {
+  background: var(--invariant-color);
+  border-left: 8px solid var(--invariant-color-dark);
+  color: var(--invariant-color-darker);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  overflow: hidden;
+  margin-left: 0;
+  border-radius: var(--border-radius-small);
+}
+
+/***** from Custom.css *********/
+.next_button {
+    display: inline;
+    padding: var(--spacing-large) 0 var(--spacing-small) 0;
+    user-select: none;
+}
+
+.next_button::after {
+    /* clearfix */
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.next_button a {
+    overflow: hidden;
+    float: right;
+    border: 1px solid var(--separator-color);
+    padding: var(--spacing-medium) calc(var(--spacing-large) / 2) var(--spacing-medium) var(--spacing-large);
+    border-radius: var(--border-radius-medium);
+    color: var(--page-secondary-foreground-color) !important;
+    text-decoration: none;
+    background-color: var(--side-nav-background);
+    transition: color .08s ease-in-out, background-color .1s ease-in-out;
+}
+
+.next_button a:hover {
+    color: var(--page-foreground-color) !important;
+    background-color: var(--side-top-background);
+}
+
+.next_button a::after {
+    content: '〉';
+    color: var(--page-secondary-foreground-color) !important;
+    padding-left: var(--spacing-large);
+    display: inline-block;
+    transition: color .08s ease-in-out, transform .09s ease-in-out;
+}
+
+.next_button a:hover::after {
+    color: var(--page-foreground-color) !important;
+    transform: translateX(3px);
+}
+
+.prev_button {
+    display: inline;
+    padding: var(--spacing-large) 0 var(--spacing-small) 0;
+    color: var(--page-background-color);
+    user-select: none;
+}
+
+.prev_button a {
+    overflow: hidden;
+    float: left;
+    border: 1px solid var(--separator-color);
+    padding: var(--spacing-medium) calc(var(--spacing-large) / 2) var(--spacing-medium) var(--spacing-large);
+    border-radius: var(--border-radius-medium);
+    color: var(--page-secondary-foreground-color) !important;
+    text-decoration: none;
+    background-color: var(--side-nav-background);
+    transition: color .08s ease-in-out, background-color .1s ease-in-out;
+}
+
+.prev_button a:hover {
+    color: var(--page-foreground-color) !important;
+    background-color: var(--side-top-background);
+}
+
+.prev_button a::before {
+    content: '〈';
+    color: var(--page-secondary-foreground-color) !important;
+    padding-right: var(--spacing-large);
+    display: inline-block;
+    transition: color .08s ease-in-out, transform .09s ease-in-out;
+}
+
+.prev_button a:hover::before {
+    color: var(--page-foreground-color) !important;
+    transform: translateX(-3px);
+}
+
+html.dark-mode #variants_image img {
+    filter: brightness(87%) hue-rotate(180deg) invert();
+}
+
+/******** Custom spans  ********/
+.img {
+  padding-left: 20px;
+  white-space: nowrap;
+  color: #00A;
+}
+
+.logo a {
+  line-height: 50px;
+  padding: 10px 0px 20px 55px;
+  white-space: nowrap;
+  color: #007;
+  font-weight: bold;
+}
+
+table.item {
+  text-align: left;
+  width: 100%;
+}
+
+table.item th {
+  width: 1%;
+  white-space: nowrap;
+  padding-right: 10px;
+}
+
+td.middle {
+  text-align:center;
+}
+
+td.section {
+  text-align:center;
+  background-color:var(--blockquote-background);
+}
+
+pre {
+  padding: 10px;
+  background: var(--code-background);
+  color: var(--code-foreground);
+  border-radius: var(--border-radius-small);
+}
+
+/******** Custom tags (explanation section) *****/
+dl.tag dt {
+  float: left;
+  background-color: black;
+  color: white;
+  line-height: 1.3em;
+  padding: 0 5px;
+}
+
+dl.tag blockquote {
+  border-left: 4px solid #9CAFD4;
+}
+
+dl.item dt {
+  font-size: 110%;
+  font-weight: normal;  padding: var(--spacing-medium);
+  background: var(--code-background);
+  border: 1px solid var(--separator-color);
+  border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+  margin-bottom: -1px;
+  overflow: auto;
+}
+dl.item dd {
+  margin-inline-start: initial;
+  padding: var(--spacing-medium);
+  border: 1px solid var(--separator-color);
+  border-radius: 0 0 var(--border-radius-medium) var(--border-radius-medium);
+  overflow: auto;
+}
+
+div.label {
+  font-weight: bold;
+}
+
+div.memdoc p {
+  margin-top: 0;
+}
+
+dl.item p {
+  margin-top: 0;
+}
+
+/******** Custom images (center) *****/
+img.inline {
+  display: block;
+  margin: auto;
+}
+
+img.right {
+  float:right;
+  clear:right;
+  margin:0 20px 0 20px;
+}
+
+#preview {
+  position:absolute;
+  border:1px solid #ccc;
+  background:#77f;
+  padding:2px;
+  display:none;
+  color:#fff;
+}

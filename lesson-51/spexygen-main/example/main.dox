@@ -1,0 +1,52 @@
+/*!
+@ifnot IN_SPEXYGEN
+@mainpage
+@section exa About the Example
+@else
+@page exa Example
+@endif
+
+@ifnot LATEX
+@nav{gen,srs}
+<div style="clear:both"></div>
+@endif
+
+@section about About this Example
+Simple example for Doxygen.
+
+@verbatim
++---example/     <-- this example
+|   |   main.dox <-- example description
+|   |   srs.dox  <-- example Software Requirements Specification
+|   |
+|   +---inc
+|   |       header.h <-- example header file
+|   |
+|   +---src
+|   |       source.c <-- example source file
+|   |
+|   \---test
+|           test1.c  <-- example test file
+|           test2.c  <-- example test file
+@endverbatim
+
+@section exa_gen Spexygen-Generated Documentation
+
+@image html  logo_spexygen.png "image caption"
+@image latex logo_spexygen.png "image caption"
+
+The following sections contain the _Spexygen_-generated documentation of this example:
+- @subpage srs
+- @ref header.h
+- @ref source.c
+- @ref test1.c
+- @ref test2.c
+
+@note
+Please note the generated _forward-traceability_ and the _backward-traceability_ links (augmented with the brief descriptions) in the "work artifacts" and "code artifacts". Also, try clicking on the provided traceability links as well as _searching_ the UIDs in the Doxygen "search" box.
+
+@ifnot LATEX
+<p></p>
+@nav{gen,srs}
+@endif
+*/

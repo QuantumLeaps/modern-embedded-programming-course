@@ -1,0 +1,46 @@
+/*!
+@ifnot LATEX
+
+@page help Using Online Help
+
+<p>You can use this online help in various ways: either sequentially from beginning to end or just by quickly locating the interesting topic.
+</p>
+
+[![](help_using.jpg)](https://github.com/QuantumLeaps/spexygen)
+@caption{Online Help Features}
+
+@section help_dark_mode Dark Mode Toggle
+You can toggle the Dark/Light Mode of the help display with the button in the top-left corner, below the logo.
+
+<img src="help_light.webp" style="float:left; margin-right:10px;">
+The Light display mode is selected
+
+<img src="help_dark.webp" style="float:left; margin-right:10px;">
+The Dark display mode is selected
+
+@section help_tree_view Using the Tree View
+The *Tree View* pane on the left-hand side of the browser displays the hierarchical Table of Contents, which can be either **linked-to** or **unlinked-from** the *Current Topic* displayed on the right-hand side. You can toggle between the two modes by pressing the **Link/Unlink Current Topic** icon at the top of the *Tree View* pane.
+
+<img src="tree-view_linked.webp" style="float:left; margin-right:10px;">
+When the *Tree View* is **linked** to the Current Topic, the *Tree View* will always follow the currently viewed topic, by expanding and highlighting the pertinent section of the hierarchical Table of Contents.
+
+<div style="clear:both;"></div>
+<img src="tree-view_unlinked.webp" style="float:left; margin-right:10px;">
+When the *Tree View* is **unlinked** from the Current Topic, the *Tree View* will show only the explicitly selected section of the hierarchical Table of Contents and will **not** follow the topics activated by internal documentation links.
+
+@section help_seq Reading Online Help Sequentially
+You can move from topic to topic by means of the <span class="strong underline">Next:</span> link at the bottom of each page.
+
+@section help_random Quickly Locating a Topic of Interest
+You can use the following elements:
+- the @ref help_tree_view "Tree View" pane on the left-hand side of the browser;
+- the **Table of Contents** box in the top-right corner of the page;
+- the **Search** box in the upper-right corner of the browser window
+
+@section hel_spexygen Spexygen on GitHub
+If you like this styling for doxygen, it is based on @webref{https://github.com/jothepro/doxygen-awesome-css,doxygen-awesome-css}. The styling with modifications made by Quantum Leaps is available as part of the @webref{https://github.com/QuantumLeaps/spexygen,spexyen documentation system}.
+
+[![Spexygen on GitHub](logo_spexygen.webp)](https://github.com/QuantumLeaps/spexygen)
+
+@endif
+*/
