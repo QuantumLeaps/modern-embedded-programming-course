@@ -18,9 +18,9 @@ int main(void) {
     c = a & b;   // AND
     c = a ^ b;   // XOR
     c = ~b;      // NOT
-    c = a << 1;  // right-shift
+    c = a << 1;  // lef-shift
     c = a << 2;
-    c = b >> 1;  // left-shift
+    c = b >> 1;  // right-shift
     c = b >> 3;
 
     int x = 1024;
