@@ -23,6 +23,19 @@ void SysTick_Handler(void) {
     QXK_ISR_EXIT(); /* inform QXK about exiting an ISR */
 }
 
+void EXTI4_15_IRQHandler(void); // prototype
+void EXTI4_15_IRQHandler(void) {
+    QXK_ISR_ENTRY();  /* inform QXK about entering an ISR */
+
+    /* falling edge? */
+    if ((EXTI->FPR1 & (1U << B1_PIN)) != 0U) {
+        EXTI->FPR1 = (1U << B1_PIN); /* clear interrupt */
+        QXSemaphore_signal(&SW1_sema);
+    }
+
+    QXK_ISR_EXIT(); /* inform QXK about exiting an ISR */
+}
+
 void BSP_init(void) {
     // enable GPIOA clock port for the LEDs
     RCC->IOPENR |= (1U << 0U);
@@ -37,11 +50,22 @@ void BSP_init(void) {
     GPIOA->OSPEEDR |=  ((1U << 2U*LD4_PIN) | (1U << 2U*LD5_PIN));
     GPIOA->PUPDR   &= ~((3U << 2U*LD4_PIN) | (3U << 2U*LD5_PIN));
 
+    // enable GPIOC clock port for the Button B1
+    RCC->IOPENR |= (1U << 2U);
+
     // configure Button B1 (PC.13) pins as input, no pull-up, pull-down
     GPIOC->MODER   &= ~(3U << 2*B1_PIN);
     GPIOC->OSPEEDR &= ~(3U << 2*B1_PIN);
     GPIOC->OSPEEDR |=  (1U << 2*B1_PIN);
     GPIOC->PUPDR   &= ~(3U << 2*B1_PIN);
+
+    // configure Button B1 interrupt as falling edge
+    EXTI->EMR1 &= ~(1U << B1_PIN);
+    EXTI->IMR1 |= (1U << B1_PIN);
+    EXTI->RTSR1 &= ~(1U << B1_PIN);
+    EXTI->FTSR1 |= (1U << B1_PIN);
+    EXTI->EXTICR[3] &= ~(7U << 8); // EXTI port C line 13
+    EXTI->EXTICR[3] |= (2U << 8);  // EXTI port C line 13
 }
 
 void BSP_ledRedOn(void) {
@@ -75,6 +99,10 @@ void QF_onStartup(void) {
 
     /* set the SysTick interrupt priority (highest) */
     NVIC_SetPriority(SysTick_IRQn, 0U);
+    NVIC_SetPriority(EXTI4_15_IRQn, 0U);
+
+    /* enable interrupts */
+    NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 /*..........................................................................*/
 void QF_onCleanup(void) {
