@@ -7,10 +7,10 @@
 
   <Targets>
     <Target>
-      <TargetName>Debug</TargetName>
+      <TargetName>dbg</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
+      <pCCUsed>6220000::V6.22::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -48,14 +48,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\Objects\</OutputDirectory>
+          <OutputDirectory>.\dbg\</OutputDirectory>
           <OutputName>lesson</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Listings\</ListingPath>
+          <ListingPath>.\dbg\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -340,7 +340,7 @@
               <MiscControls>-Wno-declaration-after-statement</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>../CMSIS/Include;../nucleo-c031c6</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -356,13 +356,13 @@
             <ClangAsOpt>1</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>Stack_Size=2048,Heap_Size=0</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
-            <umfTarg>1</umfTarg>
+            <umfTarg>0</umfTarg>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
             <noStLib>0</noStLib>
@@ -371,7 +371,7 @@
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
+            <ScatterFile>lesson.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -412,10 +412,39 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>::CMSIS</GroupName>
-        </Group>
-        <Group>
-          <GroupName>::Device</GroupName>
+          <GroupName>nucleo-c031c6</GroupName>
+          <Files>
+            <File>
+              <FileName>README.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nucleo-c031c6\README.txt</FilePath>
+            </File>
+            <File>
+              <FileName>stm32c0xx.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nucleo-c031c6\stm32c0xx.h</FilePath>
+            </File>
+            <File>
+              <FileName>stm32c031xx.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nucleo-c031c6\stm32c031xx.h</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32c0xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nucleo-c031c6\system_stm32c0xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32c0xx.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nucleo-c031c6\system_stm32c0xx.h</FilePath>
+            </File>
+            <File>
+              <FileName>startup_stm32c031xx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\nucleo-c031c6\arm\startup_stm32c031xx.s</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
@@ -423,36 +452,19 @@
 
   <RTE>
     <apis/>
-    <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
-        <targetInfos>
-          <targetInfo name="Debug"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32C0 CMSIS">
-        <package name="STM32C0xx_DFP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.0.0"/>
-        <targetInfos>
-          <targetInfo name="Debug"/>
-        </targetInfos>
-      </component>
-    </components>
+    <components/>
     <files>
       <file attr="config" category="source" condition="STM32C031 ARMCC" name="Drivers\CMSIS\Device\ST\STM32C0xx\Source\Templates\arm\startup_stm32c031xx.s" version="1.0.0">
-        <instance index="0">RTE\Device\STM32C031C6Tx\startup_stm32c031xx.s</instance>
+        <instance index="0" removed="1">RTE\Device\STM32C031C6Tx\startup_stm32c031xx.s</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32C0 CMSIS"/>
         <package name="STM32C0xx_DFP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.0.0"/>
-        <targetInfos>
-          <targetInfo name="Debug"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="source" name="Drivers\CMSIS\Device\ST\STM32C0xx\Source\Templates\system_stm32c0xx.c" version="1.0.0">
-        <instance index="0">RTE\Device\STM32C031C6Tx\system_stm32c0xx.c</instance>
+        <instance index="0" removed="1">RTE\Device\STM32C031C6Tx\system_stm32c0xx.c</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32C0 CMSIS"/>
         <package name="STM32C0xx_DFP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.0.0"/>
-        <targetInfos>
-          <targetInfo name="Debug"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
     </files>
   </RTE>

@@ -1,7 +1,7 @@
 #include "qpc.h"
 #include "bsp.h"
 
-Q_DEFINE_THIS_FILE
+//Q_DEFINE_THIS_FILE
 
 QXSemaphore SW1_sema;
 

@@ -103,11 +103,11 @@
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OGUseCmsisDspLib</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>GRuntimeLibThreads</name>
@@ -347,7 +347,8 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state></state>
+                    <state>$PROJ_DIR$\..\CMSIS\Include</state>
+                    <state>$PROJ_DIR$\..\ek-tm4c123gxl</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -756,7 +757,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C123GH6.icf</state>
+                    <state>$TOOLKIT_DIR$/config/linker/TexasInstruments/TM4C123GH6.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -989,7 +990,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>project_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>

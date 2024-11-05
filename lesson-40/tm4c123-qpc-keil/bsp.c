@@ -4,7 +4,7 @@
 #include "qpc.h"  /* QP/C API */
 #include "bsp.h"
 
-#include "TM4C123GH6PM_QL.h"        /* the device specific header (TI) */
+#include "TM4C123GH6PM.h"        /* the device specific header (TI) */
 /* add other drivers if necessary... */
 
 /* Local-scope objects -----------------------------------------------------*/

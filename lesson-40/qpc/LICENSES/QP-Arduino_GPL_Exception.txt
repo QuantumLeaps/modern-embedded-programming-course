@@ -1,0 +1,46 @@
+QP/C++ and QP-nano FRAMEWORK EXCEPTION FOR ARDUINO
+
+Version 3.0, December 22, 2021
+
+Copyright (c) 2005-2021 Quantum Leaps, LLC. <https://www.state-machine.com/>
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+This QP/C++ and QP-nano Framework Exception for Arduino ("Exception")
+is an additional permission under section 7 of the GNU General Public
+License, version 3 ("GPLv3"). It applies to the QP/C++ and QP-nano
+source code (the "QP Frameworks") that is distributed as part of the
+QP-Arduino Support Package.
+
+When you use QP Frameworks inside your program, the QP Frameworks' code
+is combined with your code of the program. The purpose of this Exception
+is to allow non-GPL (including proprietary) programs to use, in this way,
+the QP Frameworks' code covered by this Exception.
+
+0. Definitions.
+"QP Frameworks" are lightweight real-time embedded frameworks (RTEFs)
+as well as all supporting ports and examples, as distributed from:
+<https://www.state-machine.com> and
+<https://github.com/QuantumLeaps>
+
+"Arduino-Certified Board" means any board with an Arduino-supported
+CPU that bears an official Arduino logo and/or is officially certified
+under the Arduino Certified Program
+(see <https://www.arduino.cc/en/hardware>).
+
+"Target Code" refers to output from any compiler and linker in
+executable form suitable for execution by an embedded microcontroller.
+
+
+1. Grant of Additional Permission
+As a special Exception, the copyright holder of QP Frameworks gives you
+permission to propagate a work of Target Code formed by combining
+the QP Frameworks with your own source code without the requirement
+to expose your proprietary source code, provided that all Target Code
+will execute on Arduino-Certified Board(s).
+
+2. No Weakening of GPL
+The availability of this Exception does not imply any general
+presumption that third-party software linking to the QP Framework is
+unaffected by the copyleft requirements of the GPLv3 license.

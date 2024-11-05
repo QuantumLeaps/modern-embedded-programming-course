@@ -2,7 +2,7 @@
 #include "qpc.h"
 #include "bsp.h"
 
-#include "TM4C123GH6PM_QL.h"        /* the device specific header (TI) */
+#include "TM4C123GH6PM.h"        /* the device specific header (TI) */
 /* add other drivers if necessary... */
 
 /* Local-scope objects -----------------------------------------------------*/
@@ -51,13 +51,8 @@ void SysTick_Handler(void) {
     QXK_ISR_EXIT(); /* inform QXK about exiting an ISR */
 }
 /*..........................................................................*/
-// NOTE:
-// The CMSIS-comliant name of this ISR should be GPIOF_IRQHandler()
-// (see https://arm-software.github.io/CMSIS_5/Core/html/startup_c_pg.html )
-// However, the startup code provided the standard "TM4C123x Series CMSIS Pack"
-// provides NON-compliant ISR names, such as GPIOF_Handler() used here.
-void GPIOF_Handler(void); // prototype
-void GPIOF_Handler(void) {
+void GPIOPortF_IRQHandler(void); // prototype
+void GPIOPortF_IRQHandler(void) {
     QXK_ISR_ENTRY();  /* inform QXK about entering an ISR */
     if ((GPIOF_AHB->RIS & BTN_SW1) != 0U) { /* interrupt caused by SW1? */
         /* post an immutable "button-press" event from ISR */

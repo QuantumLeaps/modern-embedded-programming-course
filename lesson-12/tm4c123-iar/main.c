@@ -1,4 +1,4 @@
-#include "tm4c_cmsis.h"  // CMSIS-compatible interface
+#include "TM4C123GH6PM.h"  // CMSIS-compatible interface
 #include "delay.h"
 
 #include <stdint.h> // C99 standard integers
@@ -7,7 +7,7 @@
 #define LED_BLUE  (1U << 2)
 #define LED_GREEN (1U << 3)
 
-typedef struct /* _packed */ {
+typedef struct /* __attribute__((packed)) */ {
     uint8_t y;
     uint16_t x;
 } Point;
@@ -52,9 +52,10 @@ int main(void) {
     pp->x = 1U;
     wp->top_left = *pp;
 
-    SYSCTL->GPIOHSCTL |= (1U << 5); /* enable AHB for GPIOF */
-    SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
+    SYSCTL->RCGCGPIO  |= (1U << 5); /* enable AHB for GPIOF */
+    SYSCTL->GPIOHBCTL |= (1U << 5); /* enable clock for GPIOF */
 
+    /* configure LEDs (digital output) */
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
 
@@ -71,4 +72,14 @@ int main(void) {
         delay(250000);
     }
     //return 0; // unreachable code
+}
+
+//............................................................................
+// function needed by the library/startup code
+_Noreturn void assert_failed(char const * const module, int const id);
+_Noreturn void assert_failed(char const * const module, int const id) {
+    // TBD: damage control
+    (void)module; // avoid the "unused parameter" compiler warning
+    (void)id;     // avoid the "unused parameter" compiler warning
+    NVIC_SystemReset();
 }

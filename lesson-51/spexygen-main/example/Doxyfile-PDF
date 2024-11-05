@@ -6,7 +6,7 @@
 # Configuration options related to the LateX output
 #---------------------------------------------------------------------------
 PROJECT_NAME           = Example
-PROJECT_BRIEF          = For Spexygen 2.2.1
+PROJECT_BRIEF          = For Spexygen 2.2.2
 PROJECT_NUMBER         = Document: DOC_MAN_EXA
 
 #---------------------------------------------------------------------------

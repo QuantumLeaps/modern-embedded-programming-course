@@ -60,6 +60,7 @@ rmdir /S /Q %HTML_OUT%
 
 @echo Adding custom files...
 copy %SPEXYGEN%\spexygen-awesome\jquery.js %HTML_OUT%
+@copy DOC_MAN_SPX.pdf %HTML_OUT%
 
 ::qclean %HTML_OUT%
 goto END

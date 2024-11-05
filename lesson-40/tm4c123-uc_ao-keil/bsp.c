@@ -6,7 +6,7 @@
 
 #include <stdbool.h>             /* needed by the TI drivers */
 
-#include "TM4C123GH6PM_QL.h" /* the TM4C MCU Peripheral Access Layer (TI) */
+#include "TM4C123GH6PM.h" /* the TM4C MCU Peripheral Access Layer (TI) */
 /* add other drivers if necessary... */
 
 /* Local-scope objects -----------------------------------------------------*/

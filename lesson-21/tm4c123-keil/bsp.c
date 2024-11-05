@@ -11,10 +11,12 @@
 
 static uint32_t volatile l_tickCtr;
 
+/* ISRs  ===============================================*/
 void SysTick_Handler(void) {
     ++l_tickCtr;
 }
 
+/* BSP functions ===========================================================*/
 void BSP_init(void) {
     SYSCTL->RCGCGPIO  |= (1U << 5); /* enable Run mode for GPIOF */
     SYSCTL->GPIOHBCTL |= (1U << 5); /* enable AHB for GPIOF */
@@ -43,6 +45,7 @@ void BSP_delay(uint32_t ticks) {
     }
 }
 
+/*..........................................................................*/
 void BSP_ledRedOn(void) {
     GPIOF_AHB->DATA_Bits[LED_RED] = LED_RED;
 }

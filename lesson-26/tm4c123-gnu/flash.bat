@@ -8,7 +8,7 @@ setlocal
 
 @echo Load a given binary file to the flash of EK-TM4C123GXL
 @echo usage:   flash binary-file
-@echo example: flash dbg\blinky-qk.bin
+@echo example: flash dbg\blinky.bin
 
 ::----------------------------------------------------------------------------
 :: NOTE: The following symbol LMFLASH assumes that LMFlash.exe can
@@ -26,7 +26,13 @@ if not exist %~s1 (
     @goto end
 )
 
+@echo:
+@echo Programming %1...
 %LMFLASH% -q ek-tm4c123gxl -e -v -r %1
+
+@echo:
+@echo ********************************************
+@echo Please POWER CYCLE the TivaC LauchPad board!
 
 :end
 

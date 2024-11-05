@@ -394,11 +394,6 @@
               <FileType>1</FileType>
               <FilePath>.\delay.c</FilePath>
             </File>
-            <File>
-              <FileName>tm4c_cmsis.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\tm4c_cmsis.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

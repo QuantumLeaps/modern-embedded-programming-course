@@ -10,7 +10,7 @@
       <TargetName>dbg</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pCCUsed>6220000::V6.22::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -340,7 +340,7 @@
               <MiscControls>-Wconditional-uninitialized -Wsometimes-uninitialized</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>../nucleo-l152re</IncludePath>
+              <IncludePath>../qpc/include;../qpc/ports/arm-cm/qv/armclang</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -402,13 +402,100 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>qpc</GroupName>
+          <Files>
+            <File>
+              <FileName>qep_hsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qep_hsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>qep_msm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qep_msm.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_act.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_act.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_actq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_actq.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_defer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_defer.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_dyn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_dyn.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_ps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_ps.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qact.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qact.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qeq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qeq.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qmact.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qmact.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>qv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qv\qv.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>qpc_port</GroupName>
+          <Files>
+            <File>
+              <FileName>qp_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qv\armclang\qp_port.h</FilePath>
+            </File>
+            <File>
+              <FileName>qs_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qv\armclang\qs_port.h</FilePath>
+            </File>
+            <File>
+              <FileName>qv_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qv\armclang\qv_port.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
           <GroupName>::Device</GroupName>
-        </Group>
-        <Group>
-          <GroupName>::RTEF</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -417,32 +504,14 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="6.1.0" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.7.36" url="https://www.keil.com/pack/" vendor="ARM" version="6.1.0"/>
         <targetInfos>
           <targetInfo name="dbg"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.6.3" condition="STM32F4 CMSIS">
         <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="https://www.keil.com/pack/" vendor="Keil" version="2.17.1"/>
-        <targetInfos>
-          <targetInfo name="dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Event Processor" Cvariant="qep" Cvendor="QuantumLeaps" Cversion="7.3.0">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Framework" Cvariant="qf" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qep">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qv" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qf">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
         <targetInfos>
           <targetInfo name="dbg"/>
         </targetInfos>
@@ -466,12 +535,10 @@
         </targetInfos>
       </file>
       <file attr="config" category="header" condition="CoreM" name="ports\arm-cm\qv\config\qp_config.h" version="7.3.0">
-        <instance index="0">RTE\RTEF\qp_config.h</instance>
+        <instance index="0" removed="1">RTE\RTEF\qp_config.h</instance>
         <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qv" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qf"/>
         <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="dbg"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" condition="CoreM" name="ports\arm-cm\qv\config\qp_config.hpp" version="7.3.0">
         <instance index="0" removed="1">RTE\RTEF\qp_config.hpp</instance>

@@ -116,7 +116,7 @@ DEFINES   := -DTARGET_IS_TM4C123_RB1
 # FLOAT_ABI: [ | soft | softfp | hard]
 #
 ARM_CPU   := -mcpu=cortex-m4
-ARM_ARCH  := 7   # NOTE: must match the ARM_CPU!
+ARM_ARCH  := 7
 ARM_FPU   := -mfpu=vfp
 FLOAT_ABI := -mfloat-abi=softfp
 
@@ -245,7 +245,6 @@ ifneq ($(MAKECMDGOALS),clean)
   endif
 endif
 
-
 .PHONY : clean
 clean:
 	-$(RM) $(BIN_DIR)/*.o \
@@ -253,7 +252,7 @@ clean:
 	$(BIN_DIR)/*.bin \
 	$(BIN_DIR)/*.elf \
 	$(BIN_DIR)/*.map
-	
+
 show:
 	@echo PROJECT = $(PROJECT)
 	@echo CONF = $(CONF)

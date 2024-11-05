@@ -7,7 +7,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = Example
 PROJECT_NUMBER         = 0.0.1
-PROJECT_BRIEF          = For Spexygen 2.2.1
+PROJECT_BRIEF          = For Spexygen 2.2.2
 PROJECT_LOGO           = $(SPEXYGEN)/spexygen-awesome/img/logo_spexygen.webp
 PROJECT_ICON           =
 

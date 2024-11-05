@@ -7,10 +7,10 @@
 
   <Targets>
     <Target>
-      <TargetName>BuildConfig-dbg</TargetName>
+      <TargetName>dbg</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pCCUsed>6220000::V6.22::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -18,7 +18,7 @@
           <Vendor>Texas Instruments</Vendor>
           <PackID>Keil.TM4C_DFP.1.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
-          <Cpu>IROM(0x00000000,0x040000) IRAM(0x20000000,0x008000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x008000) IROM(0x00000000,0x040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0TM4C123_256 -FS00 -FL040000 -FP0($$Device:TM4C123GH6PM$Flash\TM4C123_256.FLM))</FlashDriverDll>
@@ -89,7 +89,7 @@
             <nStopA1X>0</nStopA1X>
             <nStopA2X>0</nStopA2X>
           </AfterMake>
-          <SelectedForBatchBuild>1</SelectedForBatchBuild>
+          <SelectedForBatchBuild>0</SelectedForBatchBuild>
           <SVCSIdString></SVCSIdString>
         </TargetCommonOption>
         <CommonProperty>
@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4096</DriverSelection>
+            <DriverSelection>-1</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -159,8 +159,8 @@
             <ldmm>1</ldmm>
             <ldXref>1</ldXref>
             <BigEnd>0</BigEnd>
-            <AdsALst>0</AdsALst>
-            <AdsACrf>0</AdsACrf>
+            <AdsALst>1</AdsALst>
+            <AdsACrf>1</AdsACrf>
             <AdsANop>0</AdsANop>
             <AdsANot>0</AdsANot>
             <AdsLLst>1</AdsLLst>
@@ -190,7 +190,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -313,7 +313,7 @@
             <RvctStartVector></RvctStartVector>
           </ArmAdsMisc>
           <Cads>
-            <interw>0</interw>
+            <interw>1</interw>
             <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
@@ -326,10 +326,10 @@
             <wLevel>3</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>1</uC99>
+            <uC99>0</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
-            <v6Lang>3</v6Lang>
+            <v6Lang>5</v6Lang>
             <v6LangP>3</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
@@ -337,10 +337,10 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>-Wconditional-uninitialized -Wsometimes-uninitialized</MiscControls>
-              <Define>QP_CONFIG</Define>
+              <MiscControls>-Wno-declaration-after-statement</MiscControls>
+              <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\qpc\include;..\qpc\ports\arm-cm\qxk\armclang;..\ek-tm4c123gxl;..\CMSIS\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -351,12 +351,12 @@
             <SplitLS>0</SplitLS>
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
-            <uSurpInc>1</uSurpInc>
+            <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <ClangAsOpt>1</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>Stack_Size=2048,Heap_Size=0</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
@@ -371,10 +371,10 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\lesson.sct</ScatterFile>
+            <ScatterFile>lesson.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--entry Reset_Handler</Misc>
+            <Misc></Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -385,6 +385,11 @@
           <GroupName>Source</GroupName>
           <Files>
             <File>
+              <FileName>main_qm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\main_qm.c</FilePath>
+            </File>
+            <File>
               <FileName>bsp.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\bsp.c</FilePath>
@@ -394,21 +399,157 @@
               <FileType>5</FileType>
               <FilePath>.\bsp.h</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ek-tm4c123gxl</GroupName>
+          <Files>
             <File>
-              <FileName>main_qm.c</FileName>
+              <FileName>startup_TM4C123GH6PM.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\ek-tm4c123gxl\arm\startup_TM4C123GH6PM.s</FilePath>
+            </File>
+            <File>
+              <FileName>README.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ek-tm4c123gxl\README.txt</FilePath>
+            </File>
+            <File>
+              <FileName>system_TM4C123GH6PM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\main_qm.c</FilePath>
+              <FilePath>..\ek-tm4c123gxl\system_TM4C123GH6PM.c</FilePath>
+            </File>
+            <File>
+              <FileName>system_TM4C123GH6PM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ek-tm4c123gxl\system_TM4C123GH6PM.h</FilePath>
+            </File>
+            <File>
+              <FileName>TM4C123GH6PM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\ek-tm4c123gxl\TM4C123GH6PM.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>::CMSIS</GroupName>
+          <GroupName>CMSIS</GroupName>
+          <Files>
+            <File>
+              <FileName>cmsis_armclang.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\CMSIS\Include\cmsis_armclang.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmsis_compiler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\CMSIS\Include\cmsis_compiler.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmsis_version.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\CMSIS\Include\cmsis_version.h</FilePath>
+            </File>
+            <File>
+              <FileName>core_cm4.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\CMSIS\Include\core_cm4.h</FilePath>
+            </File>
+            <File>
+              <FileName>mpu_armv7.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\CMSIS\Include\mpu_armv7.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
-          <GroupName>::Device</GroupName>
-        </Group>
-        <Group>
-          <GroupName>::RTEF</GroupName>
+          <GroupName>qpc</GroupName>
+          <Files>
+            <File>
+              <FileName>qep_hsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qep_hsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_act.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_act.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_actq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_actq.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_defer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_defer.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_dyn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_dyn.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_ps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_ps.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qact.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qact.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_qeq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_qeq.c</FilePath>
+            </File>
+            <File>
+              <FileName>qf_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qf\qf_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_sema.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk_sema.c</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_xthr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\src\qxk\qxk_xthr.c</FilePath>
+            </File>
+            <File>
+              <FileName>qp_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qxk\armclang\qp_port.h</FilePath>
+            </File>
+            <File>
+              <FileName>qs_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qxk\armclang\qs_port.h</FilePath>
+            </File>
+            <File>
+              <FileName>qxk_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\qpc\ports\arm-cm\qxk\armclang\qxk_port.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
@@ -416,68 +557,19 @@
 
   <RTE>
     <apis/>
-    <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.1" condition="TM4C123x CMSIS">
-        <package name="TM4C_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Event Processor" Cvariant="qep" Cvendor="QuantumLeaps" Cversion="7.3.0">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Framework" Cvariant="qf" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qep">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qxk" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="CoreM Comp_qf">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Software tracing" Cvariant="qs" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="Comp_qep">
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo excluded="1" name="BuildConfig-dbg" versionMatchMode=""/>
-        </targetInfos>
-      </component>
-    </components>
+    <components/>
     <files>
       <file attr="config" category="source" condition="Compiler ARMCC" name="Device\Source\ARM\startup_TM4C123.s" version="1.0.0">
-        <instance index="0">RTE\Device\TM4C123GH6PM\startup_TM4C123.s</instance>
+        <instance index="0" removed="1">RTE\Device\TM4C123GH6PM\startup_TM4C123.s</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.1" condition="TM4C123x CMSIS"/>
         <package name="TM4C_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="source" name="Device\Source\system_TM4C123.c" version="1.0.1">
-        <instance index="0">RTE\Device\TM4C123GH6PM\system_TM4C123.c</instance>
+        <instance index="0" removed="1">RTE\Device\TM4C123GH6PM\system_TM4C123.c</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.1" condition="TM4C123x CMSIS"/>
         <package name="TM4C_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
-      </file>
-      <file attr="config" category="header" condition="CoreM" name="ports\arm-cm\qxk\config\qp_config.h" version="7.3.0">
-        <instance index="0">RTE\RTEF\qp_config.h</instance>
-        <component Cbundle="QuantumLeaps QP/C" Cclass="RTEF" Cgroup="Real-Time Kernel" Cvariant="qxk" Cvendor="QuantumLeaps" Cversion="7.3.0" condition="CoreM Comp_qf"/>
-        <package name="qpc" schemaVersion="1.7.28" url="https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/" vendor="QuantumLeaps" version="7.3.0"/>
-        <targetInfos>
-          <targetInfo name="BuildConfig-dbg"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
     </files>
   </RTE>

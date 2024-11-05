@@ -15,15 +15,15 @@ ALIASES += \
 "enduid=</table>" \
 "code_uid{2}=@brief \2^^" \
 "code_alias{2}=@brief <b>\1</b> : \2^^@anchor \1" \
-"code_litem{1}=@par \1^^" \
-"code_bw_trace=@par Backward Traceability^^" \
-"code_bw_trace{1}=@par Backward Traceability^^" \
-"code_fw_trace=@par Forward Traceability^^" \
-"code_fw_trace{1}=@par Forward Traceability^^" \
+"code_litem{1}=^^@par \1^^" \
+"code_bw_trace=^^@par Backward Traceability^^" \
+"code_bw_trace{1}=^^@par Backward Traceability^^" \
+"code_fw_trace=^^@par Forward Traceability^^" \
+"code_fw_trace{1}=^^@par Forward Traceability^^" \
 "endcode_uid=" \
 "tr{1}=@ref \1 \"\1\"" \
-"precondition{2}=@par Precondition `\1:\2`^^" \
-"postcondition{2}=@par Postcondition `\1:\2`^^" \
+"precondition{2}=^^@par Precondition `\1:\2`^^" \
+"postcondition{2}=^^@par Postcondition `\1:\2`^^" \
 "invariant{2}=@par Invariant `\1:\2`^^" \
 "nav{2}=<span class=\"prev_button\">@ref \1</span><span class=\"next_button\">@ref \2</span>" \
 "nav_prev{1}=<span class=\"prev_button\">@ref \1</span>" \

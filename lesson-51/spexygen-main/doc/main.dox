@@ -25,6 +25,16 @@
 - traceable @ref test1.c "tests"
 - traceable specifications of other kind
 
+@ifnot LATEX
+<a href="" target="_blank" title="Spexygen video">
+<img src="spexygen-video.jpg">
+</a>
+@else
+@image latex spexygen-video.jpg width=5in
+@webref{https://youtu.be/5naC_z-76Aw?si=x4Svroqv9qDdkpsE,Spexygen video}
+@endif
+<br>
+
 @note
 By extending Doxygen with a uniform __traceability management__ not just for source code, but also for all other specifications, _Spexygen_ supports regulatory compliance with functional safety standards such as IEC 61508, IEC 62304, ISO 26262 and others.
 

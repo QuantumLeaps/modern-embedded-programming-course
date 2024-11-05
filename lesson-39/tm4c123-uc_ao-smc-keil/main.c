@@ -5,7 +5,7 @@
 
 static char const this_module[] = "main"; /* this module name for Q_ASSERT() */
 
-OS_STK stack_timeBomb[100]; /* task stack */
+OS_STK stack_timeBomb[200]; /* task stack */
 static Event *timeBomb_queue[10];
 
 static TimeBomb timeBomb;

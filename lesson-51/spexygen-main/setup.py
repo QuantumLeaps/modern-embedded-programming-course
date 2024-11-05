@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name="spexygen",
-    version="2.2.1",
+    version="2.2.2",
     author="Quantum Leaps",
     author_email="info@state-machine.com",
     description="Traceable specifications based on doxygen",

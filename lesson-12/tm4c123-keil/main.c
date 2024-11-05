@@ -1,4 +1,4 @@
-#include "tm4c_cmsis.h"  // CMSIS-compatible interface
+#include "TM4C123GH6PM.h"  // CMSIS-compatible interface
 #include "delay.h"
 
 #include <stdint.h> // C99 standard integers
@@ -52,9 +52,10 @@ int main(void) {
     pp->x = 1U;
     wp->top_left = *pp;
 
-    SYSCTL->GPIOHSCTL |= (1U << 5); /* enable AHB for GPIOF */
-    SYSCTL->RCGC2 |= (1U << 5);  /* enable clock for GPIOF */
+    SYSCTL->RCGCGPIO  |= (1U << 5); /* enable AHB for GPIOF */
+    SYSCTL->GPIOHBCTL |= (1U << 5); /* enable clock for GPIOF */
 
+    /* configure LEDs (digital output) */
     GPIOF_AHB->DIR |= (LED_RED | LED_BLUE | LED_GREEN);
     GPIOF_AHB->DEN |= (LED_RED | LED_BLUE | LED_GREEN);
 

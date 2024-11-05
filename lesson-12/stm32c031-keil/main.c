@@ -79,3 +79,13 @@ int main(void) {
     }
     //return 0; // unreachable code
 }
+
+//............................................................................
+// function needed by the library/startup code
+_Noreturn void assert_failed(char const * const module, int const id);
+_Noreturn void assert_failed(char const * const module, int const id) {
+    // TBD: damage control
+    (void)module; // avoid the "unused parameter" compiler warning
+    (void)id;     // avoid the "unused parameter" compiler warning
+    NVIC_SystemReset();
+}

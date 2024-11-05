@@ -22,7 +22,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>Debug</TargetName>
+    <TargetName>dbg</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>

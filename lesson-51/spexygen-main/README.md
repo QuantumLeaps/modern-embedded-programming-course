@@ -15,6 +15,12 @@ _Spexygen_ documentation (generated with _Spexygen_) is available at:
 - [Spexygen Reference Manual in HTML](https://www.state-machine.com/spexygen)
 - [Spexygen Reference Manual in PDF](https://www.state-machine.com/spexygen/DOC_MAN_SPX.pdf)
 
+<p align="center">
+<a href="https://youtu.be/5naC_z-76Aw?si=x4Svroqv9qDdkpsE" target="_blank" title="Spexygen video">
+<img src="https://www.state-machine.com/attachments/spexygen-video.jpg"><br>
+Traceable Documentation with Doxygen &amp; Spexygen</a>
+</p>
+
 # Licensing
 Spexygen is released under the terms of the permissive [MIT open source license](LICENSE).
 Please note that the attribution clause in the MIT license requires you to preserve

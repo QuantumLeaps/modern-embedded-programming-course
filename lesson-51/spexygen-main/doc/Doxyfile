@@ -6,7 +6,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = Spexygen
-PROJECT_NUMBER         = 2.2.1
+PROJECT_NUMBER         = 2.2.2
 PROJECT_BRIEF          = "Reference Manual"
 PROJECT_LOGO           = $(SPEXYGEN)/spexygen-awesome/img/logo_spexygen.webp
 PROJECT_ICON           =
