@@ -14,4 +14,6 @@
 	<templateProperties value="id=com.ti.common.project.core.emptyProjectTemplate_gnu_arm,"/>
 	<filesToOpen value=""/>
 	<isTargetManual value="true"/>
+	<activeTargetConfiguration value="targetConfigs/Tiva TM4C123GH6PM.ccxml"/>
+	<sourceLookupPath value=""/>
 </projectOptions>
