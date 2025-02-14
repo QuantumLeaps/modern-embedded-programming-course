@@ -1,9 +1,12 @@
 #include "stm32c031.h"
 #include "delay.h"
 
-#define LED_RED   (1U << 1)
-#define LED_BLUE  (1U << 2)
-#define LED_GREEN (1U << 3)
+// LED marked "LD4" on the NUCLEO-C031C6 board
+#define LD4_PIN  5U
+
+// external LED to be inserted between GND (short leg) and
+// D12 (longer leg) on the CN9 connector
+#define LD5_PIN  6U
 
 int *swap(int *x, int *y);
 int *swap(int *x, int *y) {
