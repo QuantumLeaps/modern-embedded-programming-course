@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="7.0.1" links="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.state-machine.com/qm/qm7.xsd">
+ <documentation>Real-time example</documentation>
+ <!--${qpc}-->
+ <framework name="qpc"/>
+ <!--${Shared}-->
+ <package name="Shared" stereotype="0x01">
+  <!--${Shared::AppSignals}-->
+  <attribute name="AppSignals" type="enum" visibility="0x04" properties="0x00">
+   <code>{
+    PERIODIC_SPEC_SIG = Q_USER_SIG,
+    TIMEOUT_SIG,
+    SPORADIC_A_SIG,
+    SPORADIC_B_SIG,
+    REMINDER_SIG,
+    // ...
+    MAX_SIG  // the last signal
+};</code>
+  </attribute>
+  <!--${Shared::PeriodicSpecEvt}-->
+  <class name="PeriodicSpecEvt" superclass="qpc::QEvt">
+   <!--${Shared::PeriodicSpecEvt::toggles}-->
+   <attribute name="toggles" type="uint16_t" visibility="0x00" properties="0x00"/>
+   <!--${Shared::PeriodicSpecEvt::ticks}-->
+   <attribute name="ticks" type="uint8_t" visibility="0x00" properties="0x00"/>
+  </class>
+  <!--${Shared::SporadicSpecEvt}-->
+  <class name="SporadicSpecEvt" superclass="qpc::QEvt">
+   <!--${Shared::SporadicSpecEvt::toggles}-->
+   <attribute name="toggles" type="uint16_t" visibility="0x00" properties="0x00"/>
+   <!--${Shared::SporadicSpecEvt::rtc_toggles}-->
+   <attribute name="rtc_toggles" type="uint16_t" visibility="0x00" properties="0x00"/>
+  </class>
+  <!--${Shared::AO_Periodic1}-->
+  <attribute name="AO_Periodic1" type="QActive * const" visibility="0x00" properties="0x00">
+   <code>= (QActive *)&amp;Periodic1_inst;</code>
+  </attribute>
+  <!--${Shared::Periodic1_ctor}-->
+  <operation name="Periodic1_ctor" type="void" visibility="0x00" properties="0x00">
+   <code>Periodic1 * const me = &amp;Periodic1_inst;
+QMActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Periodic1_initial));
+QTimeEvt_ctorX(&amp;me-&gt;te, (QActive *)me, TIMEOUT_SIG, 0U);</code>
+  </operation>
+  <!--${Shared::AO_Periodic4}-->
+  <attribute name="AO_Periodic4" type="QActive * const" visibility="0x00" properties="0x00">
+   <code>= (QActive *)&amp;Periodic4_inst;</code>
+  </attribute>
+  <!--${Shared::Periodic4_ctor}-->
+  <operation name="Periodic4_ctor" type="void" visibility="0x00" properties="0x00">
+   <code>Periodic4 * const me = &amp;Periodic4_inst;
+QMActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Periodic4_initial));
+QTimeEvt_ctorX(&amp;me-&gt;te, (QActive *)me, TIMEOUT_SIG, 0U);</code>
+  </operation>
+  <!--${Shared::AO_Sporadic2}-->
+  <attribute name="AO_Sporadic2" type="QActive * const" visibility="0x00" properties="0x00">
+   <code>= (QActive *)&amp;Sporadic2_inst;</code>
+  </attribute>
+  <!--${Shared::Sporadic2_ctor}-->
+  <operation name="Sporadic2_ctor" type="void" visibility="0x00" properties="0x00">
+   <code>Sporadic2 * const me = &amp;Sporadic2_inst;
+QMActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Sporadic2_initial));</code>
+  </operation>
+  <!--${Shared::AO_Sporadic3}-->
+  <attribute name="AO_Sporadic3" type="QActive * const" visibility="0x00" properties="0x00">
+   <code>= (QActive *)&amp;Sporadic3_inst;</code>
+  </attribute>
+  <!--${Shared::Sporadic3_ctor}-->
+  <operation name="Sporadic3_ctor" type="void" visibility="0x00" properties="0x00">
+   <code>Sporadic3 * const me = &amp;Sporadic3_inst;
+QMActive_ctor(&amp;me-&gt;super, Q_STATE_CAST(&amp;Sporadic3_initial));</code>
+  </operation>
+ </package>
+ <!--${AOs}-->
+ <package name="AOs" stereotype="0x02">
+  <!--${AOs::Periodic1}-->
+  <class name="Periodic1" superclass="qpc::QMActive">
+   <!--${AOs::Periodic1::te}-->
+   <attribute name="te" type="QTimeEvt" visibility="0x00" properties="0x00"/>
+   <!--${AOs::Periodic1::toggles}-->
+   <attribute name="toggles" type="uint16_t" visibility="0x00" properties="0x00"/>
+   <!--${AOs::Periodic1::inst}-->
+   <attribute name="inst" type="Periodic1" visibility="0x00" properties="0x01"/>
+   <!--${AOs::Periodic1::SM}-->
+   <statechart properties="0x02">
+    <!--${AOs::Periodic1::SM::initial}-->
+    <initial target="../1">
+     <action>// the initial event must be provided and must be WORKLOAD_SIG
+QEvt const *e =  (QEvt const *)par;
+
+Q_REQUIRE_ID(300, (e != (QEvt const *)0)
+             &amp;&amp; (e-&gt;sig == PERIODIC_SPEC_SIG));
+
+QTimeEvt_armX(&amp;me-&gt;te,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks);
+me-&gt;toggles = Q_EVT_CAST(PeriodicSpecEvt)-&gt;toggles;</action>
+     <initial_glyph conn="2,4,5,1,46,4,-2">
+      <action box="0,-2,6,2"/>
+     </initial_glyph>
+    </initial>
+    <!--${AOs::Periodic1::SM::active}-->
+    <state name="active">
+     <!--${AOs::Periodic1::SM::active::TIMEOUT}-->
+     <tran trig="TIMEOUT">
+      <action brief="long-RTC">for (uint16_t i = me-&gt;toggles; i &gt; 0U; --i) {
+    BSP_d6on();
+    BSP_d6off();
+}</action>
+      <tran_glyph conn="2,20,3,-1,40">
+       <action box="0,-2,19,2"/>
+      </tran_glyph>
+     </tran>
+     <!--${AOs::Periodic1::SM::active::PERIODIC_SPEC}-->
+     <tran trig="PERIODIC_SPEC">
+      <action>BSP_d6on();
+QTimeEvt_disarm(&amp;me-&gt;te);
+QTimeEvt_armX(&amp;me-&gt;te,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks);
+me-&gt;toggles = Q_EVT_CAST(PeriodicSpecEvt)-&gt;toggles;
+BSP_d6off();</action>
+      <tran_glyph conn="2,14,3,-1,40">
+       <action box="0,-2,35,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="2,6,44,18"/>
+    </state>
+    <state_diagram size="50,28"/>
+   </statechart>
+  </class>
+  <!--${AOs::Periodic4}-->
+  <class name="Periodic4" superclass="qpc::QMActive">
+   <!--${AOs::Periodic4::te}-->
+   <attribute name="te" type="QTimeEvt" visibility="0x00" properties="0x00"/>
+   <!--${AOs::Periodic4::toggles}-->
+   <attribute name="toggles" type="uint16_t" visibility="0x00" properties="0x00"/>
+   <!--${AOs::Periodic4::inst}-->
+   <attribute name="inst" type="Periodic4" visibility="0x00" properties="0x01"/>
+   <!--${AOs::Periodic4::SM}-->
+   <statechart properties="0x02">
+    <!--${AOs::Periodic4::SM::initial}-->
+    <initial target="../1">
+     <action>// the initial event must be provided and must be WORKLOAD_SIG
+QEvt const *e =  (QEvt const *)par;
+
+Q_REQUIRE_ID(300, (e != (QEvt const *)0)
+             &amp;&amp; (e-&gt;sig == PERIODIC_SPEC_SIG));
+
+QTimeEvt_armX(&amp;me-&gt;te,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks);
+me-&gt;toggles = Q_EVT_CAST(PeriodicSpecEvt)-&gt;toggles;</action>
+     <initial_glyph conn="2,4,5,1,46,4,-2">
+      <action box="0,-2,6,2"/>
+     </initial_glyph>
+    </initial>
+    <!--${AOs::Periodic4::SM::active}-->
+    <state name="active">
+     <!--${AOs::Periodic4::SM::active::TIMEOUT}-->
+     <tran trig="TIMEOUT">
+      <action brief="long-RTC">for (uint16_t i = me-&gt;toggles; i &gt; 0U; --i) {
+    BSP_d3on();
+    BSP_d3off();
+}</action>
+      <tran_glyph conn="2,20,3,-1,40">
+       <action box="0,-2,19,2"/>
+      </tran_glyph>
+     </tran>
+     <!--${AOs::Periodic4::SM::active::PERIODIC_SPEC}-->
+     <tran trig="PERIODIC_SPEC">
+      <action>BSP_d3on();
+QTimeEvt_disarm(&amp;me-&gt;te);
+QTimeEvt_armX(&amp;me-&gt;te,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks,
+    Q_EVT_CAST(PeriodicSpecEvt)-&gt;ticks);
+me-&gt;toggles = Q_EVT_CAST(PeriodicSpecEvt)-&gt;toggles;
+BSP_d3off();</action>
+      <tran_glyph conn="2,14,3,-1,40">
+       <action box="0,-2,15,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="2,6,44,18"/>
+    </state>
+    <state_diagram size="50,28"/>
+   </statechart>
+  </class>
+  <!--${AOs::Sporadic2}-->
+  <class name="Sporadic2" superclass="qpc::QMActive">
+   <!--${AOs::Sporadic2::inst}-->
+   <attribute name="inst" type="Sporadic2" visibility="0x00" properties="0x01"/>
+   <!--${AOs::Sporadic2::SM}-->
+   <statechart properties="0x02">
+    <!--${AOs::Sporadic2::SM::initial}-->
+    <initial target="../1">
+     <action>Q_UNUSED_PAR(par);</action>
+     <initial_glyph conn="2,4,5,1,42,4,-2">
+      <action box="0,-2,6,2"/>
+     </initial_glyph>
+    </initial>
+    <!--${AOs::Sporadic2::SM::active}-->
+    <state name="active">
+     <!--${AOs::Sporadic2::SM::active::SPORADIC_A}-->
+     <tran trig="SPORADIC_A">
+      <action brief="post-Sporadic3">Q_UNUSED_PAR(me);
+
+BSP_d5on();
+QACTIVE_POST(AO_Sporadic3, e, me); // Sporadic2 --&gt; Sporadic3
+BSP_d5off();</action>
+      <tran_glyph conn="2,12,3,-1,34">
+       <action box="0,-2,35,3"/>
+      </tran_glyph>
+     </tran>
+     <!--${AOs::Sporadic2::SM::active::SPORADIC_B}-->
+     <tran trig="SPORADIC_B">
+      <action brief="post-to-Periodic1,long-RTC">BSP_d5on();
+QACTIVE_POST(AO_Periodic1, BSP_getEvtPeriodic1(1U), me);
+BSP_d5off();
+
+for (uint16_t i = Q_EVT_CAST(SporadicSpecEvt)-&gt;toggles;
+     i &gt; 0U; --i)
+{
+    BSP_d5on();
+    BSP_d5off();
+}</action>
+      <tran_glyph conn="2,16,3,-1,34">
+       <action box="0,-2,34,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="2,6,40,14"/>
+    </state>
+    <state_diagram size="50,24"/>
+   </statechart>
+  </class>
+  <!--${AOs::Sporadic3}-->
+  <class name="Sporadic3" superclass="qpc::QMActive">
+   <!--${AOs::Sporadic3::inst}-->
+   <attribute name="inst" type="Sporadic3" visibility="0x00" properties="0x01"/>
+   <!--${AOs::Sporadic3::SM}-->
+   <statechart properties="0x02">
+    <!--${AOs::Sporadic3::SM::initial}-->
+    <initial target="../1">
+     <action>Q_UNUSED_PAR(par);</action>
+     <initial_glyph conn="2,4,5,1,42,4,-2">
+      <action box="0,-2,6,2"/>
+     </initial_glyph>
+    </initial>
+    <!--${AOs::Sporadic3::SM::active}-->
+    <state name="active">
+     <!--${AOs::Sporadic3::SM::active::SPORADIC_A}-->
+     <tran trig="SPORADIC_A">
+      <action brief="post-to-Periodic4,long-RTC">Q_UNUSED_PAR(me);
+
+BSP_d4on();
+// Sporadic3 --&gt; Periodic4
+QACTIVE_POST(AO_Periodic4, BSP_getEvtPeriodic4(1U), me);
+BSP_d4off();
+
+for (uint16_t i = Q_EVT_CAST(SporadicSpecEvt)-&gt;toggles;
+     i &gt; 0U; --i)
+{
+    BSP_d4on();
+    BSP_d4off();
+}</action>
+      <tran_glyph conn="2,12,3,-1,36">
+       <action box="0,-2,37,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="2,6,40,10"/>
+    </state>
+    <state_diagram size="50,18"/>
+   </statechart>
+  </class>
+ </package>
+ <!--${../Inc}-->
+ <directory name="../Inc">
+  <!--${../Inc::app.h}-->
+  <file name="app.h">
+   <text>#ifndef APP_H_
+#define APP_H_
+
+$declare ${Shared}
+
+#endif // APP_H_</text>
+  </file>
+ </directory>
+ <!--${.}-->
+ <directory name=".">
+  <!--${.::periodic1.c}-->
+  <file name="periodic1.c">
+   <text>#include &quot;qpc.h&quot;               // QP/C real-time event framework
+#include &quot;bsp.h&quot;               // Board Support Package
+#include &quot;app.h&quot;               // Application interface
+
+$declare ${AOs::Periodic1}
+
+Q_DEFINE_THIS_MODULE(&quot;periodic1&quot;)
+
+$define ${Shared::Periodic1_ctor}
+$define ${Shared::AO_Periodic1}
+$define ${AOs::Periodic1}</text>
+  </file>
+  <!--${.::periodic4.c}-->
+  <file name="periodic4.c">
+   <text>#include &quot;qpc.h&quot;               // QP/C real-time event framework
+#include &quot;bsp.h&quot;               // Board Support Package
+#include &quot;app.h&quot;               // Application interface
+
+$declare ${AOs::Periodic4}
+
+Q_DEFINE_THIS_MODULE(&quot;periodic4&quot;)
+
+$define ${Shared::Periodic4_ctor}
+$define ${Shared::AO_Periodic4}
+$define ${AOs::Periodic4}</text>
+  </file>
+  <!--${.::sporadic2.c}-->
+  <file name="sporadic2.c">
+   <text>#include &quot;qpc.h&quot;               // QP/C real-time event framework
+#include &quot;bsp.h&quot;               // Board Support Package
+#include &quot;app.h&quot;               // Application interface
+
+$declare ${AOs::Sporadic2}
+
+//Q_DEFINE_THIS_MODULE(&quot;sporadic2&quot;)
+
+$define ${Shared::Sporadic2_ctor}
+$define ${Shared::AO_Sporadic2}
+$define ${AOs::Sporadic2}</text>
+  </file>
+  <!--${.::sporadic3.c}-->
+  <file name="sporadic3.c">
+   <text>#include &quot;qpc.h&quot;               // QP/C real-time event framework
+#include &quot;bsp.h&quot;               // Board Support Package
+#include &quot;app.h&quot;               // Application interface
+
+$declare ${AOs::Sporadic3}
+
+//Q_DEFINE_THIS_MODULE(&quot;sporadic3&quot;)
+
+$define ${Shared::Sporadic3_ctor}
+$define ${Shared::AO_Sporadic3}
+$define ${AOs::Sporadic3}</text>
+  </file>
+ </directory>
+</model>
