@@ -26,12 +26,12 @@
   */
 
   .syntax unified
-	.cpu cortex-m0plus
-	.fpu softvfp
-	.thumb
+    .cpu cortex-m0plus
+    .fpu softvfp
+    .thumb
 
-.global	g_pfnVectors
-.global	Default_Handler
+.global    g_pfnVectors
+.global    Default_Handler
 
 /* start address for the initialization values of the .data section.
 defined in linker script */

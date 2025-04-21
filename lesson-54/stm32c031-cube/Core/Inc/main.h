@@ -28,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32c0xx_hal.h"
+
 #include "stm32c0xx_nucleo.h"
 #include <stdio.h>
 
