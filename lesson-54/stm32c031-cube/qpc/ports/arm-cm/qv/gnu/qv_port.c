@@ -270,3 +270,33 @@ __asm volatile (
 
 #endif // ARMv6-M
 
+//============================================================================
+#ifndef QF_NDUMMY_SYS
+// dummy definition of stdio functions that cause
+// "warning: xxxx is not implemented and will always fail"
+
+int _close(int fd) {
+    (void)fd;
+    return 0;
+}
+long _lseek(int fd, long offset, int origin) {
+    (void)fd;
+    (void)offset;
+    (void)origin;
+    return 0L;
+}
+int _read(int const fd, void * const buffer, unsigned const buffer_size) {
+    (void)fd;
+    (void)buffer;
+    (void)buffer_size;
+    return 0;
+}
+int _write(int fd, const void *buffer, unsigned int count) {
+    (void)fd;
+    (void)buffer;
+    (void)count;
+    return 0;
+}
+
+#endif // QF_NDUMMY_SYS
+

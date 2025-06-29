@@ -1,0 +1,19 @@
+Quantum Leaps Dual-Licensing:
+
+The QP/C Real-Time Embedded Framework is dually-licensed under
+the following two alternatives:
+
+1. Open source GNU General Public License (GPL) version 3,
+   or alternatively,
+
+2. One of the closed source Quantum Leaps commercial licenses.
+
+The terms of the open source GNU General Public License version 3
+can be found at: https://www.gnu.org/licenses/gpl-3.0
+
+The terms of the closed source Quantum Leaps commercial licenses
+can be found at: https://www.state-machine.com/licensing
+
+Redistributions in source code must retain the top-level comment blocks
+in all files. Plagiarizing this software to sidestep the license
+obligations is illegal.

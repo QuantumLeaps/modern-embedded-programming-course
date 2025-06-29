@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<package schemaVersion="1.7.7" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="PACK.xsd">
+    <vendor>QuantumLeaps</vendor>
+    <name>qpc</name>
+    <description>QP/C RTEF (Real-Time Embedded Framework)</description>
+    <url>https://raw.githubusercontent.com/QuantumLeaps/cmsis-packs/main/</url>
+    <license>LICENSES/License.txt</license>
+    <supportContact>info@state-machine.com.com</supportContact>
+    <releases>
+        <release date="2025-04-07" tag="v8.0.3" url="https://github.com/QuantumLeaps/qpc/releases/download/v8.0.3/QuantumLeaps.qpc.8.0.3.pack" version="8.0.3">QP/C 8.0.3. See release notes at https://www.state-machine.com/qpc/history.html#qpc_8_0_3
+        </release>
+        <release date="2025-01-20" tag="v8.0.2" url="https://github.com/QuantumLeaps/qpc/releases/download/v8.0.2/QuantumLeaps.qpc.8.0.2.pack" version="8.0.2">QP/C 8.0.2. See release notes at https://www.state-machine.com/qpc/history.html#qpc_8_0_2
+        </release>
+        <release date="2024-12-17" tag="v8.0.1" url="https://github.com/QuantumLeaps/qpc/releases/download/v8.0.1/QuantumLeaps.qpc.8.0.1.pack" version="8.0.1">QP/C 8.0.1. See release notes at https://www.state-machine.com/qpc/history.html#qpc_8_0_1
+        </release>
+        <release date="2024-10-31" tag="v8.0.0" url="https://github.com/QuantumLeaps/qpc/releases/download/v8.0.0/QuantumLeaps.qpc.8.0.0.pack" version="8.0.0">QP/C 8.0.0. See release notes at https://www.state-machine.com/qpc/history.html#qpc_8_0_0
+        </release>
+    </releases>
+    <keywords>
+        <keyword>QuantumLeaps</keyword>
+        <keyword>Samek</keyword>
+        <keyword>state-machine</keyword>
+        <keyword>hierarchical-state-machine</keyword>
+        <keyword>QP/C</keyword>
+        <keyword>QP/C++</keyword>
+        <keyword>QP</keyword>
+        <keyword>FSM</keyword>
+        <keyword>HSM</keyword>
+        <keyword>UML</keyword>
+        <keyword>uml-state-machine</keyword>
+        <keyword>uml-statechart</keyword>
+        <keyword>modeling</keyword>
+        <keyword>code-generation</keyword>
+        <keyword>actor-model</keyword>
+        <keyword>actor</keyword>
+        <keyword>embedded-systems</keyword>
+        <keyword>event-driven</keyword>
+        <keyword>rtos</keyword>
+        <keyword>arm-cortex-m</keyword>
+        <keyword>embedded-c</keyword>
+        <keyword>active-object</keyword>
+        <keyword>real time</keyword>
+        <keyword>embedded framework</keyword>
+        <keyword>real-time framework</keyword>
+        <keyword>RTEF</keyword>
+    </keywords>
+    <taxonomy>
+        <description Cclass="RTEF" doc="https://www.state-machine.com/rtef">Real Time Embedded Framework</description>
+    </taxonomy>
+    <repository type="git">https://github.com/QuantumLeaps/qpc.git</repository>
+    <conditions>
+        <condition id="ARMCC">
+            <accept Tcompiler="ARMCC"/>
+        </condition>
+        <condition id="GCC">
+            <require Tcompiler="GCC"/>
+        </condition>
+        <condition id="IAR">
+            <require Tcompiler="IAR"/>
+        </condition>
+        <condition id="CoreM">
+            <description>Cortex-M processor based device</description>
+            <accept Dcore="Cortex-M0"/>
+            <accept Dcore="Cortex-M0+"/>
+            <accept Dcore="Cortex-M1"/>
+            <accept Dcore="Cortex-M23"/>
+            <accept Dcore="Cortex-M3"/>
+            <accept Dcore="Cortex-M33"/>
+            <accept Dcore="Cortex-M35P"/>
+            <accept Dcore="Cortex-M85"/>
+            <accept Dcore="Cortex-M33"/>
+            <accept Dcore="Cortex-M4"/>
+            <accept Dcore="Cortex-M7"/>
+            <accept Dcore="SC000"/>
+            <accept Dcore="SC300"/>
+        </condition>
+        <condition id="CoreR">
+            <description>Cortex-R processor based device</description>
+            <accept Dcore="Cortex-R4"/>
+        </condition>
+        <condition id="CoreM_ARMCC">
+            <description>Cortex-M processor based device for the ARM Compiler6</description>
+            <require condition="CoreM"/>
+            <require condition="ARMCC"/>
+        </condition>
+        <condition id="CoreM_GCC">
+            <description>Cortex-M processor based device for the GNU-ARM</description>
+            <require condition="CoreM"/>
+            <require condition="GCC"/>
+        </condition>
+        <condition id="CoreM_IAR">
+            <description>Cortex-M processor based device for the IAR-ARM</description>
+            <require condition="CoreM"/>
+            <require condition="IAR"/>
+        </condition>
+        <condition id="CoreR_GCC">
+            <description>Cortex-R processor based device for the GNU-ARM</description>
+            <require condition="CoreR"/>
+            <require condition="GCC"/>
+        </condition>
+        <condition id="CoreR_IAR">
+            <description>Cortex-R processor based device for the IAR-ARM</description>
+            <require condition="CoreR"/>
+            <require condition="IAR"/>
+        </condition>
+        <condition id="Comp_qep">
+            <description>Component qep selected</description>
+            <require Cbundle="qpc" Cclass="RTEF" Cgroup="Event Processor" Cvariant="qep"/>
+        </condition>
+        <condition id="Comp_qf">
+            <description>Component qf selected</description>
+            <require Cbundle="qpc" Cclass="RTEF" Cgroup="Framework" Cvariant="qf"/>
+        </condition>
+        <condition id="CoreM Comp_qf">
+            <description>CoreM and Component qf selected</description>
+            <require condition="CoreM"/>
+            <require Cbundle="qpc" Cclass="RTEF" Cgroup="Framework" Cvariant="qf"/>
+        </condition>
+    </conditions>
+    <components>
+        <bundle Cbundle="qpc" Cclass="RTEF" Cversion="8.0.3">
+            <description>QP/C RTEF (Real-Time Embedded Framework)</description>
+            <doc>https://www.state-machine.com/products/qp/</doc>
+            <component Cgroup="Event Processor" Cvariant="qep">
+                <description>Events and Hierarchical State Machines</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_QEP        /* QP/C QEP */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/srs_sm.html"/>
+                    <file category="header" name="include/qpc.h"/>
+                    <file category="header" name="include/qp.h"/>
+                    <file category="header" name="include/qp_pkg.h"/>
+                    <file category="header" name="include/qsafe.h"/>
+                    <file category="header" name="include/qs_dummy.h"/>
+                    <file category="header" name="include/qstamp.h"/>
+                    <file category="source" name="src/qf/qep_hsm.c"/>
+                    <file category="source" name="src/qf/qep_msm.c"/>
+                </files>
+            </component>
+            <component Cgroup="Framework" Cvariant="qf" condition="Comp_qep">
+                <description>Active-Object (Actor) Framework</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_QF         /* QP/C QF */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/srs_ao.html"/>
+                    <file category="header" name="include/qequeue.h"/>
+                    <file category="header" name="include/qmpool.h"/>
+                    <file category="source" name="src/qf/qf_act.c"/>
+                    <file category="source" name="src/qf/qf_defer.c"/>
+                    <file category="source" name="src/qf/qf_dyn.c"/>
+                    <file category="source" name="src/qf/qf_mem.c"/>
+                    <file category="source" name="src/qf/qf_ps.c"/>
+                    <file category="source" name="src/qf/qf_qact.c"/>
+                    <file category="source" name="src/qf/qf_qeq.c"/>
+                    <file category="source" name="src/qf/qf_qmact.c"/>
+                    <file category="source" name="src/qf/qf_time.c"/>
+                </files>
+            </component>
+            <component Cgroup="Software tracing" Cvariant="qs" condition="Comp_qep">
+                <description>Software Tracing (Target-Resident Component)</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_QS         /* QP/C QS */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/srs_qs.html"/>
+                    <file category="header" name="include/README.md"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="qv" condition="Comp_qf">
+                <description>Cooperative run-to-completion kernel</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_QV         /* QP/C QV kernel */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/srs_qv.html"/>
+                    <file category="header" name="include/qv.h"/>
+                    <file category="source" name="src/qf/qf_actq.c"/>
+                    <file category="source" name="src/qv/qv.c"/>
+                    <file attr="config" category="header" condition="CoreM" name="ports/arm-cm/config/qp_config.h" version="8.0.2"/>
+                    <file category="include" condition="CoreM_ARMCC" name="ports/arm-cm/qv/armclang/"/>
+                    <file category="source" condition="CoreM_ARMCC" name="ports/arm-cm/qv/armclang/qv_port.c"/>
+                    <file category="include" condition="CoreM_GCC" name="ports/arm-cm/qv/gnu/"/>
+                    <file category="source" condition="CoreM_GCC" name="ports/arm-cm/qv/gnu/qv_port.c"/>
+                    <file category="include" condition="CoreM_IAR" name="ports/arm-cm/qv/iar/"/>
+                    <file category="source" condition="CoreM_IAR" name="ports/arm-cm/qv/iar/qv_port.c"/>
+                    <file attr="config" category="header " condition="CoreR" name="ports/arm-cr/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" condition="CoreR_GCC" name="ports/arm-cr/qv/gnu/"/>
+                    <file category="include" condition="CoreR_IAR" name="ports/arm-cr/qv/iar/"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="qk" condition="Comp_qf" isDefaultVariant="true">
+                <description>Preemptive non-blocking kernel</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_QK         /* QP/C QK kernel */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/srs_qk.html"/>
+                    <file category="header" name="include/qk.h"/>
+                    <file category="source" name="src/qf/qf_actq.c"/>
+                    <file category="source" name="src/qk/qk.c"/>
+                    <file attr="config" category="header" condition="CoreM" name="ports/arm-cm/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" condition="CoreM_ARMCC" name="ports/arm-cm/qk/armclang/"/>
+                    <file category="source" condition="CoreM_ARMCC" name="ports/arm-cm/qk/armclang/qk_port.c"/>
+                    <file category="include" condition="CoreM_GCC" name="ports/arm-cm/qk/gnu/"/>
+                    <file category="source" condition="CoreM_GCC" name="ports/arm-cm/qk/gnu/qk_port.c"/>
+                    <file category="include" condition="CoreM_IAR" name="ports/arm-cm/qk/iar/"/>
+                    <file category="source" condition="CoreM_IAR" name="ports/arm-cm/qk/iar/qk_port.c"/>
+                    <file attr="config" category="header " condition="CoreR" name="ports/arm-cr/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" condition="CoreR_GCC" name="ports/arm-cr/qk/gnu/"/>
+                    <file category="include" condition="CoreR_IAR" name="ports/arm-cr/qk/iar/"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="qxk" condition="CoreM Comp_qf">
+                <description>Preemptive blocking/non-blocking kernel</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_QXK        /* QP/C QXK kernel */
+                </RTE_Components_h>
+                <files>
+                    <file category="header" name="include/README.md"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="third-party embOS" condition="Comp_qf">
+                <description>QP/C port to SEGGER embOS RTOS</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_EMBOS      /* QP/C-embOS port */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/embos.html"/>
+                    <file category="header" name="ports/embos/qp_port.h"/>
+                    <file category="header" name="ports/embos/qs_port.h"/>
+                    <file attr="config" category="header" name="ports/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" name="ports/embos/"/>
+                    <file category="source" name="ports/embos/qf_port.c"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="third-party FreeRTOS" condition="Comp_qf">
+                <description>QP/C port to Amazon FreeRTOS</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_FREERTOS   /* QP/C-FreeRTOS port */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/freertos.html"/>
+                    <file category="header" name="ports/freertos/qp_port.h"/>
+                    <file category="header" name="ports/freertos/qs_port.h"/>
+                    <file attr="config" category="header" name="ports/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" name="ports/freertos/"/>
+                    <file category="source" name="ports/freertos/qf_port.c"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="third-party ThreadX" condition="Comp_qf">
+                <description>QP/C port to Azure RTOS (ThreadX)</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_THREADX    /* QP/C-ThreadX port */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/threadx.html"/>
+                    <file category="header" name="ports/threadx/qp_port.h"/>
+                    <file category="header" name="ports/threadx/qs_port.h"/>
+                    <file attr="config" category="header" name="ports/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" name="ports/threadx/"/>
+                    <file category="source" name="ports/threadx/qf_port.c"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="third-party uC-OS2" condition="Comp_qf">
+                <description>QP/C port to Micrium uC-OS2 RTOS</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_UCOS2      /* QP/C-uC-OS2 port */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/uc-os2.html"/>
+                    <file category="header" name="ports/uc-os2/qp_port.h"/>
+                    <file category="header" name="ports/uc-os2/qs_port.h"/>
+                    <file attr="config" category="header" name="ports/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" name="ports/uc-os2/"/>
+                    <file category="source" name="ports/uc-os2/qf_port.c"/>
+                </files>
+            </component>
+            <component Cgroup="Real-Time Kernel" Cvariant="third-party Zephyr" condition="Comp_qf">
+                <description>QP/C port to Zephyr RTOS</description>
+                <RTE_Components_h>
+                    #define RTE_RTEF_QPC_ZEPHYR     /* QP/C-Zephyr port */
+                </RTE_Components_h>
+                <files>
+                    <file category="doc" name="https://www.state-machine.com/qpc/zephyr.html"/>
+                    <file category="header" name="zephyr/qp_port.h"/>
+                    <file category="header" name="zephyr/qs_port.h"/>
+                    <file attr="config" category="header" name="ports/config/qp_config.h" version="8.0.3"/>
+                    <file category="include" name="zephyr/"/>
+                    <file category="source" name="zephyr/qf_port.c"/>
+                </files>
+            </component>
+        </bundle>
+    </components>
+</package>

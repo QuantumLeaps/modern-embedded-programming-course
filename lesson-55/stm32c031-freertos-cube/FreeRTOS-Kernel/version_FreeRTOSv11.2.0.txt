@@ -1,0 +1,15 @@
+This directory contains FreeRTOS V11.2.0 released March 04, 2025.
+
+To reduce the size, the portable sub-directory has been pruned and
+several FreeRTOS ports have been removed. Additionally, the files
+in the FreeRTOS distribution have been cleaned up with the 'qclean'
+host utility to remove traling whitespace, force the LF end-of-line
+convention, replace tabs with spaces, etc.
+
+To get the complete FreeRTOS release, please refer to the original
+on GitHub:
+
+https://github.com/FreeRTOS/FreeRTOS-Kernel/releases/tag/V11.2.0
+
+Quantum Leaps, LLC
+March 12, 2025
