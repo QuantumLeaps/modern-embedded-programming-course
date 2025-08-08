@@ -22,6 +22,17 @@
            PB11   PA11/PB9                           PB6    NC
            PA2    PA12/PB8                           PB7    NC
 
-# Example Logic Analyzer Trace
+# Example Logic Analyzer Traces
 
-![Logic analyzer trace](trace.png)
+<p align="center">
+<img src="../traces/qv.png"/><br>
+<b>Logic analyzer trace after pressing the button (non-preemptive QV kernel)</b>
+</p>
+<p align="center">
+<img src="../traces/qk.png"/><br>
+<b>Logic analyzer trace after pressing the button (preemptive QK kernel)</b>
+</p>
+<p align="center">
+<img src="../traces/freertos.png"/><br>
+<b>Logic analyzer trace after pressing the button (preemptive FreeRTOS kernel)</b>
+</p>

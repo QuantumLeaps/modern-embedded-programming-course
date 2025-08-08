@@ -13,6 +13,17 @@
       PA6    PE3                                PD7    PA3
       PA7    PF1 -- CH2                  CH1 -- PF4    PA2
 
-# Example Logic Analyzer Trace
+# Example Logic Analyzer Traces
 
-![Logic analyzer trace](trace.png)
+<p align="center">
+<img src="../traces/qv.png"/><br>
+<b>Logic analyzer trace after pressing the button (non-preemptive QV kernel)</b>
+</p>
+<p align="center">
+<img src="../traces/qk.png"/><br>
+<b>Logic analyzer trace after pressing the button (preemptive QK kernel)</b>
+</p>
+<p align="center">
+<img src="../traces/freertos.png"/><br>
+<b>Logic analyzer trace after pressing the button (preemptive FreeRTOS kernel)</b>
+</p>

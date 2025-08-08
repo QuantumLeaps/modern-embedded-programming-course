@@ -13,11 +13,6 @@ This example implements the "Periodic-Sporadic" application on the STM32 NUCLEO-
 <b>STM32 NUCLEO-C031C6</b>
 </p>
 
-<p align="center">
-<img src="./real-time_trace.png"/><br>
-<b>Logic analyzer trace after pressing the button (QV kernel)</b>
-</p>
-
 # Code Organization
 ```
 stm32c031-cube
@@ -78,6 +73,17 @@ The logic analyzer needs to be configured as follows:
 - trigger: Sporadic (PC.13 on the NUCLEO-C031C6), falling edge
 - pre-trigger capture ratio: 10%
 
-# Example Logic Analyzer Trace
+# Example Logic Analyzer Traces
 
-![Logic analyzer trace](trace.png)
+<p align="center">
+<img src="../traces/qv.png"/><br>
+<b>Logic analyzer trace after pressing the button (non-preemptive QV kernel)</b>
+</p>
+<p align="center">
+<img src="../traces/qk.png"/><br>
+<b>Logic analyzer trace after pressing the button (preemptive QK kernel)</b>
+</p>
+<p align="center">
+<img src="../traces/freertos.png"/><br>
+<b>Logic analyzer trace after pressing the button (preemptive FreeRTOS kernel)</b>
+</p>
