@@ -371,7 +371,14 @@ void QS_onFlush(void) {
 * the QF/QK and is not disabled. Such ISRs don't need to call QK_ISR_ENTRY/
 * QK_ISR_EXIT and they cannot post or publish events.
 */
-void UART0_IRQHandler(void) {
+/* NOTE: The name of this ISR must match the Vector Table in the startup code.
+* Unfortunately, the ISR names provided in the startup code in the ST RTE
+* (Run-Time Environment) are NOT compatible with the CMSIS naming convention
+* XXX_IRQHandler(). Instead, the startup code (file in Device/starup_TM4C123.s)
+* uses the name XXX_Handler(). Therefore this ISR is change here to match
+* this non-standard convention.
+*/
+void UART0_Handler(void) { // should be UART0_IRQHandler() by CMSIS
     uint32_t status = UART0->RIS; /* get the raw interrupt status */
     UART0->ICR = status;          /* clear the asserted interrupts */
 
