@@ -40,24 +40,25 @@
 // QF configuration for QV -- data members of the QActive class...
 
 // QV event-queue used for AOs
-#define QACTIVE_EQUEUE_TYPE     QEQueue
+#define QACTIVE_EQUEUE_TYPE    QEQueue
 
 // QF interrupt disable/enable, see NOTE2
-#define QF_INT_DISABLE()        __disable_irq()
-#define QF_INT_ENABLE()         __enable_irq()
-#define QF_INT_ENABLE_ALL()     __enable_interrupt()
+#define QF_INT_DISABLE()       __disable_irq()
+#define QF_INT_ENABLE()        __enable_irq()
+#define QF_INT_ENABLE_ALL()    __enable_interrupt()
 
 // Cortex-R provide the CLZ instruction for fast LOG2
 #define QF_LOG2(n_) ((uint8_t)(32U - __CLZ(n_)))
 
 // QF critical section entry/exit, see NOTE3
-#define QF_CRIT_STAT            uint32_t cpsr_;
+#define QF_CRIT_STAT           uint32_t cpsr_;
 #define QF_CRIT_ENTRY() do { \
     cpsr_ = __get_CPSR(); \
     QF_INT_DISABLE();     \
 } while (false)
-#define QF_CRIT_EXIT()          __set_CPSR(cpsr_)
-#define QF_CRIT_EXIT_NOP()      __ISB()
+#define QF_CRIT_EXIT()         __set_CPSR(cpsr_)
+#define QF_CRIT_EST()          QF_INT_DISABLE()
+#define QF_CRIT_EXIT_NOP()     __ISB()
 
 // macro to put the CPU to sleep inside QV_onIdle()
 #define QV_CPU_SLEEP() do { \

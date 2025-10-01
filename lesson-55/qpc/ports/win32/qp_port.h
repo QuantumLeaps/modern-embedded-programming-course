@@ -64,7 +64,7 @@
 
 #endif
 
-// QF event queue and thread types for Win32
+// QActive event queue, os-type, and thread types
 #define QACTIVE_EQUEUE_TYPE  QEQueue
 #define QACTIVE_OS_OBJ_TYPE  void*
 #define QACTIVE_THREAD_TYPE  void*
@@ -73,6 +73,7 @@
 #define QF_CRIT_STAT
 #define QF_CRIT_ENTRY()      QF_enterCriticalSection_()
 #define QF_CRIT_EXIT()       QF_leaveCriticalSection_()
+#define QF_CRIT_EST()        QF_enterCriticalSection_()
 
 // QF_LOG2 not defined -- use the internal LOG2() implementation
 

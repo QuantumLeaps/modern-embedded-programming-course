@@ -66,6 +66,8 @@
         QF_INT_ENABLE();              \
     }                                 \
 } while (false)
+
+#define QF_CRIT_EST()          QF_INT_DISABLE()
 #define QF_CRIT_EXIT_NOP()     __asm(" ISB")
 
 // macro to put the CPU to sleep inside QV_onIdle()

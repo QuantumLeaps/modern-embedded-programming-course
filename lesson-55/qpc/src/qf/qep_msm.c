@@ -38,7 +38,8 @@
 
 Q_DEFINE_THIS_MODULE("qep_msm")
 
-#define QMSM_MAX_ENTRY_DEPTH_ ((int_fast8_t)4)
+#define QMSM_MAX_NEST_DEPTH_  ((int_fast8_t)6)
+#define QMSM_MAX_TRAN_LENGTH_ ((int_fast8_t)(2*QMSM_MAX_NEST_DEPTH_))
 
 //! @cond INTERNAL
 
@@ -53,55 +54,55 @@ static struct QMState const l_msm_top_s = {
 
 #ifdef Q_SPY
 // helper macro to trace state action (entry/exit)
-#define QS_STATE_ACT_(rec_, state_)    \
-    QS_CRIT_ENTRY();                   \
-    QS_BEGIN_PRE((rec_), qsId)         \
-        QS_OBJ_PRE(me);                \
-        QS_FUN_PRE(state_);            \
-    QS_END_PRE()                       \
+#define QS_STATE_ACT_(rec_, state_) \
+    QS_CRIT_ENTRY();           \
+    QS_BEGIN_PRE((rec_), qsId) \
+        QS_OBJ_PRE(me);        \
+        QS_FUN_PRE(state_);    \
+    QS_END_PRE()               \
     QS_CRIT_EXIT()
 
 // internal helper macro to top-most init
-#define QS_TOP_INIT_(rec_, trg_)       \
-    QS_CRIT_ENTRY();                   \
-    QS_BEGIN_PRE((rec_), qsId)         \
-        QS_TIME_PRE();                 \
-        QS_OBJ_PRE(me);                \
-        QS_FUN_PRE(trg_);              \
-    QS_END_PRE()                       \
+#define QS_TOP_INIT_(rec_, trg_) \
+    QS_CRIT_ENTRY();           \
+    QS_BEGIN_PRE((rec_), qsId) \
+        QS_TIME_PRE();         \
+        QS_OBJ_PRE(me);        \
+        QS_FUN_PRE(trg_);      \
+    QS_END_PRE()               \
     QS_CRIT_EXIT()
 
 // internal helper macro to trace transition segment
 #define QS_TRAN_SEG_(rec_, src_, trg_) \
-    QS_CRIT_ENTRY();                   \
-    QS_BEGIN_PRE((rec_), qsId)         \
-        QS_OBJ_PRE(me);                \
-        QS_FUN_PRE(src_);              \
-        QS_FUN_PRE(trg_);              \
-    QS_END_PRE()                       \
+    QS_CRIT_ENTRY();           \
+    QS_BEGIN_PRE((rec_), qsId) \
+        QS_OBJ_PRE(me);        \
+        QS_FUN_PRE(src_);      \
+        QS_FUN_PRE(trg_);      \
+    QS_END_PRE()               \
     QS_CRIT_EXIT()
 
 // internal helper macro to trace transition begin/end
-#define QS_TRAN0_(rec_, trg_)          \
-    QS_CRIT_ENTRY();                   \
-    QS_BEGIN_PRE((rec_), qsId)         \
-        QS_TIME_PRE();                 \
-        QS_SIG_PRE(e->sig);            \
-        QS_OBJ_PRE(me);                \
-        QS_FUN_PRE(trg_);              \
-    QS_END_PRE()                       \
+#define QS_TRAN0_(rec_, trg_)  \
+    QS_CRIT_ENTRY();           \
+    QS_BEGIN_PRE((rec_), qsId) \
+        QS_TIME_PRE();         \
+        QS_SIG_PRE(e->sig);    \
+        QS_OBJ_PRE(me);        \
+        QS_FUN_PRE(trg_);      \
+    QS_END_PRE()               \
     QS_CRIT_EXIT()
 
 // internal helper macro to trace regular transition
 #define QS_TRAN_END_(rec_, src_, trg_) \
-    QS_CRIT_ENTRY();                   \
-    QS_BEGIN_PRE((rec_), qsId)         \
-        QS_TIME_PRE();                 \
-        QS_SIG_PRE(e->sig);            \
-        QS_OBJ_PRE(me);                \
-        QS_FUN_PRE(src_);              \
-        QS_FUN_PRE(trg_);              \
-    QS_END_PRE()                       \
+    QS_CRIT_ENTRY();           \
+    QS_BEGIN_PRE((rec_), qsId) \
+        QS_TIME_PRE();         \
+        QS_SIG_PRE(e->sig);    \
+        QS_OBJ_PRE(me);        \
+        QS_FUN_PRE(src_);      \
+        QS_FUN_PRE(trg_);      \
+    QS_END_PRE()               \
     QS_CRIT_EXIT()
 
 #else
@@ -115,20 +116,17 @@ static struct QMState const l_msm_top_s = {
 //! @endcond
 
 //============================================================================
-//! @private @memberof QMsm
 static QState QMsm_execTatbl_(
     QAsm * const me,
     QMTranActTable const * const tatbl,
     uint_fast8_t const qsId);
 
-//! @private @memberof QMsm
 static void QMsm_exitToTranSource_(
     QAsm * const me,
-    QMState const * const cs,
-    QMState const * const ts,
+    QMState const * const curr_state,
+    QMState const * const tran_source,
     uint_fast8_t const qsId);
 
-//! @private @memberof QMsm
 static QState QMsm_enterHistory_(
     QAsm * const me,
     QMState const *const hist,
@@ -148,7 +146,7 @@ void QMsm_ctor(QMsm * const me,
 #endif
     };
     // do not call the QAsm_ctor() here
-    me->super.vptr = &vtable;
+    me->super.vptr      = &vtable;
     me->super.state.obj = &l_msm_top_s; // the current state (top)
     me->super.temp.fun  = initial;      // the initial tran. handler
 }
@@ -164,21 +162,17 @@ void QMsm_init_(
     Q_UNUSED_PAR(qsId);
 #endif
 
-    QF_CRIT_STAT
-    QF_CRIT_ENTRY();
-    Q_REQUIRE_INCRIT(200, (me->vptr != (struct QAsmVtable *)0)
-        && (me->temp.fun != Q_STATE_CAST(0))
-        && (me->state.obj == &l_msm_top_s));
-    QF_CRIT_EXIT();
+    Q_REQUIRE_LOCAL(200, me->temp.fun != Q_STATE_CAST(0));
+    Q_REQUIRE_LOCAL(210, me->state.obj == &l_msm_top_s);
 
     // execute the top-most initial tran.
     QState r = (*me->temp.fun)(me, Q_EVT_CAST(QEvt));
 
-    QF_CRIT_ENTRY();
     // the top-most initial tran. must be taken
-    Q_ASSERT_INCRIT(210, r == Q_RET_TRAN_INIT);
-    QF_CRIT_EXIT();
+    Q_ASSERT_LOCAL(240, r == Q_RET_TRAN_INIT);
+    Q_ASSERT_LOCAL(250, me->temp.tatbl != (struct QMTranActTable *)0);
 
+    QS_CRIT_STAT
     QS_TRAN_SEG_(QS_QEP_STATE_INIT,
        me->state.obj->stateHandler, me->temp.tatbl->target->stateHandler);
 
@@ -186,12 +180,19 @@ void QMsm_init_(
     me->state.obj = me->temp.tatbl->target;
 
     // drill down into the state hierarchy with initial transitions...
-    while (r >= Q_RET_TRAN_INIT) {
-        // execute the tran. table
+    int_fast8_t lbound = QMSM_MAX_NEST_DEPTH_;
+    do {
+        --lbound; // fixed loop bound
+        Q_INVARIANT_LOCAL(280, lbound >= 0);
         r = QMsm_execTatbl_(me, me->temp.tatbl, qsId);
-    }
+    } while (r >= Q_RET_TRAN_INIT);
 
     QS_TOP_INIT_(QS_QEP_INIT_TRAN, me->state.obj->stateHandler);
+
+#ifndef Q_UNSAFE
+    // establish stable state configuration
+    me->temp.uint = (uintptr_t)~me->state.uint;
+#endif
 }
 
 //............................................................................
@@ -205,23 +206,23 @@ void QMsm_dispatch_(
     Q_UNUSED_PAR(qsId);
 #endif
 
-    QMState const *s = me->state.obj; // store the current state
-    QMState const *t = s;
+    Q_INVARIANT_LOCAL(300, me->state.uint == (uintptr_t)(~me->temp.uint));
 
-    QF_CRIT_STAT
-    QF_CRIT_ENTRY();
-    Q_REQUIRE_INCRIT(300,
-        (e != (QEvt *)0)
-        && (s != (QMState *)0));
-    QF_CRIT_EXIT();
+    Q_REQUIRE_LOCAL(310, e != (QEvt *)0);
 
+    QMState const *s = me->state.obj; // the current state
+    QMState const * const t = s; // store the current state for later
+    QS_CRIT_STAT
     QS_TRAN0_(QS_QEP_DISPATCH, s->stateHandler);
 
     // scan the state hierarchy up to the top state...
     QState r = Q_RET_SUPER;
-    while (t != (QMState *)0) {
-        r = (*t->stateHandler)(me, e); // call state handler function
+    int_fast8_t lbound = QMSM_MAX_NEST_DEPTH_;
+    do {
+         --lbound; // fixed loop bound
+        Q_INVARIANT_LOCAL(340, lbound >= 0);
 
+        r = (*s->stateHandler)(me, e); // call state handler function
         if (r >= Q_RET_HANDLED) { // event handled? (the most frequent case)
             break; // done scanning the state hierarchy
         }
@@ -231,68 +232,203 @@ void QMsm_dispatch_(
             QS_BEGIN_PRE(QS_QEP_UNHANDLED, qsId)
                 QS_SIG_PRE(e->sig);
                 QS_OBJ_PRE(me);
-                QS_FUN_PRE(t->stateHandler);
+                QS_FUN_PRE(s->stateHandler);
             QS_END_PRE()
             QS_CRIT_EXIT();
         }
 #endif
-        t = t->superstate; // advance to the superstate
-    }
+        s = s->superstate; // advance to the superstate
+    } while (s != (QMState *)0);
 
-    if (r >= Q_RET_TRAN) { // any kind of tran. taken?
-        QF_CRIT_ENTRY();
-        // the tran. source state must not be NULL
-        Q_ASSERT_INCRIT(330, t != (QMState *)0);
-        QF_CRIT_EXIT();
-
+    if (s == (QMState *)0) { // event bubbled to the 'top' state?
 #ifdef Q_SPY
-        QMState const * const ts = t; // tran. source for QS tracing
+        QS_TRAN0_(QS_QEP_IGNORED, t->stateHandler);
+#endif // Q_SPY
+    }
+    else if (r >= Q_RET_TRAN) { // any kind of tran. taken?
+#ifdef Q_SPY
+        QMState const * const ts = s; // tran. source for QS tracing
 #endif // Q_SPY
 
-        if (r == Q_RET_TRAN_HIST) { // was it tran. to history?
+        if (r == Q_RET_TRAN) {
+            struct QMTranActTable const * const tatbl = me->temp.tatbl;
+            QMsm_exitToTranSource_(me, t, s, qsId);
+            r = QMsm_execTatbl_(me, tatbl, qsId);
+#ifdef Q_SPY
+            s = me->state.obj;
+#endif // Q_SPY
+        }
+        else if (r == Q_RET_TRAN_HIST) { // was it tran. to history?
             QMState const * const hist = me->state.obj; // save history
-            me->state.obj = s; // restore the original state
+            me->state.obj = t; // restore the original state
 
             QS_TRAN_SEG_(QS_QEP_TRAN_HIST,
-                t->stateHandler, hist->stateHandler);
+                s->stateHandler, hist->stateHandler);
 
             // save the tran-action table before it gets clobbered
             struct QMTranActTable const * const tatbl = me->temp.tatbl;
-            QMsm_exitToTranSource_(me, s, t, qsId);
+            QMsm_exitToTranSource_(me, t, s, qsId);
             (void)QMsm_execTatbl_(me, tatbl, qsId);
             r = QMsm_enterHistory_(me, hist, qsId);
+#ifdef Q_SPY
             s = me->state.obj;
-            t = s; // set target to the current state
+#endif // Q_SPY
+        }
+        else {
+            // empty
         }
 
-        while (r >= Q_RET_TRAN) {
-            // save the tran-action table before it gets clobbered
-            struct QMTranActTable const * const tatbl = me->temp.tatbl;
-            me->temp.obj = (QMState *)0; // clear
-            QMsm_exitToTranSource_(me, s, t, qsId);
-            r = QMsm_execTatbl_(me, tatbl, qsId);
+        lbound = QMSM_MAX_NEST_DEPTH_;
+        while (r == Q_RET_TRAN_INIT) { // initial tran. in the target?
+
+            r = QMsm_execTatbl_(me, me->temp.tatbl, qsId);
+#ifdef Q_SPY
             s = me->state.obj;
-            t = s; // set target to the current state
+#endif // Q_SPY
+
+             --lbound; // fixed loop bound
+            Q_INVARIANT_LOCAL(360, lbound >= 0);
         }
 
         QS_TRAN_END_(QS_QEP_TRAN, ts->stateHandler, s->stateHandler);
     }
 #ifdef Q_SPY
     else if (r == Q_RET_HANDLED) { // was the event handled?
-        QF_CRIT_ENTRY();
-        // internal tran. source can't be NULL
-        Q_ASSERT_INCRIT(380, t != (QMState *)0);
-        QF_CRIT_EXIT();
-
-        QS_TRAN0_(QS_QEP_INTERN_TRAN, t->stateHandler);
-    }
-    else if (t == (QMState *)0) { // event bubbled to the 'top' state?
-        QS_TRAN0_(QS_QEP_IGNORED, s->stateHandler);
+        QS_TRAN0_(QS_QEP_INTERN_TRAN, s->stateHandler);
     }
 #endif // Q_SPY
     else {
         // empty
     }
+
+#ifndef Q_UNSAFE
+    // establish stable state configuration
+    me->temp.uint = (uintptr_t)~me->state.uint;
+#endif
+}
+
+//............................................................................
+//! @private @memberof QMsm
+static QState QMsm_execTatbl_(
+    QAsm * const me,
+    QMTranActTable const * const tatbl,
+    uint_fast8_t const qsId)
+{
+#ifndef Q_SPY
+    Q_UNUSED_PAR(qsId);
+#endif
+
+    Q_REQUIRE_LOCAL(400, tatbl != (struct QMTranActTable *)0);
+
+    QS_CRIT_STAT
+    QState r = Q_RET_NULL;
+    QActionHandler const *a = &tatbl->act[0];
+    int_fast8_t lbound = QMSM_MAX_TRAN_LENGTH_;
+    while (*a != Q_ACTION_CAST(0)) {
+        r = (*(*a))(me); // call the action through the 'a' pointer
+        ++a;
+
+#ifdef Q_SPY
+        if (r == Q_RET_ENTRY) {
+            QS_STATE_ACT_(QS_QEP_STATE_ENTRY, me->temp.obj->stateHandler);
+        }
+        else if (r == Q_RET_EXIT) {
+            QS_STATE_ACT_(QS_QEP_STATE_EXIT, me->temp.obj->stateHandler);
+        }
+        else if (r == Q_RET_TRAN_INIT) {
+            QS_TRAN_SEG_(QS_QEP_STATE_INIT,
+                tatbl->target->stateHandler,
+                me->temp.tatbl->target->stateHandler);
+        }
+        else {
+            // empty
+        }
+#endif // Q_SPY
+
+        --lbound; // fixed loop bound
+        Q_INVARIANT_LOCAL(480, lbound >= 0);
+    }
+
+    me->state.obj = (r >= Q_RET_TRAN)
+        ? me->temp.tatbl->target
+        : tatbl->target;
+    return r;
+}
+
+//............................................................................
+//! @private @memberof QMsm
+static void QMsm_exitToTranSource_(
+    QAsm * const me,
+    QMState const * const curr_state,
+    QMState const * const tran_source,
+    uint_fast8_t const qsId)
+{
+#ifndef Q_SPY
+    Q_UNUSED_PAR(qsId);
+#endif
+    QS_CRIT_STAT
+
+    // exit states from the current state to the tran. source state
+    QMState const *s = curr_state;
+    int_fast8_t lbound = QMSM_MAX_NEST_DEPTH_;
+    while (s != tran_source) {
+        if (s->exitAction != Q_ACTION_CAST(0)) { // exit action provided?
+            (void)(*s->exitAction)(me); // execute the exit action
+            QS_STATE_ACT_(QS_QEP_STATE_EXIT, me->temp.obj->stateHandler);
+        }
+        s = s->superstate; // advance to the superstate
+
+        --lbound; // fixed loop bound
+        Q_INVARIANT_LOCAL(580, lbound >= 0);
+    }
+}
+
+//............................................................................
+//! @private @memberof QMsm
+static QState QMsm_enterHistory_(
+    QAsm * const me,
+    QMState const *const hist,
+    uint_fast8_t const qsId)
+{
+#ifndef Q_SPY
+    Q_UNUSED_PAR(qsId);
+#endif
+
+    // record the entry path from current state to history
+    QMState const *epath[QMSM_MAX_NEST_DEPTH_];
+    QMState const *s = hist;
+    int_fast8_t i = -1; // entry path index (one below [0])
+    int_fast8_t lbound = QMSM_MAX_NEST_DEPTH_;
+    while (s != me->state.obj) {
+        if (s->entryAction != Q_ACTION_CAST(0)) {
+            ++i;
+            Q_INVARIANT_LOCAL(610, i < QMSM_MAX_NEST_DEPTH_);
+            epath[i] = s;
+        }
+        s = s->superstate;
+
+        --lbound; // fixed loop bound
+        Q_INVARIANT_LOCAL(620, lbound >= 0);
+    }
+
+    QS_CRIT_STAT
+    // retrace the entry path in reverse (desired) order...
+    // NOTE: i the fixed loop bound
+    for (; i >= 0; --i) {
+        (void)(*epath[i]->entryAction)(me); // enter epath[i]
+        QS_STATE_ACT_(QS_QEP_STATE_ENTRY, epath[i]->stateHandler);
+    }
+
+    me->state.obj = hist; // set current state to the tran. target
+
+    // initial tran. present?
+    QState r = Q_RET_NULL;
+    if (hist->initAction != Q_ACTION_CAST(0)) {
+        r = (*hist->initAction)(me); // execute the tran. action
+        QS_TRAN_SEG_(QS_QEP_STATE_INIT,
+            hist->stateHandler, me->temp.tatbl->target->stateHandler);
+    }
+    return r;
 }
 
 //............................................................................
@@ -302,14 +438,17 @@ bool QMsm_isIn_(
     QStateHandler const stateHndl)
 {
     bool inState = false; // assume that this SM is not in 'state'
-
     QMState const *s = me->state.obj;
+    int_fast8_t lbound = QMSM_MAX_NEST_DEPTH_;
     while (s != (QMState *)0) {
         if (s->stateHandler == stateHndl) { // match found?
             inState = true;
             break;
         }
         s = s->superstate; // advance to the superstate
+
+         --lbound; // fixed loop bound
+         Q_INVARIANT_LOCAL(740, lbound >= 0);
     }
 
     return inState;
@@ -331,7 +470,7 @@ QMState const * QMsm_childStateObj(QMsm const * const me,
     QMState const *s = me->super.state.obj; // start with current state
     QMState const *child = s;
     bool isFound = false; // assume the child NOT found
-
+    int_fast8_t lbound = QMSM_MAX_NEST_DEPTH_;
     while (s != (QMState *)0) {
         if (s == parent) {
             isFound = true; // child is found
@@ -339,142 +478,15 @@ QMState const * QMsm_childStateObj(QMsm const * const me,
         }
         child = s;
         s = s->superstate;
+
+         --lbound; // fixed loop bound
+         Q_INVARIANT_LOCAL(840, lbound >= 0);
     }
-    QF_CRIT_STAT
-    QF_CRIT_ENTRY();
-    Q_ASSERT_INCRIT(590, isFound);
-    QF_CRIT_EXIT();
+    Q_ENSURE_LOCAL(890, isFound);
 
 #ifdef Q_UNSAFE
     Q_UNUSED_PAR(isFound);
 #endif
 
-    return child; // return the child
+    return child;
 }
-
-//............................................................................
-//! @private @memberof QMsm
-static QState QMsm_execTatbl_(
-    QAsm * const me,
-    QMTranActTable const * const tatbl,
-    uint_fast8_t const qsId)
-{
-#ifndef Q_SPY
-    Q_UNUSED_PAR(qsId);
-#endif
-
-    QF_CRIT_STAT
-    QF_CRIT_ENTRY();
-    // precondition:
-    // - the tran-action table pointer must not be NULL
-    Q_REQUIRE_INCRIT(600, tatbl != (struct QMTranActTable *)0);
-    QF_CRIT_EXIT();
-
-    QState r = Q_RET_NULL;
-    QActionHandler const *a = &tatbl->act[0];
-    while (*a != Q_ACTION_CAST(0)) {
-        r = (*(*a))(me); // call the action through the 'a' pointer
-        ++a;
-#ifdef Q_SPY
-        if (r == Q_RET_ENTRY) {
-            QS_STATE_ACT_(QS_QEP_STATE_ENTRY, me->temp.obj->stateHandler);
-        }
-        else if (r == Q_RET_EXIT) {
-            QS_STATE_ACT_(QS_QEP_STATE_EXIT, me->temp.obj->stateHandler);
-        }
-        else if (r == Q_RET_TRAN_INIT) {
-            QS_TRAN_SEG_(QS_QEP_STATE_INIT,
-                tatbl->target->stateHandler,
-                me->temp.tatbl->target->stateHandler);
-        }
-        else {
-            // empty
-        }
-#endif // Q_SPY
-    }
-    QF_CRIT_ENTRY();
-    Q_ASSERT_INCRIT(690, *a == Q_ACTION_CAST(0));
-    QF_CRIT_EXIT();
-
-    me->state.obj = (r >= Q_RET_TRAN)
-        ? me->temp.tatbl->target
-        : tatbl->target;
-    return r;
-}
-
-//............................................................................
-//! @private @memberof QMsm
-static void QMsm_exitToTranSource_(
-    QAsm * const me,
-    QMState const * const cs,
-    QMState const * const ts,
-    uint_fast8_t const qsId)
-{
-#ifndef Q_SPY
-    Q_UNUSED_PAR(qsId);
-#endif
-    QS_CRIT_STAT
-
-    // exit states from the current state to the tran. source state
-    QMState const *s = cs;
-    while (s != ts) {
-        // exit action provided in state 's'?
-        if (s->exitAction != Q_ACTION_CAST(0)) {
-            // execute the exit action
-            (void)(*s->exitAction)(me);
-
-            QS_STATE_ACT_(QS_QEP_STATE_EXIT, me->temp.obj->stateHandler);
-        }
-        s = s->superstate; // advance to the superstate
-    }
-}
-
-//............................................................................
-//! @private @memberof QMsm
-static QState QMsm_enterHistory_(
-    QAsm * const me,
-    QMState const *const hist,
-    uint_fast8_t const qsId)
-{
-#ifndef Q_SPY
-    Q_UNUSED_PAR(qsId);
-#endif
-
-    // record the entry path from current state to history
-    QMState const *epath[QMSM_MAX_ENTRY_DEPTH_];
-    QMState const *s = hist;
-    int_fast8_t i = 0; // tran. entry path index & fixed upper loop bound
-    while ((s != me->state.obj) && (i < QMSM_MAX_ENTRY_DEPTH_)) {
-        if (s->entryAction != Q_ACTION_CAST(0)) {
-            epath[i] = s;
-            ++i;
-        }
-        s = s->superstate;
-    }
-    QF_CRIT_STAT
-    QF_CRIT_ENTRY();
-    Q_ASSERT_INCRIT(810, i <= QMSM_MAX_ENTRY_DEPTH_);
-    QF_CRIT_EXIT();
-
-    // retrace the entry path in reverse (desired) order...
-    // NOTE: i the fixed upper loop bound
-    for (i = i - 1; i >= 0; --i) {
-        // run entry action in epath[i]
-        (void)(*epath[i]->entryAction)(me);
-
-        QS_STATE_ACT_(QS_QEP_STATE_ENTRY, epath[i]->stateHandler);
-    }
-
-    me->state.obj = hist; // set current state to the tran. target
-
-    // initial tran. present?
-    QState r = Q_RET_NULL;
-    if (hist->initAction != Q_ACTION_CAST(0)) {
-        r = (*hist->initAction)(me); // execute the tran. action
-
-        QS_TRAN_SEG_(QS_QEP_STATE_INIT,
-            hist->stateHandler, me->temp.tatbl->target->stateHandler);
-    }
-    return r;
-}
-

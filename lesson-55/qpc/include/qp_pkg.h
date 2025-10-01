@@ -30,8 +30,10 @@
 #define QP_PKG_H_
 
 //============================================================================
-#define QACTIVE_CAST_(ptr_)    ((QActive *)(ptr_))
-#define Q_PTR2UINT_CAST_(ptr_) ((uintptr_t)(ptr_))
+// helper macros...
+#define QACTIVE_CAST_(ptr_)            ((QActive *)(ptr_))
+#define QP_DIS_UPDATE_(T_, org_)       ((T_)~(org_))
+#define QP_DIS_VERIFY_(T_, org_, dis_) ((T_)(org_) == (T_)~(dis_))
 
 //============================================================================
 typedef struct {
@@ -49,6 +51,20 @@ extern QF_Attr QF_priv_; //!< @static @private @memberof QF
 void QF_bzero_(
     void * const start,
     uint_fast16_t const len);
+
+//! @static @private @memberof QActive
+extern QActive * QActive_registry_[QF_MAX_ACTIVE + 1U];
+
+//============================================================================
+//! @static @private @memberof QActive
+extern QSubscrList * QActive_subscrList_;
+
+//! @static @private @memberof QActive
+extern QSignal QActive_maxPubSignal_;
+
+//============================================================================
+//! @static @private @memberof QTimeEvt
+extern QTimeEvt QTimeEvt_timeEvtHead_[QF_MAX_TICK_RATE];
 
 //============================================================================
 // Bitmasks are for the QTimeEvt::flags attribute

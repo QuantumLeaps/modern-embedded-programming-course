@@ -52,6 +52,7 @@
 #define QF_CRIT_STAT
 #define QF_CRIT_ENTRY()         taskENTER_CRITICAL()
 #define QF_CRIT_EXIT()          taskEXIT_CRITICAL()
+#define QF_CRIT_EST()           taskENTER_CRITICAL()
 
 // include files -------------------------------------------------------------
 #include "FreeRTOS.h"  // FreeRTOS master include file, see NOTE3

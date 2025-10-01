@@ -30,10 +30,10 @@
 #define QP_H_
 
 //============================================================================
-#define QP_VERSION_STR "8.0.3"
-#define QP_VERSION     803U
-// <VER>=803 <DATE>=250407
-#define QP_RELEASE     0x6ABEE96CU
+#define QP_VERSION_STR "8.0.4"
+#define QP_VERSION     804U
+// <VER>=804 <DATE>=250611
+#define QP_RELEASE     0x6A9FC8ABU
 
 //============================================================================
 // default configuration settings
@@ -167,6 +167,7 @@ union QAsmAttr {
     QXThreadHandler thr;          //!< @private @memberof QAsmAttr
     QMTranActTable  const *tatbl; //!< @private @memberof QAsmAttr
     struct QMState  const *obj;   //!< @private @memberof QAsmAttr
+    uintptr_t       uint;         //!< @private @memberof QAsmAttr
 };
 
 #define Q_STATE_CAST(handler_) ((QStateHandler)(handler_))
@@ -508,25 +509,16 @@ typedef struct QActive {
 
 #ifdef QACTIVE_THREAD_TYPE
     QACTIVE_THREAD_TYPE thread; //!< @protected @memberof QActive
-#endif // def QACTIVE_THREAD_TYPE
+#endif
 
 #ifdef QACTIVE_OS_OBJ_TYPE
     QACTIVE_OS_OBJ_TYPE osObject; //!< @protected @memberof QActive
-#endif // def QACTIVE_OS_OBJ_TYPE
+#endif
 
 #ifdef QACTIVE_EQUEUE_TYPE
     QACTIVE_EQUEUE_TYPE eQueue; //!< @protected @memberof QActive
 #endif // def QACTIVE_EQUEUE_TYPE
 } QActive;
-
-//! @static @private @memberof QActive
-extern QActive * QActive_registry_[QF_MAX_ACTIVE + 1U];
-
-//! @static @private @memberof QActive
-extern QSubscrList * QActive_subscrList_;
-
-//! @static @private @memberof QActive
-extern enum_t QActive_maxPubSignal_;
 
 //! @protected @memberof QActive
 void QActive_ctor(QActive * const me,
@@ -685,9 +677,6 @@ QTimeEvt * QTimeEvt_expire_(QTimeEvt * const me,
 //! @static @public @memberof QTimeEvt
 bool QTimeEvt_noActive(uint_fast8_t const tickRate);
 
-//! @static @private @memberof QTimeEvt
-extern QTimeEvt QTimeEvt_timeEvtHead_[QF_MAX_TICK_RATE];
-
 //============================================================================
 //! @class QTicker
 //! @extends QActive
@@ -713,7 +702,7 @@ void QTicker_dispatch_(
 
 //! @private @memberof QTicker
 void QTicker_trig_(
-    QActive * const me,
+    QTicker * const me,
     void const * const sender);
 
 //============================================================================
@@ -833,6 +822,6 @@ void QF_gcFromISR(QEvt const * const e);
 
 #ifdef QF_MEM_ISOLATE
     #error Memory isolation not supported in this QP edition, need SafeQP
-#endif // def QF_MEM_ISOLATE
+#endif
 
 #endif // QP_H_

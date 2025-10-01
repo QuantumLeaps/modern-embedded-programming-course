@@ -52,10 +52,16 @@
     #define QF_CRIT_STAT
     #define QF_CRIT_ENTRY()  OS_ENTER_CRITICAL()
     #define QF_CRIT_EXIT()   OS_EXIT_CRITICAL()
+    #define QF_CRIT_EST()    OS_ENTER_CRITICAL()
 #elif (OS_CRITICAL_METHOD == 3U)
     #define QF_CRIT_STAT     OS_CPU_SR cpu_sr;
     #define QF_CRIT_ENTRY()  OS_ENTER_CRITICAL()
     #define QF_CRIT_EXIT()   OS_EXIT_CRITICAL()
+    #define QF_CRIT_EST()    do { \
+        OS_CPU_SR cpu_sr;         \
+        OS_ENTER_CRITICAL();      \
+        (void)cpu_sr;             \
+    } while (false)
 #else
     #error Unsupported uC-OS2 critical section type
 #endif // OS_CRITICAL_METHOD

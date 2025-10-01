@@ -58,6 +58,7 @@
     __disable_interrupt();                 \
 } while (false)
 
+#define QF_CRIT_EST()           __disable_interrupt()
 #define QF_CRIT_EXIT()          __set_interrupt_state(int_state_)
 
 // Check if the code executes in the ISR context

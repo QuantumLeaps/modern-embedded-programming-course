@@ -1,6 +1,6 @@
 @setlocal
 
-set VERSION=8.0.3
+set VERSION=8.0.4
 
 :: usage
 @echo Usage: qpc_sha1 [gen]
@@ -37,6 +37,7 @@ goto end
     ports/win32/* ports/win32-qv/* ports/win32-qutest/* ^
     zephyr/* ^
     > qpc_%VERSION%.sha1
+qclean
 @echo done
 
 :end

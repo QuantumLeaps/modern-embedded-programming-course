@@ -121,12 +121,12 @@ int_t QF_critSectNest_;
 //............................................................................
 void QF_enterCriticalSection_(void) {
     pthread_mutex_lock(&QF_critSectMutex_);
-    Q_ASSERT_INCRIT(101, QF_critSectNest_ == 0); // NO nesting of crit.sect!
+    Q_ASSERT_INCRIT(100, QF_critSectNest_ == 0); // NO nesting of crit.sect!
     ++QF_critSectNest_;
 }
 //............................................................................
 void QF_leaveCriticalSection_(void) {
-    Q_ASSERT_INCRIT(102, QF_critSectNest_ == 1); // crit.sect. must balance!
+    Q_ASSERT_INCRIT(200, QF_critSectNest_ == 1); // crit.sect. must balance!
     if ((--QF_critSectNest_) == 0) {
         pthread_mutex_unlock(&QF_critSectMutex_);
     }
@@ -368,7 +368,9 @@ void QActive_start(QActive * const me,
 //............................................................................
 #ifdef QACTIVE_CAN_STOP
 void QActive_stop(QActive * const me) {
-    QActive_unsubscribeAll(me); // unsubscribe this AO from all events
+    if (QActive_subscrList_ != (QSubscrList *)0) {
+        QActive_unsubscribeAll(me); // unsubscribe from all events
+    }
     me->thread = false; // stop the thread loop (see thread_routine())
 }
 #endif

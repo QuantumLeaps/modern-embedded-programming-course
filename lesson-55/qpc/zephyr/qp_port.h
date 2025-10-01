@@ -45,6 +45,7 @@
 #define QF_CRIT_STAT         k_spinlock_key_t key_;
 #define QF_CRIT_ENTRY()      ((key_) = k_spin_lock(&QF_spinlock))
 #define QF_CRIT_EXIT()       k_spin_unlock(&QF_spinlock, key_)
+#define QF_CRIT_EST()        ((void)k_spin_lock(&QF_spinlock))
 
 // Q_PRINTK() macro to avoid conflicts with Zephyr's printk()
 // when Q_SPY configuration is used
@@ -55,16 +56,15 @@
 #endif
 
 // include files -------------------------------------------------------------
-#include "qequeue.h"   // used for event deferral
-#include "qmpool.h"    // this QP port uses the native QF memory pool
-#include "qp.h"        // QP platform-independent public interface
+#include "qequeue.h"     // used for event deferral
+#include "qmpool.h"      // this QP port uses the native QF memory pool
+#include "qp.h"          // QP platform-independent public interface
 
 // Zephyr spinlock for QF critical section
 extern struct k_spinlock QF_spinlock;
 
 //============================================================================
 // interface used only inside QF implementation, but not in applications
-
 #ifdef QP_IMPL
 
     // scheduler locking, see NOTE2

@@ -1,5 +1,5 @@
 //============================================================================
-// SafeQP/C Real-Time Event Framework (RTEF)
+// QP/C Real-Time Event Framework (RTEF)
 //
 // Copyright (C) 2005 Quantum Leaps, LLC. All rights reserved.
 //
@@ -28,16 +28,11 @@
 #ifndef QS_PORT_H_
 #define QS_PORT_H_
 
-#if defined(__LP64__) || defined(_LP64) || defined(_WIN64) // 64-bit?
-    #define QS_OBJ_PTR_SIZE 8U
-    #define QS_FUN_PTR_SIZE 8U
-#else                                   // 32-bit architecture
-    #define QS_OBJ_PTR_SIZE 4U
-    #define QS_FUN_PTR_SIZE 4U
-#endif
+// object pointer size in bytes
+#define QS_OBJ_PTR_SIZE  2U
 
-// flush the QS output buffer after each QS record
-#define QS_REC_DONE()  QS_onFlush()
+// function pointer size in bytes
+#define QS_FUN_PTR_SIZE  2U
 
 //============================================================================
 // NOTE: QS might be used with or without other QP components, in which

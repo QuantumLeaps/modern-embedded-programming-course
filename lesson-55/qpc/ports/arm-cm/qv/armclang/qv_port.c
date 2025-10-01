@@ -51,7 +51,6 @@
 // For best performance, these functions are implemented in assembly,
 // but they can be implemented in C as well.
 
-//int32_t volatile QF_int_lock_nest_; // not used
 extern char const QF_port_module_[];
 char const QF_port_module_[] = "qv_port";
 

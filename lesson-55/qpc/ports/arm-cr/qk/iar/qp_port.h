@@ -57,6 +57,7 @@
     QF_INT_DISABLE();     \
 } while (false)
 #define QF_CRIT_EXIT()          __set_CPSR(cpsr_)
+#define QF_CRIT_EST()           QF_INT_DISABLE()
 #define QF_CRIT_EXIT_NOP()      __ISB()
 
 // Check if the code executes in the ISR context

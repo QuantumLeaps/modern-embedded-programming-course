@@ -49,6 +49,7 @@
 #define QF_CRIT_STAT
 #define QF_CRIT_ENTRY()         QF_INT_DISABLE()
 #define QF_CRIT_EXIT()          QF_INT_ENABLE()
+#define QF_CRIT_EST()           QF_INT_DISABLE()
 
 // include files -------------------------------------------------------------
 #include "RTOS.h"      // embOS API

@@ -73,7 +73,8 @@
 #define QF_CRIT_EXIT() \
     __asm volatile ("MSR cpsr_c,%0" :: "r" (cpsr_) : "cc")
 
-#define QF_CRIT_EXIT_NOP()     __asm volatile ("ISB")
+#define QF_CRIT_EST()           QF_INT_DISABLE()
+#define QF_CRIT_EXIT_NOP()      __asm volatile ("ISB")
 
 // Check if the code executes in the ISR context
 #define QK_ISR_CONTEXT_() (QK_priv_.intNest != 0U)

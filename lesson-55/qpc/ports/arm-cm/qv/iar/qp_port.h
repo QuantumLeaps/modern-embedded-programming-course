@@ -53,6 +53,7 @@
 #define QF_CRIT_STAT
 #define QF_CRIT_ENTRY()         (QF_crit_entry_())
 #define QF_CRIT_EXIT()          (QF_crit_exit_())
+#define QF_CRIT_EST()           (QF_crit_entry_())
 
 #define QF_CRIT_EXIT_NOP()      __ISB()
 
@@ -146,8 +147,6 @@ void QF_int_disable_(void);
 void QF_int_enable_(void);
 void QF_crit_entry_(void);
 void QF_crit_exit_(void);
-
-extern int32_t volatile QF_int_lock_nest_;
 
 //============================================================================
 // NOTE1:

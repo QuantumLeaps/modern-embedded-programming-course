@@ -214,7 +214,9 @@ void QActive_start(QActive * const me,
 //............................................................................
 #ifdef QACTIVE_CAN_STOP
 void QActive_stop(QActive * const me) {
-    QActive_unsubscribeAll(me); // unsubscribe this AO from all events
+    if (QActive_subscrList_ != (QSubscrList *)0) {
+        QActive_unsubscribeAll(me); // unsubscribe from all events
+    }
     me->thread = (void *)0; // stop the thread loop (see ao_thread())
 }
 #endif
