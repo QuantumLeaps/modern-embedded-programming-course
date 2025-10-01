@@ -33,13 +33,13 @@
     #error Q_SPY must be defined to compile qs_port.c
 #endif // Q_SPY
 
-#define QP_IMPL       // this is QP implementation
-#include "qp_port.h"  // QP port
-#include "qsafe.h"    // QP Functional Safety (FuSa) System
-#include "qs_port.h"  // QS port
-#include "qs_pkg.h"   // QS package-scope interface
+#define QP_IMPL        // this is QP implementation
+#include "qp_port.h"   // QP port
+#include "qsafe.h"     // QP Functional Safety (FuSa) System
+#include "qs_port.h"   // QS port
+#include "qs_pkg.h"    // QS package-scope interface
 
-#include "safe_std.h" // portable "safe" <stdio.h>/<string.h> facilities
+#include "safe_std.h"  // portable "safe" <stdio.h>/<string.h> facilities
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -60,21 +60,17 @@
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR   -1
 
-// local variables .........................................................
+// local variables ...........................................................
 static int l_sock = INVALID_SOCKET;
 static struct timespec const c_timeout = { 0, QS_TIMEOUT_MS*1000000L };
 
-//............................................................................
+static char *l_rxBuf;
+static int   l_rxBufLen;
+
+//----------------------------------------------------------------------------
 uint8_t QS_onStartup(void const *arg) {
-
-    static uint8_t qsBuf[QS_TX_SIZE];   // buffer for QS-TX channel
-    QS_initBuf(qsBuf, sizeof(qsBuf));
-
-    static uint8_t qsRxBuf[QS_RX_SIZE]; // buffer for QS-RX channel
-    QS_rxInitBuf(qsRxBuf, sizeof(qsRxBuf));
-
     char hostName[128];
-    char const *serviceName = "6601";   // default QSPY server port
+    char const *serviceName = "6601";  // default QSPY server port
     char const *src;
     char *dst;
     int status;
@@ -83,6 +79,16 @@ uint8_t QS_onStartup(void const *arg) {
     struct addrinfo *rp = NULL;
     struct addrinfo hints;
     int sockopt_bool;
+
+    // initialize the QS transmit and receive buffers
+    static uint8_t qsBuf[QS_TX_SIZE];   // buffer for QS-TX channel
+    QS_initBuf(qsBuf, sizeof(qsBuf));
+
+    static uint8_t qsRxBuf[QS_RX_SIZE]; // buffer for QS-RX channel
+    QS_rxInitBuf(qsRxBuf, sizeof(qsRxBuf));
+    l_rxBuf    = (char *)qsRxBuf;
+    l_rxBufLen = (int)sizeof(qsRxBuf);
+
 
     // extract hostName from 'arg' (hostName:port_remote)...
     src = (arg != (void *)0)
@@ -184,10 +190,11 @@ void QS_onReset(void) {
     exit(0);
 }
 //............................................................................
-// NOTE:
-// No critical section in QS_onFlush() to avoid nesting of critical sections
-// in case QS_onFlush() is called from Q_onError().
 void QS_onFlush(void) {
+    // NOTE:
+    // No critical section in QS::onFlush() to avoid nesting of critical
+    // sections in case QS::onFlush() is called from Q_onError().
+
     if (l_sock == INVALID_SOCKET) { // socket NOT initialized?
         FPRINTF_S(stderr, "<TARGET> ERROR   %s\n",
                   "invalid TCP socket");
@@ -220,7 +227,7 @@ void QS_onFlush(void) {
                 nBytes -= (uint16_t)nSent;
             }
             else {
-                break; // break out of the for-ever loop
+                break;
             }
         }
         // set nBytes for the next call to QS_getBlock()
@@ -282,12 +289,9 @@ void QS_output(void) {
 }
 //............................................................................
 void QS_rx_input(void) {
-    int status = recv(l_sock,
-                      (char *)QS_rxPriv_->buf, (int)QS_rxPriv_->end, 0);
-    if (status > 0) { // any data received?
-        QS_rxPriv_->tail = 0U;
-        QS_rxPriv_->head = status; // # bytes received
-        QS_rxParse(); // parse all received bytes
+    int len = recv(l_sock, l_rxBuf, l_rxBufLen, 0);
+    if (len > 0) { // any data received?
+        QS_rxParseBuf((uint16_t)len);
     }
 }
 

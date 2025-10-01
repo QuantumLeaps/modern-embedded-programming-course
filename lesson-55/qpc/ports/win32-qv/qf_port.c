@@ -172,12 +172,11 @@ int QF_run(void) {
 
     //CloseHandle(win32Event_);
     //DeleteCriticalSection(&l_win32CritSect);
-
     return 0; // return success
 }
 //............................................................................
 void QF_stop(void) {
-    l_isRunning = false; // this will exit the main event-loop
+    l_isRunning = false; // terminate the main event-loop
 
     // unblock the event-loop so it can terminate
     QPSet_insert(&QF_readySet_, 1U);
@@ -232,7 +231,7 @@ void QActive_start(QActive * const me,
     // no per-AO stack needed for this port
     QF_CRIT_STAT
     QF_CRIT_ENTRY();
-    Q_REQUIRE_INCRIT(600, stkSto == (void *)0);
+    Q_REQUIRE_INCRIT(800, stkSto == (void *)0);
     QF_CRIT_EXIT();
 
     me->prio  = (uint8_t)(prioSpec & 0xFFU); // QF-priority of the AO
@@ -249,7 +248,9 @@ void QActive_start(QActive * const me,
 //............................................................................
 #ifdef QACTIVE_CAN_STOP
 void QActive_stop(QActive * const me) {
-    QActive_unsubscribeAll(me);
+    if (QActive_subscrList_ != (QSubscrList *)0) {
+        QActive_unsubscribeAll(me); // unsubscribe from all events
+    }
 
     // make sure the AO is no longer in "ready set"
     QF_CRIT_STAT

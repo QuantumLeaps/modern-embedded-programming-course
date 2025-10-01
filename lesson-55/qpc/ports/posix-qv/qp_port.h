@@ -37,14 +37,15 @@
 #define Q_NORETURN   _Noreturn void
 
 // QActive event queue and thread types for POSIX-QV
-#define QACTIVE_EQUEUE_TYPE     QEQueue
+#define QACTIVE_EQUEUE_TYPE  QEQueue
 //QACTIVE_OS_OBJ_TYPE  not used in this port
 //QACTIVE_THREAD_TYPE  not used in this port
 
 // QF critical section for POSIX-QV, see NOTE1
 #define QF_CRIT_STAT
-#define QF_CRIT_ENTRY()         QF_enterCriticalSection_()
-#define QF_CRIT_EXIT()          QF_leaveCriticalSection_()
+#define QF_CRIT_ENTRY()      QF_enterCriticalSection_()
+#define QF_CRIT_EXIT()       QF_leaveCriticalSection_()
+#define QF_CRIT_EST()        QF_enterCriticalSection_()
 
 // QF_LOG2 not defined -- use the internal LOG2() implementation
 
@@ -68,9 +69,9 @@ void QF_onClockTick(void);
 #endif
 
 // include files -------------------------------------------------------------
-#include "qequeue.h"  // POSIX-QV needs the native event-queue
-#include "qmpool.h"   // POSIX-QV needs the native memory-pool
-#include "qp.h"       // QP platform-independent public interface
+#include "qequeue.h"   // POSIX-QV needs the native event-queue
+#include "qmpool.h"    // POSIX-QV needs the native memory-pool
+#include "qp.h"        // QP platform-independent public interface
 
 //============================================================================
 // interface used only inside QF implementation, but not in applications
@@ -101,7 +102,6 @@ void QF_onClockTick(void);
     #include <pthread.h> // POSIX-thread API
 
     extern QPSet QF_readySet_;
-    extern QPSet QF_readySet_dis_;
     extern pthread_cond_t QF_condVar_; // Cond.var. to signal events
 
 #endif // QP_IMPL

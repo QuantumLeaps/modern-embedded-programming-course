@@ -42,7 +42,7 @@ Q_DEFINE_THIS_MODULE("qf_qeq")
 //............................................................................
 //! @public @memberof QEQueue
 void QEQueue_init(QEQueue * const me,
-    struct QEvt const  * * const qSto,
+    struct QEvt const * * const qSto,
     uint_fast16_t const qLen)
 {
     QF_CRIT_STAT
@@ -81,23 +81,28 @@ bool QEQueue_post(QEQueue * const me,
 
     Q_REQUIRE_INCRIT(200, e != (QEvt *)0);
 
-    QEQueueCtr tmp = me->nFree; // get volatile into temporary
+    QEQueueCtr nFree = me->nFree; // get volatile into temporary
 
-    // can the queue accept the event?
-    bool const status = ((margin == QF_NO_MARGIN) && (tmp > 0U))
-        || (tmp > (QEQueueCtr)margin);
+    bool status = (nFree > 0U);
+    if (margin == QF_NO_MARGIN) { // no margin requested?
+        // queue must not overflow
+        Q_ASSERT_INCRIT(240, status);
+    }
+    else {
+        status = (nFree > (QEQueueCtr)margin);
+    }
+
     if (status) {
         // is it a mutable event?
         if (e->poolNum_ != 0U) {
-            Q_ASSERT_INCRIT(205, e->refCtr_ < (2U * QF_MAX_ACTIVE));
+            Q_ASSERT_INCRIT(250, e->refCtr_ < (2U * QF_MAX_ACTIVE));
             QEvt_refCtr_inc_(e); // increment the reference counter
         }
 
-        --tmp; // one free entry just used up
-
-        me->nFree = tmp; // update the original
-        if (me->nMin > tmp) { // is this the new minimum?
-            me->nMin = tmp; // update minimum so far
+        --nFree; // one free entry just used up
+        me->nFree = nFree; // update the original
+        if (me->nMin > nFree) { // is this the new minimum?
+            me->nMin = nFree; // update minimum so far
         }
 
 #ifdef Q_SPY
@@ -106,7 +111,7 @@ bool QEQueue_post(QEQueue * const me,
             QS_SIG_PRE(e->sig);   // the signal of the event
             QS_OBJ_PRE(me);       // this queue object
             QS_2U8_PRE(e->poolNum_, e->refCtr_);
-            QS_EQC_PRE(tmp);      // # free entries
+            QS_EQC_PRE(nFree);    // # free entries
             QS_EQC_PRE(me->nMin); // min # free entries
         QS_END_PRE()
 #endif // def Q_SPY
@@ -115,28 +120,24 @@ bool QEQueue_post(QEQueue * const me,
             me->frontEvt = e; // deliver event directly
         }
         else { // queue was not empty, insert event into the ring-buffer
-            tmp = me->head; // get volatile into temporary
-            me->ring[tmp] = e; // insert e into buffer
+            QEQueueCtr head = me->head; // get volatile into temporary
+            me->ring[head] = e; // insert e into buffer
 
-            if (tmp == 0U) { // need to wrap the head?
-                tmp = me->end;
+            if (head == 0U) { // need to wrap the head?
+                head = me->end;
             }
-            --tmp; // advance head (counter-clockwise)
-
-            me->head = tmp; // update the original
+            --head; // advance head (counter-clockwise)
+            me->head = head; // update the original
         }
     }
     else { // event cannot be posted
-        // dropping events must be acceptable
-        Q_ASSERT_INCRIT(230, margin != QF_NO_MARGIN);
-
 #ifdef Q_SPY
         QS_BEGIN_PRE(QS_QF_EQUEUE_POST_ATTEMPT, qsId)
             QS_TIME_PRE();       // timestamp
             QS_SIG_PRE(e->sig);  // the signal of this event
             QS_OBJ_PRE(me);      // this queue object
             QS_2U8_PRE(e->poolNum_, e->refCtr_);
-            QS_EQC_PRE(tmp);     // # free entries
+            QS_EQC_PRE(nFree);   // # free entries
             QS_EQC_PRE(margin);  // margin requested
         QS_END_PRE()
 #endif // def Q_SPY
@@ -162,21 +163,20 @@ void QEQueue_postLIFO(QEQueue * const me,
 
     Q_REQUIRE_INCRIT(300, e != (QEvt *)0);
 
-    QEQueueCtr tmp = me->nFree; // get volatile into temporary
+    QEQueueCtr nFree = me->nFree; // get volatile into temporary
 
     // must be able to LIFO-post the event
-    Q_REQUIRE_INCRIT(310, tmp != 0U);
+    Q_REQUIRE_INCRIT(330, nFree != 0U);
 
     if (e->poolNum_ != 0U) { // is it a mutable event?
-        Q_ASSERT_INCRIT(305, e->refCtr_ < (2U * QF_MAX_ACTIVE));
+        Q_ASSERT_INCRIT(340, e->refCtr_ < (2U * QF_MAX_ACTIVE));
         QEvt_refCtr_inc_(e); // increment the reference counter
     }
 
-    --tmp; // one free entry just used up
-
-    me->nFree = tmp; // update the original
-    if (me->nMin > tmp) { // is this the new minimum?
-        me->nMin = tmp; // update minimum so far
+    --nFree; // one free entry just used up
+    me->nFree = nFree; // update the original
+    if (me->nMin > nFree) { // is this the new minimum?
+        me->nMin = nFree; // update minimum so far
     }
 
     QS_BEGIN_PRE(QS_QF_EQUEUE_POST_LIFO, qsId)
@@ -184,7 +184,7 @@ void QEQueue_postLIFO(QEQueue * const me,
         QS_SIG_PRE(e->sig);   // the signal of this event
         QS_OBJ_PRE(me);       // this queue object
         QS_2U8_PRE(e->poolNum_, e->refCtr_);
-        QS_EQC_PRE(tmp);      // # free entries
+        QS_EQC_PRE(nFree);    // # free entries
         QS_EQC_PRE(me->nMin); // min # free entries
     QS_END_PRE()
 
@@ -192,13 +192,14 @@ void QEQueue_postLIFO(QEQueue * const me,
     me->frontEvt = e; // deliver the event directly to the front
 
     if (frontEvt != (QEvt *)0) { // was the queue NOT empty?
-        tmp = me->tail; // get volatile into temporary
-        ++tmp;
-        if (tmp == me->end) { // need to wrap the tail?
-            tmp = 0U; // wrap around
+        QEQueueCtr tail = me->tail; // get volatile into temporary
+
+        ++tail;
+        if (tail == me->end) { // need to wrap the tail?
+            tail = 0U; // wrap around
         }
-        me->tail = tmp;
-        me->ring[tmp] = frontEvt;
+        me->tail = tail;
+        me->ring[tail] = frontEvt;
     }
 
     QF_CRIT_EXIT();
@@ -219,41 +220,40 @@ struct QEvt const * QEQueue_get(QEQueue * const me,
     QEvt const * const e = me->frontEvt; // always remove evt from the front
 
     if (e != (QEvt *)0) { // was the queue not empty?
-        QEQueueCtr tmp = me->nFree; // get volatile into temporary
+        QEQueueCtr nFree = me->nFree; // get volatile into temporary
 
-        ++tmp; // one more free event in the queue
-
-        me->nFree = tmp; // update the # free
+        ++nFree; // one more free event in the queue
+        me->nFree = nFree; // update the # free
 
         // any events in the ring buffer?
-        if (tmp <= me->end) {
+        if (nFree <= me->end) {
+            // remove event from the tail
+            QEQueueCtr tail = me->tail; // get volatile into temporary
+
+            QEvt const * const frontEvt = me->ring[tail];
+            Q_ASSERT_INCRIT(450, frontEvt != (QEvt *)0);
 
             QS_BEGIN_PRE(QS_QF_EQUEUE_GET, qsId)
                 QS_TIME_PRE();      // timestamp
                 QS_SIG_PRE(e->sig); // the signal of this event
                 QS_OBJ_PRE(me);     // this queue object
                 QS_2U8_PRE(e->poolNum_, e->refCtr_);
-                QS_EQC_PRE(tmp);    // # free entries
+                QS_EQC_PRE(nFree);  // # free entries
             QS_END_PRE()
-
-            tmp = me->tail; // get volatile into temporary
-            QEvt const * const frontEvt = me->ring[tmp];
-
-            Q_ASSERT_INCRIT(420, frontEvt != (QEvt *)0);
 
             me->frontEvt = frontEvt; // update the original
 
-            if (tmp == 0U) { // need to wrap the tail?
-                tmp = me->end;
+            if (tail == 0U) { // need to wrap the tail?
+                tail = me->end;
             }
-            --tmp; // advance the tail (counter-clockwise)
-            me->tail = tmp; // update the original
+            --tail; // advance the tail (counter-clockwise)
+            me->tail = tail; // update the original
         }
         else {
             me->frontEvt = (QEvt *)0; // queue becomes empty
 
             // all entries in the queue must be free (+1 for frontEvt)
-            Q_ASSERT_INCRIT(440, tmp == (me->end + 1U));
+            Q_ASSERT_INCRIT(440, nFree == (me->end + 1U));
 
             QS_BEGIN_PRE(QS_QF_EQUEUE_GET_LAST, qsId)
                 QS_TIME_PRE();      // timestamp

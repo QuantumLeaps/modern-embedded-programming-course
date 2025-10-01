@@ -52,7 +52,7 @@
 #define QF_CRIT_STAT
 #define QF_CRIT_ENTRY()         (QF_crit_entry_())
 #define QF_CRIT_EXIT()          (QF_crit_exit_())
-
+#define QF_CRIT_EST()           (QF_crit_entry_())
 #define QF_CRIT_EXIT_NOP()      __asm volatile ("isb" ::: "memory")
 
 // Efficient log2() ----------------------------------------------------------

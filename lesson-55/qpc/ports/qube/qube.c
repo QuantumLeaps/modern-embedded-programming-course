@@ -1,5 +1,5 @@
 //============================================================================
-// QP/C Real-Time Event Framework (RTEF)
+// SafeQP/C Real-Time Event Framework (RTEF)
 //
 // Copyright (C) 2005 Quantum Leaps, LLC. All rights reserved.
 //
@@ -7,25 +7,25 @@
 //                    ------------------------
 //                    Modern Embedded Software
 //
-// SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-QL-commercial
+// SPDX-License-Identifier: LicenseRef-QL-commercial
 //
-// This software is dual-licensed under the terms of the open-source GNU
-// General Public License (GPL) or under the terms of one of the closed-
-// source Quantum Leaps commercial licenses.
+// This software is licensed under the terms of the Quantum Leaps commercial
+// licenses. Please contact Quantum Leaps for more information about the
+// available licensing options.
 //
-// Redistributions in source code must retain this top-level comment block.
-// Plagiarizing this software to sidestep the license obligations is illegal.
-//
-// NOTE:
-// The GPL does NOT permit the incorporation of this code into proprietary
-// programs. Please contact Quantum Leaps for commercial licensing options,
-// which expressly supersede the GPL and are designed explicitly for
-// closed-source distribution.
+// RESTRICTIONS
+// You may NOT :
+// (a) redistribute, encumber, sell, rent, lease, sublicense, or otherwise
+//     transfer rights in this software,
+// (b) remove or alter any trademark, logo, copyright or other proprietary
+//     notices, legends, symbols or labels present in this software,
+// (c) plagiarize this software to sidestep the licensing obligations.
 //
 // Quantum Leaps contact information:
 // <www.state-machine.com/licensing>
 // <info@state-machine.com>
 //============================================================================
+
 #ifndef Q_SPY
     #error Q_SPY must be defined to compile qube.c
 #endif // Q_SPY
@@ -75,7 +75,7 @@ static char const *HELP_STR =
 #define F_BYELLOW  "\x1b[33;1m"
 
 #define COLOR_DFLT "\x1b[K\x1b[0m"
-#define COLOR_APP  B_BLUE F_YELLOW
+#define COLOR_APP  B_BLUE F_BYELLOW
 
 //............................................................................
 void Qube_setAO(QActive* ao) {
@@ -199,7 +199,7 @@ static void handle_evts(void) {
 
         // perform the run-to-completion (RTC) step...
         // 1. retrieve the event from the AO's event queue, which by this
-        //   time must be non-empty and The "Vanialla" kernel asserts it.
+        //   time must be non-empty and The QV kernel asserts it.
         // 2. dispatch the event to the AO's state machine.
         // 3. determine if event is garbage and collect it if so
         //
@@ -265,6 +265,8 @@ void QF_init(void) {
     QF_bzero_(&QF_intLock_,          sizeof(QF_intLock_));
     QF_bzero_(&QActive_registry_[0], sizeof(QActive_registry_));
 
+    QTimeEvt_init(); // initialize QTimeEvts
+
     l_currAO_name[0] = '\0';
 
     fputs(COLOR_APP, stdout);
@@ -273,6 +275,10 @@ void QF_init(void) {
     if (QS_INIT((void*)0) == 0U) {
         Q_ERROR();
     }
+    // function dictionaries for the standard API
+    QS_FUN_DICTIONARY(&QActive_post_);
+    QS_FUN_DICTIONARY(&QActive_postLIFO_);
+    QS_OBJ_DICTIONARY(&Qube);
 }
 //............................................................................
 void QF_stop(void) {
@@ -287,11 +293,6 @@ void QF_onCleanup(void) {
 int_t QF_run(void) {
     QS_CRIT_STAT
     QS_CRIT_ENTRY();
-
-    // function dictionaries for the standard API
-    QS_FUN_DICTIONARY(&QActive_post_);
-    QS_FUN_DICTIONARY(&QActive_postLIFO_);
-    QS_OBJ_DICTIONARY(&Qube);
 
     // produce the QS_QF_RUN trace record
     QS_BEGIN_PRE(QS_QF_RUN, 0U)
@@ -368,7 +369,9 @@ void QActive_start(QActive* const me,
 //............................................................................
 #ifdef QACTIVE_CAN_STOP
 void QActive_stop(QActive* const me) {
-    QActive_unsubscribeAll(me); // unsubscribe from all events
+    if (QActive_subscrList_ != (QSubscrList *)0) {
+        QActive_unsubscribeAll(me); // unsubscribe from all events
+    }
     QActive_unregister_(me); // un-register this active object
 }
 #endif // def QACTIVE_CAN_STOP
@@ -383,18 +386,19 @@ uint8_t QS_onStartup(void const *arg) {
 
     // QS configuration options for this application...
     QSpyConfig const config = {
-        QP_VERSION,          // version
-        0U,                  // endianness (little)
-        QS_OBJ_PTR_SIZE,     // objPtrSize
-        QS_FUN_PTR_SIZE,     // funPtrSize
-        QS_TIME_SIZE,        // tstampSize
-        Q_SIGNAL_SIZE,       // sigSize
-        QF_EVENT_SIZ_SIZE,   // evtSize
-        QF_EQUEUE_CTR_SIZE,  // queueCtrSize
-        QF_MPOOL_CTR_SIZE,   // poolCtrSize
-        QF_MPOOL_SIZ_SIZE,   // poolBlkSize
-        QF_TIMEEVT_CTR_SIZE, // tevtCtrSize
-        { 0U, 0U, 0U, 0U, 0U, 0U} // tstamp
+        .qpVersion    = QP_VERSION,
+        .qpType       = 0U,
+        .qpDate       = 0U, // unknown
+        .endianness   = 0U, // little
+        .objPtrSize   = QS_OBJ_PTR_SIZE,
+        .funPtrSize   = QS_FUN_PTR_SIZE,
+        .tstampSize   = QS_TIME_SIZE,
+        .sigSize      = Q_SIGNAL_SIZE,
+        .evtSize      = QF_EVENT_SIZ_SIZE,
+        .queueCtrSize = QF_EQUEUE_CTR_SIZE,
+        .poolCtrSize  = QF_MPOOL_CTR_SIZE,
+        .poolBlkSize  = QF_MPOOL_SIZ_SIZE,
+        .tevtCtrSize  = QF_TIMEEVT_CTR_SIZE,
     };
 
     QSPY_config(&config, (QSPY_CustParseFun)0); // no custom parser function
