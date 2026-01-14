@@ -49,13 +49,24 @@ bool QActive_defer(QActive const * const me,
 
     QS_CRIT_STAT
     QS_CRIT_ENTRY();
-    QS_BEGIN_PRE(QS_QF_ACTIVE_DEFER, me->prio)
-        QS_TIME_PRE();      // time stamp
-        QS_OBJ_PRE(me);     // this active object
-        QS_OBJ_PRE(eq);     // the deferred queue
-        QS_SIG_PRE(e->sig); // the signal of the event
-        QS_2U8_PRE(e->poolNum_, e->refCtr_);
-    QS_END_PRE()
+    if (status) {
+        QS_BEGIN_PRE(QS_QF_ACTIVE_DEFER, me->prio)
+            QS_TIME_PRE();      // time stamp
+            QS_OBJ_PRE(me);     // this active object
+            QS_OBJ_PRE(eq);     // the deferred queue
+            QS_SIG_PRE(e->sig); // the signal of the event
+            QS_2U8_PRE(e->poolNum_, e->refCtr_);
+        QS_END_PRE()
+    }
+    else {
+        QS_BEGIN_PRE(QS_QF_ACTIVE_DEFER_ATTEMPT, me->prio)
+            QS_TIME_PRE();      // time stamp
+            QS_OBJ_PRE(me);     // this active object
+            QS_OBJ_PRE(eq);     // the deferred queue
+            QS_SIG_PRE(e->sig); // the signal of the event
+            QS_2U8_PRE(e->poolNum_, e->refCtr_);
+        QS_END_PRE()
+    }
     QS_CRIT_EXIT();
 
     return status;
@@ -67,24 +78,24 @@ bool QActive_recall(QActive * const me,
     struct QEQueue * const eq)
 {
     QEvt const * const e = QEQueue_get(eq, me->prio);
-    QF_CRIT_STAT
-
     bool recalled = false;
     if (e != (QEvt *)0) { // event available?
+
         QACTIVE_POST_LIFO(me, e); // post it to the front of the AO's queue
 
+        QF_CRIT_STAT
         QF_CRIT_ENTRY();
 
-        if (e->poolNum_ != 0U) { // is it a mutable event?
+        if (e->poolNum_ != 0U) { // mutable event?
 
             // after posting to the AO's queue the event must be referenced
             // at least twice: once in the deferred event queue (eq->get()
             // did NOT decrement the reference counter) and once in the
             // AO's event queue.
-            Q_ASSERT_INCRIT(205, e->refCtr_ >= 2U);
+            Q_ASSERT_INCRIT(210, e->refCtr_ >= 2U);
 
-            // we need to decrement the reference counter once, to account
-            // for removing the event from the deferred event queue.
+            // decrement the reference counter once, to account for removing
+            // the event from the deferred queue.
             QEvt_refCtr_dec_(e); // decrement the reference counter
         }
 
@@ -101,6 +112,7 @@ bool QActive_recall(QActive * const me,
         recalled = true;
     }
     else {
+        QS_CRIT_STAT
         QS_CRIT_ENTRY();
 
         QS_BEGIN_PRE(QS_QF_ACTIVE_RECALL_ATTEMPT, me->prio)

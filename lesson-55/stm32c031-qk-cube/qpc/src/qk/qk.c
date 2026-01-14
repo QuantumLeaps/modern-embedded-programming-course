@@ -61,14 +61,14 @@ QSchedStatus QK_schedLock(uint_fast8_t const ceiling) {
         QS_BEGIN_PRE(QS_SCHED_LOCK, QK_priv_.actPrio)
             QS_TIME_PRE();   // timestamp
             // the previous lock ceiling & new lock ceiling
-            QS_2U8_PRE((uint8_t)QK_priv_.lockCeil, (uint8_t)ceiling);
+            QS_2U8_PRE(QK_priv_.lockCeil, (uint8_t)ceiling);
         QS_END_PRE()
 
         // previous status of the lock
         stat = (QSchedStatus)QK_priv_.lockCeil;
 
         // new status of the lock
-        QK_priv_.lockCeil = ceiling;
+        QK_priv_.lockCeil = (uint8_t)ceiling;
     }
     QF_CRIT_EXIT();
 
@@ -83,16 +83,17 @@ void QK_schedUnlock(QSchedStatus const prevCeil) {
         QF_CRIT_STAT
         QF_CRIT_ENTRY();
 
-        Q_REQUIRE_INCRIT(200, (!QK_ISR_CONTEXT_())
-                              && (QK_priv_.lockCeil > prevCeil));
+        Q_REQUIRE_INCRIT(200, !QK_ISR_CONTEXT_());
+        Q_REQUIRE_INCRIT(210, QK_priv_.lockCeil > prevCeil);
+
         QS_BEGIN_PRE(QS_SCHED_UNLOCK, QK_priv_.actPrio)
             QS_TIME_PRE(); // timestamp
             // current lock ceiling (old), previous lock ceiling (new)
-            QS_2U8_PRE((uint8_t)QK_priv_.lockCeil, (uint8_t)prevCeil);
+            QS_2U8_PRE(QK_priv_.lockCeil, (uint8_t)prevCeil);
         QS_END_PRE()
 
         // restore the previous lock ceiling
-        QK_priv_.lockCeil = prevCeil;
+        QK_priv_.lockCeil = (uint8_t)prevCeil;
 
         // find if any AOs should be run after unlocking the scheduler
         if (QK_sched_() != 0U) { // preemption needed?
@@ -108,10 +109,10 @@ void QK_schedUnlock(QSchedStatus const prevCeil) {
 uint_fast8_t QK_sched_(void) {
     // NOTE: this function is entered with interrupts DISABLED
 
-    uint_fast8_t p = 0U; // assume NO activation needed
+    uint8_t p = 0U; // assume NO activation needed
     if (QPSet_notEmpty(&QK_priv_.readySet)) {
         // find the highest-prio AO with non-empty event queue
-        p = QPSet_findMax(&QK_priv_.readySet);
+        p = (uint8_t)QPSet_findMax(&QK_priv_.readySet);
 
         // is the AO's prio. below the active preemption-threshold?
         if (p <= QK_priv_.actThre) {
@@ -139,7 +140,7 @@ uint_fast8_t QK_sched_act_(
 {
     // NOTE: this function is entered with interrupts DISABLED
 
-    uint_fast8_t p = act->prio;
+    uint8_t p = act->prio;
     if (act->eQueue.frontEvt == (QEvt *)0) { // empty queue?
         QPSet_remove(&QK_priv_.readySet, p);
     }
@@ -149,7 +150,7 @@ uint_fast8_t QK_sched_act_(
     }
     else {
         // find new highest-prio AO ready to run...
-        p = QPSet_findMax(&QK_priv_.readySet);
+        p = (uint8_t)QPSet_findMax(&QK_priv_.readySet);
         // NOTE: p is guaranteed to be <= QF_MAX_ACTIVE
 
         // is the new prio. below the initial preemption-threshold?
@@ -172,31 +173,31 @@ uint_fast8_t QK_sched_act_(
 void QK_activate_(void) {
     // NOTE: this function is entered with interrupts DISABLED
 
-    uint_fast8_t const prio_in = QK_priv_.actPrio; // save initial prio.
-    uint_fast8_t p = QK_priv_.nextPrio; // next prio to run
+    uint8_t const prio_in = QK_priv_.actPrio; // save initial prio.
+    uint8_t p = QK_priv_.nextPrio; // next prio to run
 
-    Q_REQUIRE_INCRIT(500, (prio_in <= QF_MAX_ACTIVE)
-       && (0U < p) && (p <= QF_MAX_ACTIVE));
+    Q_REQUIRE_INCRIT(520, prio_in <= QF_MAX_ACTIVE);
+    Q_REQUIRE_INCRIT(530, (0U < p) && (p <= QF_MAX_ACTIVE));
 
 #if (defined QF_ON_CONTEXT_SW) || (defined Q_SPY)
-    uint_fast8_t pprev = prio_in;
+    uint8_t pprev = prio_in;
 #endif // QF_ON_CONTEXT_SW || Q_SPY
 
     QK_priv_.nextPrio = 0U; // clear for the next time
 
-    uint_fast8_t pthre_in = 0U; // assume preempting the idle thread
+    uint8_t pthre_in = 0U; // assume preempting the idle thread
     if (prio_in != 0U) { // preempting NOT the idle thread
         QActive const * const a = QActive_registry_[prio_in];
-        Q_ASSERT_INCRIT(510, a != (QActive *)0);
+        Q_ASSERT_INCRIT(540, a != (QActive *)0);
 
-        pthre_in = (uint_fast8_t)a->pthre;
+        pthre_in = a->pthre;
     }
 
     // loop until no more ready-to-run AOs of higher pthre than the initial
     do  {
         QActive * const a = QActive_registry_[p];
-        Q_ASSERT_INCRIT(520, a != (QActive *)0); // the AO must be registered
-        uint_fast8_t const pthre = (uint_fast8_t)a->pthre;
+        Q_ASSERT_INCRIT(570, a != (QActive *)0); // the AO must be registered
+        uint8_t const pthre = a->pthre;
 
         // set new active prio. and preemption-threshold
         QK_priv_.actPrio = p;
@@ -207,8 +208,7 @@ void QK_activate_(void) {
 
             QS_BEGIN_PRE(QS_SCHED_NEXT, p)
                 QS_TIME_PRE();     // timestamp
-                QS_2U8_PRE(p,      // prio. of the scheduled AO
-                            pprev); // previous prio.
+                QS_2U8_PRE(p, pprev);
             QS_END_PRE()
 
 #ifdef QF_ON_CONTEXT_SW
@@ -222,6 +222,7 @@ void QK_activate_(void) {
         QF_INT_ENABLE(); // unconditionally enable interrupts
 
         QEvt const * const e = QActive_get_(a);
+        // NOTE QActive_get_() performs QF_MEM_APP() before return
 
         // dispatch event (virtual call)
         (*a->super.vptr->dispatch)(&a->super, e, p);
@@ -231,7 +232,7 @@ void QK_activate_(void) {
 
         // determine the next highest-prio. AO ready to run...
         QF_INT_DISABLE(); // unconditionally disable interrupts
-        p = QK_sched_act_(a, pthre_in); // schedule next AO
+        p = (uint8_t)QK_sched_act_(a, pthre_in); // schedule next AO
 
     } while (p != 0U);
 
@@ -262,6 +263,7 @@ void QK_activate_(void) {
         QF_onContextSw(QActive_registry_[pprev], (QActive *)0);
 #endif // QF_ON_CONTEXT_SW
     }
+
 #endif // QF_ON_CONTEXT_SW || Q_SPY
 }
 
@@ -344,8 +346,8 @@ void QActive_start(QActive * const me,
     QF_CRIT_STAT
     QF_CRIT_ENTRY();
 
-    Q_REQUIRE_INCRIT(300, (me->super.vptr != (struct QAsmVtable *)0)
-        && (stkSto == (void *)0));
+    Q_REQUIRE_INCRIT(300, stkSto == (void *)0);
+    Q_REQUIRE_INCRIT(310, me->super.vptr != (struct QAsmVtable *)0);
     QF_CRIT_EXIT();
 
     me->prio  = (uint8_t)(prioSpec & 0xFFU); // QF-prio. of the AO

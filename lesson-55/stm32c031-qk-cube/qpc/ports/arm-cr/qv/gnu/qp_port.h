@@ -73,6 +73,7 @@
 #define QF_CRIT_EXIT() \
     __asm volatile ("MSR cpsr_c,%0" :: "r" (cpsr_) : "cc")
 
+#define QF_CRIT_EST()          QF_INT_DISABLE()
 #define QF_CRIT_EXIT_NOP()     __asm volatile ("ISB")
 
 // macro to put the CPU to sleep inside QV_onIdle()

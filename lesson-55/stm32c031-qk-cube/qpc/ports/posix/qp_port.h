@@ -46,6 +46,7 @@
 #define QF_CRIT_STAT
 #define QF_CRIT_ENTRY()      QF_enterCriticalSection_()
 #define QF_CRIT_EXIT()       QF_leaveCriticalSection_()
+#define QF_CRIT_EST()        QF_enterCriticalSection_()
 
 // QF_LOG2 not defined -- use the internal LOG2() implementation
 

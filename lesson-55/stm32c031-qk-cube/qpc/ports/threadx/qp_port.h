@@ -62,6 +62,7 @@
 #define QF_CRIT_STAT     UINT int_ctrl_;
 #define QF_CRIT_ENTRY()  (int_ctrl_ = tx_interrupt_control(TX_INT_DISABLE))
 #define QF_CRIT_EXIT()   ((void)tx_interrupt_control(int_ctrl_))
+#define QF_CRIT_EST()    ((void)tx_interrupt_control(TX_INT_DISABLE))
 
 // include files -------------------------------------------------------------
 #include "tx_api.h"    // ThreadX API

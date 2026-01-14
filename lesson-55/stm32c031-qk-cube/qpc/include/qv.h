@@ -40,8 +40,8 @@ typedef struct QV {
 //============================================================================
 //! @class QV_Attr
 typedef struct {
-    QPSet readySet;             //!< @private @memberof QV_Attr
-    uint_fast8_t schedCeil;     //!< @private @memberof QV_Attr
+    QPSet readySet;        //!< @private @memberof QV_Attr
+    uint8_t schedCeil;     //!< @private @memberof QV_Attr
 } QV_Attr;
 
 //! @static @private @memberof QV

@@ -42,12 +42,12 @@ typedef uint_fast8_t QSchedStatus;
 //============================================================================
 //! @class QK_Attr
 typedef struct {
-    QPSet readySet;            //!< @memberof QK_Attr
-    uint_fast8_t actPrio;      //!< @memberof QK_Attr
-    uint_fast8_t nextPrio;     //!< @memberof QK_Attr
-    uint_fast8_t actThre;      //!< @memberof QK_Attr
-    uint_fast8_t lockCeil;     //!< @memberof QK_Attr
-    uint_fast8_t intNest;      //!< @memberof QK_Attr
+    QPSet readySet;        //!< @memberof QK_Attr
+    uint8_t actPrio;       //!< @memberof QK_Attr
+    uint8_t nextPrio;      //!< @memberof QK_Attr
+    uint8_t actThre;       //!< @memberof QK_Attr
+    uint8_t lockCeil;      //!< @memberof QK_Attr
+    uint8_t intNest;       //!< @memberof QK_Attr
 } QK_Attr;
 
 //! @static @private @memberof QK

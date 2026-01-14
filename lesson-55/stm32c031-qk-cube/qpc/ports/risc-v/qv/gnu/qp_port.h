@@ -46,6 +46,8 @@
     __asm__ volatile("csrr %0, mstatus" : "=r"(mstatus_)); \
     QF_INT_DISABLE(); \
 } while (false)
+
+#define QF_CRIT_EST()          QF_INT_DISABLE()
 #define QF_CRIT_EXIT() \
     __asm__ volatile ("csrw mstatus, %0" :: "rK"(mstatus_))
 

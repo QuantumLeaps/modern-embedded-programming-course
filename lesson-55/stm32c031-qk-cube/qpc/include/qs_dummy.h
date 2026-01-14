@@ -85,55 +85,6 @@
 #define QS_ONLY(code_)                  ((void)0)
 
 //============================================================================
-// QS API used inside applications
-#ifndef QS_TIME_SIZE
-    typedef uint32_t QSTimeCtr;
-#elif (QS_TIME_SIZE == 2U)
-    typedef uint16_t QSTimeCtr;
-#else
-    typedef uint32_t QSTimeCtr;
-#endif
-
-void QS_initBuf(uint8_t * const sto, uint_fast32_t const stoSize);
-uint16_t QS_getByte(void);
-uint8_t const *QS_getBlock(uint16_t* const pNbytes);
-void QS_doOutput(void);
-uint8_t QS_onStartup(void const* arg);
-void QS_onCleanup(void);
-void QS_onFlush(void);
-QSTimeCtr QS_onGetTime(void);
-
-void QS_rxInitBuf(uint8_t * const sto, uint16_t const stoSize);
-void QS_rxParse(void);
-
-//============================================================================
-// QS API used inside test fixtures
-#ifdef Q_UTEST
-
-#if (QS_FUN_PTR_SIZE == 2U)
-    typedef uint16_t QSFun;
-#elif (QS_FUN_PTR_SIZE == 4U)
-    typedef uint32_t QSFun;
-#elif (QS_FUN_PTR_SIZE == 8U)
-    typedef uint64_t QSFun;
-#endif
-
-struct QS_TProbe {
-    QSFun    addr;
-    uint32_t data;
-    uint8_t  idx;
-};
-
-void QS_onTestSetup(void);
-void QS_onTestTeardown(void);
-void QS_onTestEvt(QEvt *e);
-void QS_onTestPost(void const *sender, QActive *recipient,
-                   QEvt const *e, bool status);
-void QS_onTestLoop(void);
-
-#endif // def Q_UTEST
-
-//============================================================================
 // interface used only for internal implementation, but not in applications
 #ifdef QP_IMPL
     // predefined QS trace records

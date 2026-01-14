@@ -51,8 +51,8 @@ void QTimeEvt_ctorX(QTimeEvt * const me,
 {
     QF_CRIT_STAT
     QF_CRIT_ENTRY();
-    Q_REQUIRE_INCRIT(300, (sig != 0)
-        && (tickRate < QF_MAX_TICK_RATE));
+    Q_REQUIRE_INCRIT(300, sig != 0);
+    Q_REQUIRE_INCRIT(310, tickRate < QF_MAX_TICK_RATE);
     QF_CRIT_EXIT();
 
     QEvt_ctor(&me->super, sig);
@@ -64,7 +64,7 @@ void QTimeEvt_ctorX(QTimeEvt * const me,
     me->tickRate = (uint8_t)tickRate;
     me->flags    = 0U;
 
-    me->super.refCtr_ = 0U; // adjust from the QEvt_ctor((sig) ctor
+    me->super.refCtr_ = 0U; // adjust from QEvt_ctor(sig)
 }
 
 //............................................................................
@@ -78,26 +78,23 @@ void QTimeEvt_armX(QTimeEvt * const me,
 
     // dynamic range checks
 #if (QF_TIMEEVT_CTR_SIZE == 1U)
-    Q_REQUIRE_INCRIT(400, (nTicks < 0xFFU) && (interval < 0xFFU));
+    Q_REQUIRE_INCRIT(400, nTicks   < 0xFFU);
+    Q_REQUIRE_INCRIT(410, interval < 0xFFU);
 #elif (QF_TIMEEVT_CTR_SIZE == 2U)
-    Q_REQUIRE_INCRIT(400, (nTicks < 0xFFFFU) && (interval < 0xFFFFU));
+    Q_REQUIRE_INCRIT(400, nTicks   < 0xFFFFU);
+    Q_REQUIRE_INCRIT(410, interval < 0xFFFFU);
 #endif
 
+#ifndef Q_UNSAFE
     QTimeEvtCtr const ctr = me->ctr;
+#endif
+
     uint8_t const tickRate = me->tickRate;
-#ifdef Q_SPY
-    uint_fast8_t const qsId = ((QActive *)(me->act))->prio;
-#endif // def Q_SPY
 
-    Q_REQUIRE_INCRIT(410,
-        (nTicks != 0U)
-        && (ctr == 0U)
-        && (me->act != (void *)0)
-        && (tickRate < (uint_fast8_t)QF_MAX_TICK_RATE));
-
-#ifdef Q_UNSAFE
-    Q_UNUSED_PAR(ctr);
-#endif // ndef Q_UNSAFE
+    Q_REQUIRE_INCRIT(440, nTicks != 0U);
+    Q_REQUIRE_INCRIT(450, ctr == 0U);
+    Q_REQUIRE_INCRIT(460, me->act != (void *)0);
+    Q_REQUIRE_INCRIT(470, tickRate < (uint_fast8_t)QF_MAX_TICK_RATE);
 
     me->ctr = (QTimeEvtCtr)nTicks;
     me->interval = (QTimeEvtCtr)interval;
@@ -119,7 +116,7 @@ void QTimeEvt_armX(QTimeEvt * const me,
         QTimeEvt_timeEvtHead_[tickRate].act = me;
     }
 
-    QS_BEGIN_PRE(QS_QF_TIMEEVT_ARM, qsId)
+    QS_BEGIN_PRE(QS_QF_TIMEEVT_ARM, ((QActive *)(me->act))->prio)
         QS_TIME_PRE();        // timestamp
         QS_OBJ_PRE(me);       // this time event object
         QS_OBJ_PRE(me->act);  // the active object
@@ -193,10 +190,9 @@ bool QTimeEvt_rearm(QTimeEvt * const me,
     uint8_t const tickRate = me->tickRate;
     QTimeEvtCtr const ctr = me->ctr;
 
-    Q_REQUIRE_INCRIT(610,
-        (nTicks != 0U)
-        && (me->act != (void *)0)
-        && (tickRate < QF_MAX_TICK_RATE));
+    Q_REQUIRE_INCRIT(610, nTicks != 0U);
+    Q_REQUIRE_INCRIT(620, me->act != (void *)0);
+    Q_REQUIRE_INCRIT(630, tickRate < QF_MAX_TICK_RATE);
 
 #ifdef Q_SPY
     uint_fast8_t const qsId = ((QActive *)(me->act))->prio;
@@ -304,28 +300,23 @@ void QTimeEvt_tick_(
         QS_TEC_PRE(prev->ctr);   // tick ctr
         QS_U8_PRE(tickRate);     // tick rate
     QS_END_PRE()
-#endif // def Q_SPY
+#endif
 
     // scan the linked-list of time events at this rate...
-    while (true) {
-        Q_ASSERT_INCRIT(810, prev != (QTimeEvt *)0); // sanity check
-
+    uint_fast8_t lbound = (2U * QF_MAX_ACTIVE); // fixed loop bound
+    for (;;) {
         QTimeEvt *te = prev->next; // advance down the time evt. list
 
         if (te == (QTimeEvt *)0) { // end of the list?
-            // NO any new time events armed since the last QTimeEvt_tick_()?
-            if (QTimeEvt_timeEvtHead_[tickRate].act == (void *)0) {
-                break; // terminate the while-loop
+            // set 'te' to the the newly-armed linked list
+            te = QTimeEvt_timeEvtHead_[tickRate].act;
+            if (te == (void *)0) { // no newly-armed time events?
+                break; // terminate the loop
             }
 
-            prev->next = (QTimeEvt*)QTimeEvt_timeEvtHead_[tickRate].act;
+            prev->next = te;
             QTimeEvt_timeEvtHead_[tickRate].act = (void *)0;
-
-            te = prev->next; // switch to the new list
         }
-
-        // the time event 'te' must be valid
-        Q_ASSERT_INCRIT(840, te != (QTimeEvt *)0);
 
         QTimeEvtCtr ctr = te->ctr; // move volatile into temporary
 
@@ -367,6 +358,9 @@ void QTimeEvt_tick_(
             QF_CRIT_EXIT(); // exit crit. section to reduce latency
         }
         QF_CRIT_ENTRY(); // re-enter crit. section to continue the loop
+
+        --lbound; // fixed loop bound
+        Q_INVARIANT_INCRIT(890, lbound > 0U);
     }
     QF_CRIT_EXIT();
 }

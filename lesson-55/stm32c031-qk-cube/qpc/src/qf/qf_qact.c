@@ -74,41 +74,35 @@ void QActive_register_(QActive * const me) {
     QF_CRIT_STAT
     QF_CRIT_ENTRY();
 
+    uint8_t p = me->prio;
     if (me->pthre == 0U) { // preemption-threshold not defined?
-        me->pthre = me->prio; // apply the default
+        me->pthre = p; // apply the default
     }
 
-#ifndef Q_UNSAFE
-    Q_REQUIRE_INCRIT(100,
-        (0U < me->prio) && (me->prio <= QF_MAX_ACTIVE)
-        && (QActive_registry_[me->prio] == (QActive *)0)
-        && (me->prio <= me->pthre));
+    Q_REQUIRE_INCRIT(100, (0U < p) && (p <= QF_MAX_ACTIVE));
+    Q_REQUIRE_INCRIT(110, QActive_registry_[p] == (QActive *)0);
+    Q_REQUIRE_INCRIT(130, p <= me->pthre);
 
+#ifndef Q_UNSAFE
     uint8_t prev_thre = me->pthre;
     uint8_t next_thre = me->pthre;
 
-    for (uint_fast8_t p = (uint_fast8_t)me->prio - 1U;
-         p > 0U;
-         --p)
-    {
+    for (p = p - 1U; p > 0U; --p) {
         if (QActive_registry_[p] != (QActive *)0) {
             prev_thre = QActive_registry_[p]->pthre;
             break;
         }
     }
-    for (uint_fast8_t p = (uint_fast8_t)me->prio + 1U;
-         p <= QF_MAX_ACTIVE;
-         ++p)
-    {
+    for (p = me->prio + 1U; p <= QF_MAX_ACTIVE; ++p) {
         if (QActive_registry_[p] != (QActive *)0) {
             next_thre = QActive_registry_[p]->pthre;
             break;
         }
     }
 
-    Q_ASSERT_INCRIT(190,
-        (prev_thre <= me->pthre)
-        && (me->pthre <= next_thre));
+    Q_ASSERT_INCRIT(160,
+        (prev_thre <= me->pthre) && (me->pthre <= next_thre));
+
 #endif // Q_UNSAFE
 
     // register the AO at the QF-prio.
@@ -120,15 +114,15 @@ void QActive_register_(QActive * const me) {
 //............................................................................
 //! @private @memberof QActive
 void QActive_unregister_(QActive * const me) {
-    uint_fast8_t const p = (uint_fast8_t)me->prio;
-
     QF_CRIT_STAT
     QF_CRIT_ENTRY();
 
-    Q_REQUIRE_INCRIT(200, (0U < p) && (p <= QF_MAX_ACTIVE)
-                      && (QActive_registry_[p] == me));
-    QActive_registry_[p] = (QActive *)0; // free-up the prio. level
+    uint8_t const p = me->prio;
+    Q_REQUIRE_INCRIT(210, (0U < p) && (p <= QF_MAX_ACTIVE));
+    Q_REQUIRE_INCRIT(230, QActive_registry_[p] == me);
+
     me->super.state.fun = Q_STATE_CAST(0); // invalidate the state
+    QActive_registry_[p] = (QActive *)0; // free-up the prio. level
 
     QF_CRIT_EXIT();
 }
