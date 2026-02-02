@@ -32,7 +32,7 @@
 #ifndef BSP_H_
 #define BSP_H_
 
-#define BSP_TICKS_PER_SEC 2500U
+#define BSP_TICKS_PER_SEC configTICK_RATE_HZ
 
 void BSP_init(void);
 void BSP_start(void);

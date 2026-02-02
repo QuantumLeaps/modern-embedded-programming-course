@@ -220,7 +220,7 @@ void BSP_init(void) {
                 | MPU_CTRL_ENABLE_Msk;        // enable the MPU
     __ISB();
     __DSB();
-
+    
     // enable GPIO port PA clock
     RCC->IOPENR |= (1U << 0U);
 

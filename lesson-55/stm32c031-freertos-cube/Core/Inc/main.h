@@ -32,6 +32,16 @@ extern "C" {
 #include "stm32c0xx_nucleo.h"
 #include <stdio.h>
 
+#include "stm32c0xx_ll_rcc.h"
+#include "stm32c0xx_ll_bus.h"
+#include "stm32c0xx_ll_system.h"
+#include "stm32c0xx_ll_exti.h"
+#include "stm32c0xx_ll_cortex.h"
+#include "stm32c0xx_ll_utils.h"
+#include "stm32c0xx_ll_pwr.h"
+#include "stm32c0xx_ll_dma.h"
+#include "stm32c0xx_ll_gpio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -60,17 +70,17 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define RCC_OSCX_IN_Pin GPIO_PIN_14
+#define RCC_OSCX_IN_Pin LL_GPIO_PIN_14
 #define RCC_OSCX_IN_GPIO_Port GPIOC
-#define RCC_OSCX_OUT_Pin GPIO_PIN_15
+#define RCC_OSCX_OUT_Pin LL_GPIO_PIN_15
 #define RCC_OSCX_OUT_GPIO_Port GPIOC
-#define RCC_OSC_IN_Pin GPIO_PIN_0
+#define RCC_OSC_IN_Pin LL_GPIO_PIN_0
 #define RCC_OSC_IN_GPIO_Port GPIOF
-#define RCC_OSC_OUT_Pin GPIO_PIN_1
+#define RCC_OSC_OUT_Pin LL_GPIO_PIN_1
 #define RCC_OSC_OUT_GPIO_Port GPIOF
-#define DEBUG_SWDIO_Pin GPIO_PIN_13
+#define DEBUG_SWDIO_Pin LL_GPIO_PIN_13
 #define DEBUG_SWDIO_GPIO_Port GPIOA
-#define DEBUG_SWCLK_Pin GPIO_PIN_14
+#define DEBUG_SWCLK_Pin LL_GPIO_PIN_14
 #define DEBUG_SWCLK_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */

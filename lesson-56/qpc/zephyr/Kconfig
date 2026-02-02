@@ -1,0 +1,15 @@
+# QPC Zephyr module
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-QL-commercial
+
+menuconfig QPC
+    bool "QPC"
+    default n
+    help
+        Enables the QPC Module
+
+if QPC
+
+module = QPC
+module-str = QPC
+
+endif

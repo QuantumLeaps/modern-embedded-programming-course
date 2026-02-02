@@ -270,5 +270,3 @@ void assert_failed(uint8_t *file, uint32_t line);
 #endif
 
 #endif /* STM32C0xx_HAL_CONF_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

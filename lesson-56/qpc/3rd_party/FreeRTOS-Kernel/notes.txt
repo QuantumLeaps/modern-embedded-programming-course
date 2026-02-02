@@ -1,0 +1,217 @@
+7/3/2025 11:49:17 AM
+
+Subject:Re: PO 11971: Quantum Leaps license QPC-SP-250702A, download links + invoice + bank-info
+TO chrish@aviftech.com
+TO Mikeh@aviftech.com
+CC troyt@aviftech.com
+
+Hi Chris,
+
+Thank you for the completed and signed QP Single Product license agreement.
+
+Here are the download links for the materials associated with your new license QPC-SP-250702A:
+
+1. The complete license agreement (please download and save for your records):
+
+https://state-machine.com/licensees/AIT/QPC-SP-250702A.pdf
+
+2. The QP license certificate file:
+
+https://state-machine.com/licensees/AIT/QPC-SP-250702A.qlc
+
+Please forward this link to all interested software developers working on the Single Product covered by this license ("T615A-LDR ARINC 615A Target Loader"). This license certificate is needed for unlocking commercial features in the QM modeling tool and QSPY host utility.
+
+3. The commercially-licensed software components for the latest QP/C 8.0.4:
+
+https://state-machine.com/licensees/AIT/qpc-plus_8.0.4.zip
+
+The ZIP file is password-protected. The password is your license number (QPC-SP-250702A). The files should be unzipped and *merged* into the existing installation directories of QP/C 8.0.4.
+
+
+All these links will remain valid as long as you maintain the Support Term for this license.
+
+Also, as new versions of QP/C will be released during your Support Term, please submit a support request to obtain your commercially-licensed software updates.
+
+I would appreciate if you could confirm receipt of these documents.
+
+***
+Regarding the payment of the license fee, I have attached:
+
+1. the invoice for the PO 11971: (Invoice_250702A.pdf)
+
+2. the PO 11971 (see PO_11971.pdf)
+
+3. the Quantum Leaps bank information for electronic payments (see bank_Quantum-Leaps.pdf). Alternatively, we accept checks mailed to our postal address included in the invoice.
+
+4. the Quantum Leaps W-9 form for your accounting (see fw9_Quantum-Leaps.pdf)
+
+Please let me know if you need any other documentation from Quantum Leaps to accept the invoice for payment.
+
+Best regards,
+  Miro
+
+--
+Miro Samek
+Quantum Leaps, LLC
+https://www.state-machine.com
+
+Tel: +1-919-360-5668
+support@state-machine.com
+
+
+On 7/2/2025 5:04 PM, Chris Hartley wrote:
+> Miro,
+>       Hopefully the attached is now correct.
+>
+> -Chris
+>
+
+
+===================================================================
+7/2/2025 10:18:36 AM
+
+Subject:PO 11971: Quantum Leaps license: please provide Single Product definition
+TO Mikeh@aviftech.com
+CC chrish@aviftech.com
+CC troyt@aviftech.com
+
+Hi Mike,
+
+This is just a quick follow up on your PO 11971 and the Quantum Leaps QP/C Single Product license you've requested.
+
+I'm ready to issue the license, but to generate the QP License Certificate I need the definition of the Single Product of your Company that the license will cover. The definition should go into Exhibit B on the last page of the license agreement (see attached QP-SP-Signed.pdf).
+
+It would be great if we could finalize this till the end of this week. I will be on vacation from July 7th till the 17th.
+
+Best regards,
+    Miro
+
+--
+Miro Samek
+Quantum Leaps, LLC
+https://www.state-machine.com
+
+Tel: +1-919-360-5668
+sales@state-machine.com
+
+=================================================================
+6/28/2025 11:24:07 AM
+
+Subject:PO 11971: Quantum Leaps license: please provide Single Product definition
+TO Mikeh@aviftech.com
+CC chrish@aviftech.com
+CC troyt@aviftech.com
+
+Hi Mike,
+
+Thank you for the PO 11971 and the signed QP license agreement. I hereby confirm my acceptance of the PO P11971.
+
+Regarding the license agreement, it is filled out correctly, except the Single Product definition is still missing in Exhibit B on page 8. This information is needed to issue the QP license certificate file.
+
+I'll issue the finalized license as soon as I receive the complete agreement.
+
+Thank you,
+  Miro
+
+--
+Miro Samek
+Quantum Leaps, LLC
+https://www.state-machine.com
+
+Tel: +1-919-360-5668
+sales@state-machine.com
+
+
+On 6/28/2025 12:31 AM, Mike Hoffmann wrote:
+> Miro,
+>
+> Sorry for the delayed response.
+> Attached is the signed license agreement and a PO for line 1 on your quote.
+> Please confirm acceptance of PO P11971.
+>
+> --
+> Mike Hoffmann
+> Avionics Interface Technologies  a Division of Teradyne
+> O: 952-474-4710
+> C: 605-360-0604
+
+=============================================================
+4/24/2025 4:07:22 PM
+
+Subject:Quantum Leaps license request
+TO chrish@aviftech.com
+
+Hello Chris,
+
+Thank you for your interest in QP licensing.
+
+> Requested License Type(s):  QP Evaluation License,
+> QP Framework Editions: QP/C
+
+Here are your download links for the requested QP/C Evaluation License:
+
+- QP evaluation license certificate file for AIT:
+
+https://state-machine.com/eval/AIT/QP-EVAL-AIT.qlc
+
+Please forward this link to all interested developers at Avionics Interface Technologies. The QP license certificate can be then used for both the QM modeling tool and the QSPY host application. The evaluation period is for 3 months.
+
+- QP/C 8.0.3 files omitted in the public GPL distribution (QS and QXK components):
+
+https://state-machine.com/eval/AIT/qpc-plus_8.0.3.zip
+
+The ZIP file is password protected with the password being your license number (QP-EVAL-AIT). The ZIP file should be unzipped and *merged* into an existing installation directory of QP/C 8.0.3.
+
+
+> Requested License Type(s): QP Single Product License
+> QP Framework Editions: QP/C
+> SafeQP Framework Editions: SafeQP/C
+
+I have attached the price quote for the requested QP/C Single Product license and SafeQP/C Single Product License (see QL-Quote_250424A.pdf).
+
+I have also attached the following license agreements for your consideration:
+
+- QP Single Product license agreement in PDF (see QP-SP.pdf).
+- SafeQP Single Product license agreement in PDF (see SQP-SP.pdf).
+
+Regarding the SafeQP/C license, please note that some documents in the "SafeQP/C Certification Kit" are still under development, which is reflected in the quoted price. However, the SafeQP/C source code, test code, and many critical parts (e.g., Functional Safety Management Plan, MISRA-C:2023 compliance, etc.) are complete and will provide a significant time saver for in-house certification. As an early adopter of the SafeQP/C kit, you will be eligible for all the Cert Kit updates, regardless of any future price changes (as long as you maintain the Support Term).
+
+Please let me know if you need anything else.
+
+Best regards,
+  Miro
+
+--
+Miro Samek
+Quantum Leaps, LLC
+https://www.state-machine.com
+
+Tel: +1-919-360-5668
+sales@state-machine.com
+
+On 4/24/2025 2:36 PM, Contact Form wrote:
+> First Name: Chris
+> Last Name: Hartley
+> Email: chrish@aviftech.com
+> Company: Avionics Interface Technologies
+> Country: United States
+> Company Website: https://aviftech.com/
+> Small Business:
+> Requested License Type(s): QP Evaluation License, QP Single Product License
+> QP Framework Editions: QP/C
+> SafeQP Framework Editions: SafeQP/C
+> Anticipated Production Date: Within 3 months
+> Partner Referral:
+> Comment or Message:
+>
+> ---
+>
+> Date: 2025-04-24
+> Time: 1:36 pm
+> Page URL: https://www.state-machine.com/licensing#RequestForm
+> User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36
+> Remote IP: 208.56.47.113
+> Powered by: Elementor
+>
+
+
